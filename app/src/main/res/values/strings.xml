@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Event-Me</string>
     <string name="api_client_id">209416865581-psp3v5n7bsu4h8itfaoh3t9gt3asb4v1.apps.googleusercontent.com</string>
+    <string name="title_activity_main">Event-Me</string>
+    <string name="title_events">Events</string>
+    <string name="title_teams">Teams</string>
+    <string name="title_profile">Profile</string>
 </resources>

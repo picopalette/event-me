@@ -21,6 +21,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener,GoogleApiClient.OnConnectionFailedListener{
 
@@ -29,6 +31,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private FirebaseAuth.AuthStateListener mAuthListener;
     private SignInButton signInButton;
     private GoogleApiClient mGoogleApiClient;
+    private DatabaseReference mDatabase;
     private FirebaseUser user;
     private final String TAG = "SignInActivity";
 
@@ -66,7 +69,20 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             }
         };
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void signIn() {
@@ -85,7 +101,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
+
             } else {
+                //TODO: Show a snack bar when login fails.
                 // Google Sign In failed, update UI appropriately
                 // ...
             }
@@ -104,7 +122,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            //User newUser = new User(user.getUid(), user.getDisplayName(), user.getEmail(), user.getPhotoUrl().toString());
+                            //mDatabase.child("users").child(newUser.uId).setValue(newUser);
                             Toast.makeText(getApplicationContext(),user.getDisplayName(),Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(intent);
                             //updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
