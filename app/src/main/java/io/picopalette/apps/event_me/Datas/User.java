@@ -1,4 +1,4 @@
-package io.picopalette.apps.event_me;
+package io.picopalette.apps.event_me.Datas;
 
 /**
  * Created by ramkumar on 02/06/17.

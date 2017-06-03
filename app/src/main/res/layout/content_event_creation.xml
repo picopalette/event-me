@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="io.picopalette.apps.event_me.EventCreation"
+    tools:showIn="@layout/activity_event_creation">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
+        <com.github.florent37.materialtextfield.MaterialTextField
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:mtf_image="@drawable/ic_mail"
+            app:mtf_labelColor="@android:color/holo_orange_dark"
+            android:layout_gravity="center"
+            >
+
+            <EditText
+                android:id="@+id/eve_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Event Name"
+                android:textColor="#333"
+                android:textColorHint="#666"
+                android:textSize="15sp" />
+
+        </com.github.florent37.materialtextfield.MaterialTextField>
+
+        <com.github.florent37.materialtextfield.MaterialTextField
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:mtf_image="@drawable/ic_mail"
+            app:mtf_labelColor="@android:color/holo_orange_dark"
+            android:layout_gravity="center"
+            >
+
+            <EditText
+                android:id="@+id/eve_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Event Type"
+                android:textColor="#333"
+                android:textColorHint="#666"
+                android:textSize="15sp" />
+
+        </com.github.florent37.materialtextfield.MaterialTextField>
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:padding="10dp"
+           android:layout_marginTop="30dp"
+           android:layout_gravity="center"
+           android:gravity="center">
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Private Event"
+               android:textSize="23dp"/>
+
+           <View
+               android:layout_marginLeft="10dp"
+               android:layout_marginRight="10dp"
+               android:layout_width="2dp"
+               android:layout_height="match_parent"
+               android:background="@color/black">
+           </View>
+
+           <Switch
+               android:id="@+id/eve_switch"
+               android:layout_width="100dp"
+               android:layout_height="match_parent" />
+
+       </LinearLayout>
+
+        <com.github.florent37.materialtextfield.MaterialTextField
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:mtf_image="@drawable/ic_mail"
+            app:mtf_labelColor="@android:color/holo_orange_dark"
+            android:layout_gravity="center"
+            >
+
+            <EditText
+                android:id="@+id/eve_keyword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Keyword"
+                android:textColor="#333"
+                android:textColorHint="#666"
+                android:textSize="15sp" />
+
+        </com.github.florent37.materialtextfield.MaterialTextField>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="19dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3">
+                <EditText android:id="@+id/date_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:textAppearance="@android:style/TextAppearance.Medium"
+                    android:enabled="true"
+                    android:textAlignment="center"
+                    android:inputType="date"
+                    android:focusable="false"
+                    android:hint="Set Date" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2">
+                <EditText android:id="@+id/time_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:textAppearance="@android:style/TextAppearance.Medium"
+                    android:enabled="true"
+                    android:textAlignment="center"
+                    android:inputType="time"
+                    android:focusable="false"
+                    android:hint="Set Time" />
+            </android.support.design.widget.TextInputLayout>
+
+
+        </LinearLayout>
+
+
+        <android.support.v7.widget.CardView
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/to_card"
+            android:layout_below="@+id/from_card"
+            android:layout_height="50dp">
+
+
+                    <fragment
+                        android:id="@+id/place_auto"
+                        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp" />
+
+        </android.support.v7.widget.CardView>
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="right"
+            android:id="@+id/add_event"
+            android:text="Complete"/>
+
+
+
+    </LinearLayout>
+
+
+</android.support.v4.widget.NestedScrollView>
