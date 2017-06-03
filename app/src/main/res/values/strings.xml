@@ -98,6 +98,13 @@
     </string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_testings">Testings</string>
+    <string name="event_name">Event Name</string>
+    <string name="event_type">Event Type</string>
+    <string name="private_event">Private Event</string>
+    <string name="keyword">Keyword</string>
+    <string name="set_date">Set Date</string>
+    <string name="set_time">Set Time</string>
+    <string name="complete">Complete</string>
 
 
 </resources>
