@@ -7,69 +7,56 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.TextView;
+
 import android.widget.Toast;
+
+import io.picopalette.apps.event_me.Fragments.EventsFragment;
+import io.picopalette.apps.event_me.Fragments.ProfileFragment;
+import io.picopalette.apps.event_me.Fragments.TeamsFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Boolean exit = false;
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment fragment;
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragment = new ProfileFragment();
-            //TODO: remove placeholder fragment (above line) after implementing all fragments.
-            switch (item.getItemId()) {
-                case R.id.navigation_events:
-
-                    return true;
-                case R.id.navigation_teams:
-
-                    return true;
-                case R.id.navigation_profile:
-                    fragment = new ProfileFragment();
-                    return true;
-            }
-            fragmentTransaction.replace(R.id.content, fragment);
-            fragmentTransaction.commit();
-            return false;
-        }
-
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                findViewById(R.id.navigation);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-    }
+        bottomNavigationView.setOnNavigationItemSelectedListener
+                (new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        Fragment selectedFragment = null;
+                        switch (item.getItemId()) {
+                            case R.id.navigation_events:
+                                selectedFragment = EventsFragment.newInstance();
+                                break;
+                            case R.id.navigation_teams:
+                                selectedFragment = TeamsFragment.newInstance();
+                                break;
+                            case R.id.navigation_profile:
+                                selectedFragment = ProfileFragment.newInstance();
+                                break;
+                        }
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.content, selectedFragment);
+                        transaction.commit();
+                        return true;
+                    }
+                });
 
-    @Override
-    public void onBackPressed() {
-        if (exit) {
-            finish(); // finish activity
-        } else {
-            Toast.makeText(this, "Press Back again to Exit.",
-                    Toast.LENGTH_SHORT).show();
-            exit = true;
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    exit = false;
-                }
-            }, 3 * 1000);
+        //Manually displaying the first fragment - one time only
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.content, EventsFragment.newInstance());
+        transaction.commit();
 
-        }
-
+        //Used to select an item programmatically
+        //bottomNavigationView.getMenu().getItem(2).setChecked(true);
     }
 
 }

@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "209416865581-s1l6ek5ruj2r9rb5pmo90ski7mmp7stc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.picopalette.apps.event_me",
+            "certificate_hash": "789ef4ba618672428ae4e1e3aab9c9054b6f3890"
+          }
+        },
+        {
           "client_id": "209416865581-ei2lpfpe0q87rcfqi0ccmvo06smjes6g.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
