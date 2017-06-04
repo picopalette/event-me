@@ -8,6 +8,7 @@
     <color name="theme600">#00ACC1</color>
     <color name="accent200">#FFFF00</color>
     <color name="orange">#abd95f96</color>
+    <color name="Black">#000000</color>
 
     <!-- Greyscales -->
     <color name="grey200">#EEEEEE</color>
