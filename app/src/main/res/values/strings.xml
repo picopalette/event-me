@@ -106,6 +106,10 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="blurred_image_of_profile_picture">blurred image of profile picture</string>
+    <string name="image_changer">image_changer</string>
+    <string name="full_name">Full Name</string>
+    <string name="email_id">Email - id</string>
 
 
 </resources>
