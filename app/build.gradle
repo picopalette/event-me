@@ -39,6 +39,7 @@ dependencies {
     compile 'com.google.android.gms:play-services:10.2.6'
     compile 'com.github.florent37:materialtextfield:1.0.7'
     compile 'com.github.nguyenhoanglam:ImagePicker:1.1.3'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
     testCompile 'junit:junit:4.12'
 }
 
