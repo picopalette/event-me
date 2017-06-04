@@ -9,6 +9,8 @@
     <color name="accent200">#FFFF00</color>
     <color name="orange">#abd95f96</color>
     <color name="Black">#000000</color>
+    <color name="Main_blue">#16253D</color>
+    <color name="second_blue">#002c54</color>
 
     <!-- Greyscales -->
     <color name="grey200">#EEEEEE</color>
