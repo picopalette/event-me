@@ -13,8 +13,8 @@
         <ImageView
             android:id="@+id/header_cover_image"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:alpha="0.3"
+            android:layout_height="130dp"
+            android:alpha="0.7"
             android:contentDescription="@string/blurred_image_of_profile_picture"
             android:scaleType="centerCrop"
             android:src="@drawable/logo" />
@@ -25,7 +25,7 @@
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="120dp"
+            android:layout_marginTop="60dp"
             android:layout_height="wrap_content">
 
 
@@ -38,14 +38,6 @@
             app:civ_border_color="#FF000000"
             app:civ_border_width="2dp" />
 
-            <ImageView
-                android:id="@+id/profile_changer"
-                android:layout_width="50dp"
-                android:contentDescription="@string/image_changer"
-                android:layout_height="50dp"
-                android:layout_marginStart="118dp"
-                android:layout_marginTop="100dp"
-                app:srcCompat="@drawable/image_picker" />
 
 
         </FrameLayout>
@@ -65,7 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="76dp"
+                android:layout_marginTop="85dp"
                 android:textColor="#591414"
                 android:text="@string/full_name"
                 android:textSize="24sp"

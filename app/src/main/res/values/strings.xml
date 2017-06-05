@@ -110,6 +110,7 @@
     <string name="image_changer">image_changer</string>
     <string name="full_name">Full Name</string>
     <string name="email_id">Email - id</string>
+    <string name="signin">SignIn</string>
 
 
 </resources>

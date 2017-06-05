@@ -45,8 +45,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -55,7 +53,7 @@ public class ProfileFragment extends Fragment {
         View v =  inflater.inflate(R.layout.fragment_profile, container, false);
         progressDialog = new ProgressDialog(getContext());
         header_image = (ImageView) v.findViewById(R.id.header_cover_image);
-        profile_change = (ImageView) v.findViewById(R.id.profile_changer);
+        //profile_change = (ImageView) v.findViewById(R.id.profile_changer);
         profile_pic = (CircleImageView) v.findViewById(R.id.profile_image);
         full_name = (TextView) v.findViewById(R.id.user_profile_name);
         email_id = (TextView) v.findViewById(R.id.user_profile_email);
@@ -78,12 +76,12 @@ public class ProfileFragment extends Fragment {
         }
         progressDialog.dismiss();
 
-        profile_change.setOnClickListener(new View.OnClickListener() {
+    /*    profile_change.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 imagestart();
             }
-        });
+        });*/
 
 
         return v;
