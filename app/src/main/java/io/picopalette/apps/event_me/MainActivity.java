@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import io.picopalette.apps.event_me.Fragments.EventsFragment;
+import io.picopalette.apps.event_me.Fragments.HomeFragment;
 import io.picopalette.apps.event_me.Fragments.ProfileFragment;
 import io.picopalette.apps.event_me.Fragments.TeamsFragment;
 
@@ -49,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.navigation_profile:
                                 selectedFragment = ProfileFragment.newInstance();
                                 break;
+                            case R.id.navigation_home:
+                                selectedFragment = HomeFragment.newInstance();
+                                break;
                         }
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                         transaction.replace(R.id.content, selectedFragment);
@@ -59,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Manually displaying the first fragment - one time only
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.content, EventsFragment.newInstance());
+        transaction.replace(R.id.content, HomeFragment.newInstance());
         transaction.commit();
 
         //Used to select an item programmatically

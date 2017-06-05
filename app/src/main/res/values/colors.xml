@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#002c54</color>
+    <color name="colorPrimaryDark">#16253d</color>
+    <color name="colorAccent">#efb509</color>
     <!-- Theme & Accent -->
     <color name="theme500">#00BCD4</color>
     <color name="theme600">#00ACC1</color>
@@ -11,6 +11,7 @@
     <color name="Black">#000000</color>
     <color name="Main_blue">#16253D</color>
     <color name="second_blue">#002c54</color>
+    <color name="dark_brown">#2a2922</color>
 
     <!-- Greyscales -->
     <color name="grey200">#EEEEEE</color>
