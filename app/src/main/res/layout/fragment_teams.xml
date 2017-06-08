@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="@string/teams_fragment"
+        android:layout_marginTop="150dp"
         android:textSize="30sp"/>
 
 </RelativeLayout>
