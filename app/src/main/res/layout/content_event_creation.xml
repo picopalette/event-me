@@ -163,12 +163,28 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <AutoCompleteTextView
-                android:id="@+id/autoCompleteTextView1"
+            <io.picopalette.apps.event_me.Utils.ContactsCompletionView
+                android:id="@+id/autocomplete_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:ems="10" />
+                android:focusableInTouchMode="true"
+                android:imeOptions="actionDone"
+                android:inputType="text|textNoSuggestions|textMultiLine"
+                android:nextFocusDown="@+id/editText"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="19sp" />
+            <Button
+                android:id="@+id/btn_get"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="@string/get_input_data" />
+
+            <TextView
+                android:id="@+id/input_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin" />
 
         </LinearLayout>
 

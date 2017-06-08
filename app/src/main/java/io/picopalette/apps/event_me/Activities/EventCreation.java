@@ -31,8 +31,10 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.Switch;
 
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -52,20 +54,30 @@ import com.google.firebase.database.ValueEventListener;
 import com.nguyenhoanglam.imagepicker.activity.ImagePicker;
 import com.nguyenhoanglam.imagepicker.activity.ImagePickerActivity;
 import com.nguyenhoanglam.imagepicker.model.Image;
+import com.tokenautocomplete.TokenCompleteTextView;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import io.picopalette.apps.event_me.Adapters.FilterAdapter;
 import io.picopalette.apps.event_me.Datas.DateAndTime;
 import io.picopalette.apps.event_me.Datas.MyEvent;
+import io.picopalette.apps.event_me.Datas.SimpleContact;
 import io.picopalette.apps.event_me.R;
 import io.picopalette.apps.event_me.Utils.Constants;
+import io.picopalette.apps.event_me.Utils.ContactsCompletionView;
 
 
-public class EventCreation extends AppCompatActivity implements View.OnClickListener, PlaceSelectionListener{
+public class EventCreation extends AppCompatActivity implements PlaceSelectionListener, TokenCompleteTextView.TokenListener<SimpleContact>{
 
 
     private EditText Event_name,date,time,Event_type,Event_key;
+    private ArrayList<SimpleContact> contacts;
+    private FilterAdapter filterAdapter;
+    private ContactsCompletionView autoCompleteTextView;
     private DateAndTime dateAndTime;
     private String place_name;
     private Button complete;
@@ -78,7 +90,7 @@ public class EventCreation extends AppCompatActivity implements View.OnClickList
     private ProgressDialog progressDialog;
     private String url = "https://event-me-firebase.firebaseio.com/people.json";
     private String TAG = "testing";
-    private AutoCompleteTextView automcomplete;
+    //private MultiAutoCompleteTextView automcomplete;
     private ArrayList<String> users;
     private AlertDialog.Builder diaog;
     private AlertDialog alertDialog;
@@ -107,8 +119,8 @@ public class EventCreation extends AppCompatActivity implements View.OnClickList
         layoutParams.width = dialogWindowWidth;
         layoutParams.height = dialogWindowHeight;
         alertDialog.getWindow().setAttributes(layoutParams);
-        automcomplete = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView1);
-        users = new ArrayList<>();
+       /* automcomplete = (MultiAutoCompleteTextView) findViewById(R.id.autoCompleteTextView1);
+        automcomplete.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());*/
         date = (EditText) findViewById(R.id.date_text);
         mitch = (Switch) findViewById(R.id.eve_switch);
         time = (EditText) findViewById(R.id.time_text);
@@ -117,10 +129,90 @@ public class EventCreation extends AppCompatActivity implements View.OnClickList
         Event_key = (EditText) findViewById(R.id.eve_keyword);
         Event_image = (ImageView) findViewById(R.id.event_image);
         complete = (Button) findViewById(R.id.add_event);
+        autoCompleteTextView = (ContactsCompletionView) findViewById(R.id.autocomplete_textview);
+        Log.d("test1","before fetchAndParse");
         fetchAndParsewithFirebase();
-        date.setOnClickListener(this);
-        time.setOnClickListener(this);
-        complete.setOnClickListener(this);
+        filterAdapter = new FilterAdapter(this, R.layout.item_contact, contacts);
+        Log.d("test1","after fetchAndParse");
+        autoCompleteTextView.setTokenListener(EventCreation.this);
+        autoCompleteTextView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Select);
+
+       /* btnGet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                List<SimpleContact> tokens = autoCompleteTextView.getObjects();
+                StringBuilder content = new StringBuilder();
+                for (int i = 0; i < tokens.size(); i++) {
+                    content.append(tokens.get(i)).append("; ");
+                }
+                inputContent.setText(String.format("You choose: %s", content.toString()));
+            }
+        });*/
+
+        date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Calendar calendar = Calendar.getInstance();
+                DatePickerDialog datePickerDialog = new DatePickerDialog(EventCreation.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        dateAndTime.setYear(year);
+                        dateAndTime.setMonth(month);
+                        dateAndTime.setDayOfMonth(dayOfMonth);
+                        date.setText(dateAndTime.getFormattedDate());
+                    }
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.show();
+
+            }
+        });
+        time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Calendar calendar = Calendar.getInstance();
+                TimePickerDialog timePickerDialog = new TimePickerDialog(EventCreation.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        dateAndTime.setHourOfDay(hourOfDay);
+                        dateAndTime.setMinute(minute);
+                        time.setText(dateAndTime.getFormattedTime());
+                    }
+                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
+                timePickerDialog.show();
+
+            }
+        });
+        complete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(!TextUtils.isEmpty(Event_name.getText().toString()) && !TextUtils.isEmpty(Event_type.getText().toString()) &&
+                        !TextUtils.isEmpty(date.getText().toString()) && !TextUtils.isEmpty(time.getText().toString()) &&
+                        !TextUtils.isEmpty(place_name) )
+                {
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    DatabaseReference EventRefUser = mDatabaseReference.child(Constants.users).child(EncodeString(user.getEmail()));
+                    DatabaseReference EventReference = mDatabaseReference.child(Constants.events);
+                    String my_keys = EventReference.push().getKey();
+                    Boolean mPrivate = mitch.isChecked();
+                    EventRefUser.child(Constants.events).child(my_keys).setValue(GetValue());
+                    MyEvent event = new MyEvent(Event_name.getText().toString(),Event_type.getText().toString(),place_name,date.getText().toString(),time.getText().toString(),mPrivate,my_keys);
+                    EventReference.child(my_keys).setValue(event);
+
+                    Toast.makeText(getBaseContext(), R.string.success,Toast.LENGTH_LONG).show();
+                    finish();
+
+                }
+                else
+                {
+                    Toast.makeText(getBaseContext(), R.string.fill_details,Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
         dateAndTime = new DateAndTime();
 
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
@@ -138,21 +230,33 @@ public class EventCreation extends AppCompatActivity implements View.OnClickList
     }
 
     private void fetchAndParsewithFirebase() {
+        contacts = new ArrayList<>();
 
 
         mDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d("test1","inside Datasnapshot before initializing");
+
+                Log.d("test1","insidedpsn after init");
                 Map<String, Object> td = (HashMap<String,Object>) dataSnapshot.getValue();
                 for (Map.Entry<String, Object> e : td.entrySet()) {
-                    users.add(e.getKey());
+                   // users.add(e.getKey());
+                    Log.d("test1","in");
+                    contacts.add(new SimpleContact(R.drawable.male, e.getKey(), (String) e.getValue()));
+
                 }
-                ArrayAdapter<String> adapter = new ArrayAdapter<>
-                        (EventCreation.this, android.R.layout.select_dialog_item, users);
-                automcomplete.setThreshold(2);
-                automcomplete.setAdapter(adapter);
+
+                autoCompleteTextView.setAdapter(filterAdapter);
+
+               /* ArrayAdapter<String> adapter = new ArrayAdapter<>
+                        (EventCreation.this, android.R.layout.select_dialog_item, users);*/
+               /* automcomplete.setThreshold(2);
+                automcomplete.setAdapter(adapter);*/
+
                 Log.d("testing","success");
                 alertDialog.dismiss();
+
             }
 
             @Override
@@ -191,7 +295,7 @@ public class EventCreation extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    @Override
+ /*   @Override
     public void onClick(View v) {
         if(v == date)
         {
@@ -247,7 +351,7 @@ public class EventCreation extends AppCompatActivity implements View.OnClickList
 
 
 
-    }
+    }*/
 
     private String GetValue() {
         return "ongoing";
@@ -269,6 +373,24 @@ public class EventCreation extends AppCompatActivity implements View.OnClickList
     }
 
 
+    @Override
+    public void onTokenAdded(SimpleContact token) {
+
+    }
+
+    @Override
+    public void onTokenRemoved(SimpleContact token) {
+
+    }
 
 
 }
+
+//For getting contents from that android-chip view
+
+/*
+    List<SimpleContact> tokens = autoCompleteTextView.getObjects();
+    StringBuilder content = new StringBuilder();
+                for (int i = 0; i < tokens.size(); i++) {
+        content.append(tokens.get(i)).append("; ");
+        }*/
