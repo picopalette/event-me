@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
@@ -13,21 +14,25 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+
 import android.widget.Switch;
-import android.widget.TextView;
+
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -39,31 +44,19 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.nguyenhoanglam.imagepicker.activity.ImagePicker;
 import com.nguyenhoanglam.imagepicker.activity.ImagePickerActivity;
 import com.nguyenhoanglam.imagepicker.model.Image;
-import com.tokenautocomplete.FilteredArrayAdapter;
-import com.tokenautocomplete.TokenCompleteTextView;
-
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-
-
-import io.paperdb.Paper;
+import java.util.HashMap;
+import java.util.Map;
 import io.picopalette.apps.event_me.Datas.DateAndTime;
-
 import io.picopalette.apps.event_me.Datas.MyEvent;
 import io.picopalette.apps.event_me.R;
 import io.picopalette.apps.event_me.Utils.Constants;
@@ -87,8 +80,8 @@ public class EventCreation extends AppCompatActivity implements View.OnClickList
     private String TAG = "testing";
     private AutoCompleteTextView automcomplete;
     private ArrayList<String> users;
-
-
+    private AlertDialog.Builder diaog;
+    private AlertDialog alertDialog;
 
 
     @Override
@@ -98,13 +91,24 @@ public class EventCreation extends AppCompatActivity implements View.OnClickList
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         progressDialog = new ProgressDialog(EventCreation.this);
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference("people");
+        AlertDialog.Builder diaog = new AlertDialog.Builder(this).setCancelable(false);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.alert_dialog_custom, null);
+        diaog.setView(dialogView);
+        alertDialog = diaog.create();
+        alertDialog.show();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(alertDialog.getWindow().getAttributes());
+        int dialogWindowWidth = 600;
+        int dialogWindowHeight = 400;
+        layoutParams.width = dialogWindowWidth;
+        layoutParams.height = dialogWindowHeight;
+        alertDialog.getWindow().setAttributes(layoutParams);
         automcomplete = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView1);
         users = new ArrayList<>();
-
-
-        Paper.init(EventCreation.this);
-        Paper.book().read(Constants.ustringjson,null);
-
         date = (EditText) findViewById(R.id.date_text);
         mitch = (Switch) findViewById(R.id.eve_switch);
         time = (EditText) findViewById(R.id.time_text);
@@ -113,7 +117,7 @@ public class EventCreation extends AppCompatActivity implements View.OnClickList
         Event_key = (EditText) findViewById(R.id.eve_keyword);
         Event_image = (ImageView) findViewById(R.id.event_image);
         complete = (Button) findViewById(R.id.add_event);
-        fetchAndcreateArrayList();
+        fetchAndParsewithFirebase();
         date.setOnClickListener(this);
         time.setOnClickListener(this);
         complete.setOnClickListener(this);
@@ -133,33 +137,35 @@ public class EventCreation extends AppCompatActivity implements View.OnClickList
 
     }
 
+    private void fetchAndParsewithFirebase() {
 
-    private void fetchAndcreateArrayList() {
-        ConnectivityManager cm =
-                (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-        if(isConnected) {
-            new FetchingTask().execute(url);
-        }
 
-        else {
-            if(Paper.book().read(Constants.ustringjson)!=null)
-            {
-                String users = Paper.book().read(Constants.ustringjson);
-                new FetchingTask().execute("methane project hei die hei");
-            }
-            else {
-                Toast.makeText(EventCreation.this, R.string.error_network, Toast.LENGTH_LONG).show();
-                if(progressDialog.isShowing()) {
-                    progressDialog.dismiss();
+        mDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, Object> td = (HashMap<String,Object>) dataSnapshot.getValue();
+                for (Map.Entry<String, Object> e : td.entrySet()) {
+                    users.add(e.getKey());
                 }
+                ArrayAdapter<String> adapter = new ArrayAdapter<>
+                        (EventCreation.this, android.R.layout.select_dialog_item, users);
+                automcomplete.setThreshold(2);
+                automcomplete.setAdapter(adapter);
+                Log.d("testing","success");
+                alertDialog.dismiss();
             }
-        }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                alertDialog.dismiss();
+                Toast.makeText(EventCreation.this,"Netwok Error",Toast.LENGTH_LONG).show();
+            }
+        });
+
 
 
     }
+
 
     private void PickImage() {
         ImagePicker.create(this)
@@ -263,95 +269,6 @@ public class EventCreation extends AppCompatActivity implements View.OnClickList
     }
 
 
-    private class FetchingTask extends AsyncTask<String, String, Integer> {
 
-        @Override
-        protected void onPreExecute() {
-
-            progressDialog.setMessage(getString(R.string.fetching));
-            progressDialog.show();
-        }
-
-        @Override
-        protected void onPostExecute(Integer integer) {
-            if(progressDialog.isShowing())
-            {
-                progressDialog.dismiss();
-            }
-
-
-            if (integer == 1) {
-                Toast.makeText(EventCreation.this,"success",Toast.LENGTH_LONG).show();
-                ArrayAdapter<String> adapter = new ArrayAdapter<>
-                        (EventCreation.this, android.R.layout.select_dialog_item, users);
-                automcomplete.setThreshold(2);
-                automcomplete.setAdapter(adapter);
-
-
-
-
-            } else {
-
-                String jstring = Paper.book().read("ustring");
-                try {
-                    ParseArrayList(jstring);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-
-
-                Toast.makeText(getApplicationContext(), "Network Error", Toast.LENGTH_LONG).show();
-
-
-            }
-
-
-
-        }
-
-        @Override
-        protected Integer doInBackground(String... params) {
-            Integer result = 0;
-            HttpURLConnection urlConnection;
-            try {
-                URL url = new URL(params[0]);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                int statusCode = urlConnection.getResponseCode();
-                if (statusCode == 200) {
-                    BufferedReader r = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                    StringBuilder response = new StringBuilder();
-                    String line;
-                    while ((line = r.readLine()) != null) {
-                        response.append(line);
-                    }
-                    Paper.book().write(Constants.ustringjson,response.toString());
-                    ParseArrayList(response.toString());
-                    result = 1;
-                } else {
-                    result = 0;
-
-                }
-            } catch (Exception e) {
-                Log.d(TAG, e.getLocalizedMessage());
-            }
-            return result;
-        }
-    }
-
-    private void ParseArrayList(String s) throws JSONException {
-        JSONObject jObject = new JSONObject(s);
-        Log.d("testing",jObject.toString());
-        Iterator<?> keys = jObject.keys();
-        int i = 0;
-        while (keys.hasNext()) {
-            String key = (String) keys.next();
-            String value = jObject.getString(key);
-            users.add(key);
-            Log.d(TAG,key + " "+ value);
-        }
-
-
-    }
 
 }
