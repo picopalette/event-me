@@ -1,14 +1,15 @@
 package io.picopalette.apps.event_me.Datas;
 
 
-public class HomeEvent {
+public class EventsData {
 
     private String eve_home_name, eve_home_type,eve_home_place,eve_home_date_time,eve_home_img_url;
 
-    public HomeEvent()
+    public EventsData()
     {
 
     }
+
 
     public String getEve_home_name() {
         return eve_home_name;

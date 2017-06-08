@@ -19,7 +19,7 @@
             android:value="AIzaSyDaOjx9zjd7QkKFtJiFwUkr3pEvjacPs2c" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".Activities.MainActivity"
             android:label="@string/title_activity_main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,10 +30,10 @@
 
         </activity>
         <activity
-            android:name=".SignInActivity"
+            android:name=".Activities.SignInActivity"
             android:label="@string/signin" />
         <activity
-            android:name=".EventCreation"
+            android:name=".Activities.EventCreation"
             android:label="@string/title_activity_event_creation"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

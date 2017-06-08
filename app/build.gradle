@@ -11,6 +11,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled = true
     }
     buildTypes {
         release {
@@ -43,6 +44,9 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.firebaseui:firebase-ui-database:1.0.1'
+    compile "com.splitwise:tokenautocomplete:2.0.8@aar"
+    compile 'io.paperdb:paperdb:2.0'
     testCompile 'junit:junit:4.12'
 }
 

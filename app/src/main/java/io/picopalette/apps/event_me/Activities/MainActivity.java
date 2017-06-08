@@ -1,4 +1,4 @@
-package io.picopalette.apps.event_me;
+package io.picopalette.apps.event_me.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,14 +8,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
 import io.picopalette.apps.event_me.Fragments.EventsFragment;
-import io.picopalette.apps.event_me.Fragments.HomeFragment;
+import io.picopalette.apps.event_me.Fragments.NotificationFragment;
 import io.picopalette.apps.event_me.Fragments.ProfileFragment;
 import io.picopalette.apps.event_me.Fragments.TeamsFragment;
+import io.picopalette.apps.event_me.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                                 selectedFragment = ProfileFragment.newInstance();
                                 break;
                             case R.id.navigation_home:
-                                selectedFragment = HomeFragment.newInstance();
+                                selectedFragment = NotificationFragment.newInstance();
                                 break;
                         }
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -63,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Manually displaying the first fragment - one time only
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.content, HomeFragment.newInstance());
+        transaction.replace(R.id.content, EventsFragment.newInstance());
         transaction.commit();
 
         //Used to select an item programmatically

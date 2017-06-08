@@ -1,4 +1,4 @@
-package io.picopalette.apps.event_me;
+package io.picopalette.apps.event_me.Activities;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -29,6 +29,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import io.picopalette.apps.event_me.Datas.User;
+import io.picopalette.apps.event_me.R;
+import io.picopalette.apps.event_me.Utils.Constants;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener,GoogleApiClient.OnConnectionFailedListener{
 
@@ -39,6 +41,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private GoogleApiClient mGoogleApiClient;
     private DatabaseReference mDatabase;
     private FirebaseUser user;
+
     private final String TAG = "SignInActivity";
 
     @Override
@@ -117,9 +120,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 firebaseAuthWithGoogle(account);
 
             } else {
-                //TODO: Show a snack bar when login fails.
-                // Google Sign In failed, update UI appropriately
-                // ...
+                Toast.makeText(getApplicationContext(),"error",Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -136,14 +137,15 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             final FirebaseUser user = mAuth.getCurrentUser();
-                            DatabaseReference userRef = mDatabase.child("users").child(user.getUid());
+                            DatabaseReference userRef = mDatabase.child(Constants.users).child(user.getUid());
                             userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     if(!dataSnapshot.exists()) {
                                         Log.d(TAG, "New user created in firebase");
                                         User newUser = new User(user.getUid(), user.getDisplayName(), user.getEmail(), user.getPhotoUrl().toString());
-                                        mDatabase.child("users").child(newUser.uId).setValue(newUser);
+                                        mDatabase.child(Constants.users).child(EncodeString(user.getEmail())).setValue(newUser);
+                                        mDatabase.child(Constants.people).child(EncodeString(user.getEmail())).setValue(user.getDisplayName());
                                     }
                                 }
 
@@ -171,6 +173,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                         // ...
                     }
                 });
+    }
+
+    private static String  EncodeString(String email) {
+        return email.replace(".",Constants.dot);
     }
 
 

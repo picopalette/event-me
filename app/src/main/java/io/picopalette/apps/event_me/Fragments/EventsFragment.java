@@ -1,6 +1,5 @@
 package io.picopalette.apps.event_me.Fragments;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,9 +15,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.picopalette.apps.event_me.Adapters.EventAdapter;
-import io.picopalette.apps.event_me.Datas.HomeEvent;
-import io.picopalette.apps.event_me.EventCreation;
+import io.picopalette.apps.event_me.Adapters.EventsAdapter;
+import io.picopalette.apps.event_me.Datas.EventsData;
+import io.picopalette.apps.event_me.Activities.EventCreation;
 import io.picopalette.apps.event_me.R;
 
 
@@ -26,8 +25,8 @@ public class EventsFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
-    List<HomeEvent> homeEvents;
-    private EventAdapter adapter;
+    List<EventsData> homeEvents;
+    private EventsAdapter adapter;
 
 
 
@@ -50,7 +49,7 @@ public class EventsFragment extends Fragment {
 
         getDataTask();
         recyclerView.setHasFixedSize(true);
-        adapter = new EventAdapter(getContext(), homeEvents);
+        adapter = new EventsAdapter(getContext(), homeEvents);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         fab.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +66,7 @@ public class EventsFragment extends Fragment {
     private void getDataTask()  {
 
         homeEvents = new ArrayList<>();
-        HomeEvent events = new HomeEvent();
+        EventsData events = new EventsData();
         events.setEve_home_date_time("fgfdgsdf");
         events.setEve_home_img_url("thgfhfghfg");
         events.setEve_home_name("sdfgdfgdfg");
