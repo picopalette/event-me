@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="io.picopalette.apps.event_me.EventCreation">
+    tools:context="io.picopalette.apps.event_me.Activities.EventCreation">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -19,13 +19,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="@color/orange"
+            app:contentScrim="@color/dark_brown"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/event_image"
+                android:contentDescription="@string/eveimg"
                 android:scaleType="fitCenter"/>
 
             <android.support.v7.widget.Toolbar
@@ -50,7 +51,7 @@
         android:layout_margin="@dimen/fab_margin"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@drawable/ic_image_pick" />
+        app:srcCompat="@drawable/ic_cam" />
 
 
 

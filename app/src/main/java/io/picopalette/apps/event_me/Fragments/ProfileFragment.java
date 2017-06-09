@@ -1,52 +1,96 @@
 package io.picopalette.apps.event_me.Fragments;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
-import io.picopalette.apps.event_me.MainActivity;
+import android.widget.TextView;
+import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.nguyenhoanglam.imagepicker.activity.ImagePickerActivity;
+import com.nguyenhoanglam.imagepicker.model.Image;
+import java.util.ArrayList;
+import de.hdodenhof.circleimageview.CircleImageView;
 import io.picopalette.apps.event_me.R;
-import jp.wasabeef.blurry.Blurry;
-
-/**
- * Created by ramkumar on 02/06/17.
- */
+import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment {
 
+    private static final int REQUEST_CODE_PICKER = 69;
+    private ImageView header_image;
+    private CircleImageView profile_pic;
+    private TextView full_name, email_id;
+    private ProgressDialog progressDialog;
+    private String img_url;
+
     public static ProfileFragment newInstance() {
-        ProfileFragment fragment = new ProfileFragment();
-        return fragment;
+        return new ProfileFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
         View v =  inflater.inflate(R.layout.fragment_profile, container, false);
-        int imageresource = getResources().getIdentifier("@drawable/logo", "drawable", getActivity().getPackageName());
-        ImageView imageView = (ImageView) v.findViewById(R.id.header_cover_image);
+        progressDialog = new ProgressDialog(getContext());
+        header_image = (ImageView) v.findViewById(R.id.header_cover_image);
+        profile_pic = (CircleImageView) v.findViewById(R.id.profile_image);
+        full_name = (TextView) v.findViewById(R.id.user_profile_name);
+        email_id = (TextView) v.findViewById(R.id.user_profile_email);
+        progressDialog.setMessage("Getting your content");
+        progressDialog.show();
 
-        Bitmap logo = BitmapFactory.decodeResource(getContext().getResources(), imageresource);
-        Blurry.with(getContext()).from(logo).into(imageView);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user!= null)
+        {
+            String name = user.getDisplayName();
+            String email = user.getEmail();
+            Uri photoUrl = user.getPhotoUrl();
+            assert photoUrl != null;
+            img_url = photoUrl.toString();
+            full_name.setText(name);
+            email_id.setText(email);
+            Glide.with(getContext()).load(photoUrl).into(profile_pic);
+            Glide.with(getContext()).load(photoUrl).into(header_image);
 
+        }
+        progressDialog.dismiss();
         return v;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_PICKER && resultCode == RESULT_OK && data != null) {
+            ArrayList<Image> images = data.getParcelableArrayListExtra(ImagePickerActivity.INTENT_EXTRA_SELECTED_IMAGES);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0, l = images.size(); i < l; i++) {
+                sb.append(images.get(i).getPath()).append("\n");
+            }
+            String uri = sb.toString();
+            profile_pic.setImageURI(Uri.parse(uri.trim()));
+            header_image.setImageURI(Uri.parse(uri.trim()));
+        }
+    }
 }
+
+  // code for image picking
+  /* private void imagestart() {
+        ImagePicker.create(getActivity())
+                .folderMode(true)
+                .folderTitle("My Images")
+                .imageTitle("Select")
+                .single()
+                .showCamera(false)
+                .imageDirectory("Images/*.jpg")
+                .start(REQUEST_CODE_PICKER);
+    }*/

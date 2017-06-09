@@ -1,30 +1,31 @@
 package io.picopalette.apps.event_me.Fragments;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
-import io.picopalette.apps.event_me.EventCreation;
+import java.util.ArrayList;
+import java.util.List;
+import io.picopalette.apps.event_me.Adapters.EventsAdapter;
+import io.picopalette.apps.event_me.Datas.EventsData;
+import io.picopalette.apps.event_me.Activities.EventCreation;
 import io.picopalette.apps.event_me.R;
 
-/**
- * Created by holmesvinn on 3/6/17.
- */
 
 public class EventsFragment extends Fragment {
 
-
-
+    private RecyclerView recyclerView;
+    List<EventsData> homeEvents;
+    private EventsAdapter adapter;
 
     public static EventsFragment newInstance() {
-        EventsFragment fragment = new EventsFragment();
-        return fragment;
+        return new EventsFragment();
     }
 
     @Override
@@ -37,6 +38,13 @@ public class EventsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_events, container, false);
         FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
+        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
+
+        getDataTask();
+        recyclerView.setHasFixedSize(true);
+        adapter = new EventsAdapter(getContext(), homeEvents);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,5 +54,16 @@ public class EventsFragment extends Fragment {
             }
         });
         return v;
+    }
+
+    private void getDataTask()  {
+        homeEvents = new ArrayList<>();
+        EventsData events = new EventsData();
+        events.setEve_home_date_time("fgfdgsdf");
+        events.setEve_home_img_url("thgfhfghfg");
+        events.setEve_home_name("sdfgdfgdfg");
+        events.setEve_home_place("sddgffdgfdg");
+        events.setEve_home_type("dfgfdgdfg");
+        homeEvents.add(events);
     }
 }
