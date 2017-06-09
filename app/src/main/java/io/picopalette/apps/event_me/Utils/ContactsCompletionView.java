@@ -1,6 +1,5 @@
 package io.picopalette.apps.event_me.Utils;
 
-
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
@@ -8,19 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import com.tokenautocomplete.TokenCompleteTextView;
-
 import io.picopalette.apps.event_me.Datas.SimpleContact;
 import io.picopalette.apps.event_me.R;
 
-/**
- * Sample token completion view for basic contact info
- * <p>
- * Created on 9/12/13.
- *
- * @author mgod
- */
 public class ContactsCompletionView extends TokenCompleteTextView<SimpleContact> {
 
     public ContactsCompletionView(Context context) {
@@ -43,18 +33,16 @@ public class ContactsCompletionView extends TokenCompleteTextView<SimpleContact>
         ImageView icon = (ImageView) tokenView.findViewById(R.id.icon);
         textView.setText(contact.getName());
         icon.setImageResource(contact.getDrawableId());
-
         return tokenView;
     }
 
     @Override
     protected SimpleContact defaultObject(String completionText) {
-        //Stupid simple example of guessing if we have an email or not
         int index = completionText.indexOf('@');
         if (index == -1) {
-            return new SimpleContact(R.drawable.male, completionText, completionText.replace(" ", "") + "@example.com");
+            return new SimpleContact(R.mipmap.male, completionText, completionText.replace(" ", "") + "@example.com");
         } else {
-            return new SimpleContact(R.drawable.female, completionText.substring(0, index), completionText);
+            return new SimpleContact(R.mipmap.male, completionText.substring(0, index), completionText);
         }
     }
 }

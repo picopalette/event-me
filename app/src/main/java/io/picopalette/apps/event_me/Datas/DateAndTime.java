@@ -1,11 +1,6 @@
 package io.picopalette.apps.event_me.Datas;
 
-/**
- * Created by holmesvinn on 3/6/17.
- */
-
 public class DateAndTime {
-
     private int dayOfMonth;
     private int month;
     private int year;

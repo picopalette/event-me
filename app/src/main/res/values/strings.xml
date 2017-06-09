@@ -39,6 +39,9 @@
     <string name="teams_fragment">Teams Fragment</string>
     <string name="eveimg">eveimage</string>
     <string name="get_input_data">Get Input Data</string>
+    <string name="new_user">New user created in firebase</string>
+    <string name="ongoing">ongoing</string>
+    <string name="simpleimg">simpleimg</string>
 
 
 </resources>

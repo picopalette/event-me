@@ -7,9 +7,9 @@
 
     <ImageView
         android:id="@+id/icon"
-        android:src="@drawable/male"
+        android:src="@mipmap/male"
         android:layout_centerVertical="true"
-        android:contentDescription="simpleimg"
+        android:contentDescription="@string/simpleimg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

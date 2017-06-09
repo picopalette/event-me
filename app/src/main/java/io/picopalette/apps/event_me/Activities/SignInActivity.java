@@ -27,7 +27,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import io.picopalette.apps.event_me.Datas.User;
 import io.picopalette.apps.event_me.R;
 import io.picopalette.apps.event_me.Utils.Constants;
@@ -41,30 +40,25 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private GoogleApiClient mGoogleApiClient;
     private DatabaseReference mDatabase;
     private FirebaseUser user;
-
     private final String TAG = "SignInActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-
         ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
-
+        if(actionBar!=null)
+            actionBar.hide();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.api_client_id))
                 .requestEmail()
                 .build();
-
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-
         signInButton = (SignInButton)findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(this);
-
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -77,19 +71,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                // ...
             }
         };
-
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
-
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null) {
             Intent launchNextActivity;
@@ -98,7 +87,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             launchNextActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             launchNextActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(launchNextActivity);
-
         }
     }
 
@@ -110,15 +98,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
-                // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
-
             } else {
                 Toast.makeText(getApplicationContext(),"error",Toast.LENGTH_LONG).show();
             }
@@ -126,7 +110,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -134,7 +117,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             final FirebaseUser user = mAuth.getCurrentUser();
                             DatabaseReference userRef = mDatabase.child(Constants.users).child(user.getUid());
@@ -142,7 +124,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     if(!dataSnapshot.exists()) {
-                                        Log.d(TAG, "New user created in firebase");
+                                        Log.d(TAG, getString(R.string.new_user));
                                         User newUser = new User(user.getUid(), user.getDisplayName(), user.getEmail(), user.getPhotoUrl().toString());
                                         mDatabase.child(Constants.users).child(EncodeString(user.getEmail())).setValue(newUser);
                                         mDatabase.child(Constants.people).child(EncodeString(user.getEmail())).setValue(user.getDisplayName());
@@ -151,7 +133,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
-
                                 }
                             });
                             Toast.makeText(getApplicationContext(),user.getDisplayName(),Toast.LENGTH_SHORT).show();
@@ -161,16 +142,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                             launchNextActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             launchNextActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             startActivity(launchNextActivity);
-                            //updateUI(user);
                         } else {
-                            // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(getBaseContext(), "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
                         }
-
-                        // ...
                     }
                 });
     }
@@ -179,7 +155,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         return email.replace(".",Constants.dot);
     }
 
-
     @Override
     public void onClick(View v) {
         if(v == signInButton){
@@ -187,9 +162,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
 }

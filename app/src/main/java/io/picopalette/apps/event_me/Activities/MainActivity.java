@@ -8,8 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.Toast;
-
 import com.google.firebase.auth.FirebaseAuth;
 import io.picopalette.apps.event_me.Fragments.EventsFragment;
 import io.picopalette.apps.event_me.Fragments.NotificationFragment;
@@ -32,10 +30,8 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
-
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.navigation);
-
 
         bottomNavigationView.setOnNavigationItemSelectedListener
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -67,16 +63,13 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
-
         //Manually displaying the first fragment - one time only
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.content, EventsFragment.newInstance());
         transaction.commit();
-
         //Used to select an item programmatically
         //bottomNavigationView.getMenu().getItem(2).setChecked(true);
     }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();

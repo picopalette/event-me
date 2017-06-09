@@ -7,9 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.util.List;
-
 import io.picopalette.apps.event_me.Datas.EventsData;
 import io.picopalette.apps.event_me.R;
 
@@ -17,9 +15,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
 
     private List<EventsData> eventsDataList;
     private Context context;
-
-
-
 
     public EventsAdapter(Context context, List<EventsData> homeEventList) {
         this.eventsDataList = homeEventList;
@@ -30,7 +25,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.event_tab_custom_row, parent, false);
-
         return new MyViewHolder(itemView);
     }
 
@@ -42,7 +36,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
         holder.event_date_time.setText(homeEvent.getEve_home_date_time());
         holder.event_place.setText(homeEvent.getEve_home_place());
         holder.event_image.setBackgroundResource(R.drawable.logo);
-
     }
 
     @Override

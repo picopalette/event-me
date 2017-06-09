@@ -1,6 +1,5 @@
 package io.picopalette.apps.event_me.Adapters;
 
-
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,11 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.tokenautocomplete.FilteredArrayAdapter;
-
 import java.util.List;
-
 import io.picopalette.apps.event_me.Datas.SimpleContact;
 import io.picopalette.apps.event_me.R;
 
@@ -27,7 +23,6 @@ public class FilterAdapter extends FilteredArrayAdapter<SimpleContact> {
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
-
             LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.item_contact, parent, false);
         }
@@ -37,7 +32,6 @@ public class FilterAdapter extends FilteredArrayAdapter<SimpleContact> {
         ((TextView) convertView.findViewById(R.id.email)).setText(contact != null ? contact.getEmail() : null);
         assert contact != null;
         ((ImageView) convertView.findViewById(R.id.icon)).setImageResource(contact.getDrawableId());
-
         return convertView;
     }
 

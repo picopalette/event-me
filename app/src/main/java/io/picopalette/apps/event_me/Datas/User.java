@@ -1,15 +1,11 @@
 package io.picopalette.apps.event_me.Datas;
 
-/**
- * Created by ramkumar on 02/06/17.
- */
-
 public class User {
 
-    public String uId;
-    public String displayName;
-    public String email;
-    public String dpUrl;
+    private String uId;
+    private String displayName;
+    private String email;
+    private String dpUrl;
 
     public User() {
     }
@@ -20,5 +16,4 @@ public class User {
         this.email = email;
         this.dpUrl = dpUrl;
     }
-
 }

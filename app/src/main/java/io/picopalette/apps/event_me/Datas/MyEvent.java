@@ -1,24 +1,12 @@
 package io.picopalette.apps.event_me.Datas;
 
-
-import android.text.format.Time;
-
-import java.util.Date;
-
-/**
- * Created by holmesvinn on 3/6/17.
- */
-
 public class MyEvent {
 
-    public String eveName, eveType, place, eveDate, eveTime;
-    public Boolean isPrivate;
-    public String eId;
+    private String eveName, eveType, place, eveDate, eveTime;
+    private Boolean isPrivate;
+    private String eId;
 
-
-    public MyEvent()
-    {
-
+    public MyEvent(){
     }
 
     public MyEvent(String eveName, String eveType, String place, String eveDate, String eveTime, Boolean isPrivate,String eId) {

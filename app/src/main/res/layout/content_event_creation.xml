@@ -148,9 +148,7 @@
             android:layout_width="match_parent"
             android:id="@+id/to_card"
             android:layout_height="50dp">
-
-
-                    <fragment
+                <fragment
                         android:id="@+id/place_auto"
                         android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
                         android:layout_width="match_parent"
@@ -173,18 +171,6 @@
                 android:nextFocusDown="@+id/editText"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="19sp" />
-            <Button
-                android:id="@+id/btn_get"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:text="@string/get_input_data" />
-
-            <TextView
-                android:id="@+id/input_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_horizontal_margin" />
 
         </LinearLayout>
 

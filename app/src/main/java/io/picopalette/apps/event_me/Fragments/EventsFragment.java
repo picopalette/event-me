@@ -9,12 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import io.picopalette.apps.event_me.Adapters.EventsAdapter;
 import io.picopalette.apps.event_me.Datas.EventsData;
 import io.picopalette.apps.event_me.Activities.EventCreation;
@@ -24,12 +21,8 @@ import io.picopalette.apps.event_me.R;
 public class EventsFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private ProgressBar progressBar;
     List<EventsData> homeEvents;
     private EventsAdapter adapter;
-
-
-
 
     public static EventsFragment newInstance() {
         return new EventsFragment();
@@ -64,7 +57,6 @@ public class EventsFragment extends Fragment {
     }
 
     private void getDataTask()  {
-
         homeEvents = new ArrayList<>();
         EventsData events = new EventsData();
         events.setEve_home_date_time("fgfdgsdf");
@@ -73,8 +65,5 @@ public class EventsFragment extends Fragment {
         events.setEve_home_place("sddgffdgfdg");
         events.setEve_home_type("dfgfdgdfg");
         homeEvents.add(events);
-
-
-
     }
 }

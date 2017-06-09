@@ -5,10 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import io.picopalette.apps.event_me.R;
-
-
 
 public class NotificationFragment extends Fragment {
     public static NotificationFragment newInstance() {

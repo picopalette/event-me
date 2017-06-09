@@ -1,7 +1,5 @@
 package io.picopalette.apps.event_me.Datas;
 
-
-
 public class SimpleContact {
     private int drawableId;
     private String name;
