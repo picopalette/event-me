@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.tokenautocomplete.FilteredArrayAdapter;
 import java.util.List;
-import io.picopalette.apps.event_me.Datas.SimpleContact;
+import io.picopalette.apps.event_me.Models.SimpleContact;
 import io.picopalette.apps.event_me.R;
 
 public class FilterAdapter extends FilteredArrayAdapter<SimpleContact> {

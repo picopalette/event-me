@@ -1,4 +1,4 @@
-package io.picopalette.apps.event_me.Datas;
+package io.picopalette.apps.event_me.Models;
 
 public class DateAndTime {
     private int dayOfMonth;
@@ -6,6 +6,8 @@ public class DateAndTime {
     private int year;
     private int hourOfDay;
     private int minute;
+    private String formattedTime;
+    private String formattedDate;
 
     public DateAndTime() {
     }
@@ -98,5 +100,13 @@ public class DateAndTime {
             sMinute = ""+mMinute;
 
         return sHour+":"+sMinute+" "+mtime;
+    }
+
+    public void setFormattedTime(String formattedTime) {
+        this.formattedTime = formattedTime;
+    }
+
+    public void setFormattedDate(String formattedDate) {
+        this.formattedDate = formattedDate;
     }
 }

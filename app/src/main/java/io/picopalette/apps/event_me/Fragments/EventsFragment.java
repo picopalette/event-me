@@ -6,23 +6,34 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
-import java.util.List;
 import io.picopalette.apps.event_me.Adapters.EventsAdapter;
-import io.picopalette.apps.event_me.Datas.EventsData;
-import io.picopalette.apps.event_me.Activities.EventCreation;
+import io.picopalette.apps.event_me.Activities.EventCreationActivity;
+import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.R;
+import io.picopalette.apps.event_me.Utils.Constants;
+import io.picopalette.apps.event_me.Utils.Utilities;
 
 
 public class EventsFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    List<EventsData> homeEvents;
+    private ArrayList<Event> events;
     private EventsAdapter adapter;
+    private DatabaseReference mDatabaseReference;
 
     public static EventsFragment newInstance() {
         return new EventsFragment();
@@ -39,31 +50,78 @@ public class EventsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_events, container, false);
         FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
-
         getDataTask();
         recyclerView.setHasFixedSize(true);
-        adapter = new EventsAdapter(getContext(), homeEvents);
+        adapter = new EventsAdapter(getContext(), events);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(),"fab clicked",Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(getActivity(), EventCreation.class);
+                Intent intent = new Intent(getActivity(), EventCreationActivity.class);
                 getActivity().startActivity(intent);
             }
         });
         return v;
     }
 
-    private void getDataTask()  {
-        homeEvents = new ArrayList<>();
-        EventsData events = new EventsData();
-        events.setEve_home_date_time("fgfdgsdf");
-        events.setEve_home_img_url("thgfhfghfg");
-        events.setEve_home_name("sdfgdfgdfg");
-        events.setEve_home_place("sddgffdgfdg");
-        events.setEve_home_type("dfgfdgdfg");
-        homeEvents.add(events);
+    private void getDataTask() {
+        events = new ArrayList<>();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference eventReference = mDatabaseReference.child(Constants.users).child(Utilities.encodeEmail(user.getEmail())).child(Constants.events);
+        eventReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                    DatabaseReference eventRef = mDatabaseReference.child(Constants.events).child(eventSnapshot.getKey());
+                    eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Event event = dataSnapshot.getValue(Event.class);
+                            events.add(event);
+                            adapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getActivity(),getString(R.string.error_network),Toast.LENGTH_LONG).show();
+            }
+        });
+        eventReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getActivity(),getString(R.string.error_network),Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

@@ -1,4 +1,4 @@
-package io.picopalette.apps.event_me.Datas;
+package io.picopalette.apps.event_me.Models;
 
 public class SimpleContact {
     private int drawableId;

@@ -33,7 +33,7 @@
             android:name=".Activities.SignInActivity"
             android:label="@string/signin" />
         <activity
-            android:name=".Activities.EventCreation"
+            android:name=".Activities.EventCreationActivity"
             android:label="@string/title_activity_event_creation"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

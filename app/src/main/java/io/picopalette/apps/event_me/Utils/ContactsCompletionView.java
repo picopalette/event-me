@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.tokenautocomplete.TokenCompleteTextView;
-import io.picopalette.apps.event_me.Datas.SimpleContact;
+import io.picopalette.apps.event_me.Models.SimpleContact;
 import io.picopalette.apps.event_me.R;
 
 public class ContactsCompletionView extends TokenCompleteTextView<SimpleContact> {

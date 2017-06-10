@@ -8,16 +8,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.List;
-import io.picopalette.apps.event_me.Datas.EventsData;
+
+import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.R;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHolder> {
 
-    private List<EventsData> eventsDataList;
+    private List<Event> events;
     private Context context;
 
-    public EventsAdapter(Context context, List<EventsData> homeEventList) {
-        this.eventsDataList = homeEventList;
+    public EventsAdapter(Context context, List<Event> events) {
+        this.events = events;
         this.context = context;
     }
 
@@ -30,17 +31,17 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        EventsData homeEvent = eventsDataList.get(position);
-        holder.event_title.setText(homeEvent.getEve_home_name());
-        holder.event_type.setText(homeEvent.getEve_home_type());
-        holder.event_date_time.setText(homeEvent.getEve_home_date_time());
-        holder.event_place.setText(homeEvent.getEve_home_place());
+        Event homeEvent = events.get(position);
+        holder.event_title.setText(homeEvent.getName());
+        holder.event_type.setText(homeEvent.getType());
+        holder.event_date_time.setText(homeEvent.getDateAndTime().getFormattedDate() + " " + homeEvent.getDateAndTime().getFormattedTime());
+        holder.event_place.setText(homeEvent.getPlace().getName());
         holder.event_image.setBackgroundResource(R.drawable.logo);
     }
 
     @Override
     public int getItemCount() {
-        return (null != eventsDataList ? eventsDataList.size() : 0);
+        return (null != events ? events.size() : 0);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

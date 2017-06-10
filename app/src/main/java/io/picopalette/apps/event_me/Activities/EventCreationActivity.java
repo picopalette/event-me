@@ -1,17 +1,18 @@
 package io.picopalette.apps.event_me.Activities;
 
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -37,20 +38,25 @@ import com.nguyenhoanglam.imagepicker.activity.ImagePicker;
 import com.nguyenhoanglam.imagepicker.activity.ImagePickerActivity;
 import com.nguyenhoanglam.imagepicker.model.Image;
 import com.tokenautocomplete.TokenCompleteTextView;
+
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import io.picopalette.apps.event_me.Adapters.FilterAdapter;
-import io.picopalette.apps.event_me.Datas.DateAndTime;
-import io.picopalette.apps.event_me.Datas.MyEvent;
-import io.picopalette.apps.event_me.Datas.SimpleContact;
+import io.picopalette.apps.event_me.Models.DateAndTime;
+import io.picopalette.apps.event_me.Models.Event;
+import io.picopalette.apps.event_me.Models.Location;
+import io.picopalette.apps.event_me.Models.SimpleContact;
 import io.picopalette.apps.event_me.R;
 import io.picopalette.apps.event_me.Utils.Constants;
 import io.picopalette.apps.event_me.Utils.ContactsCompletionView;
+import io.picopalette.apps.event_me.Utils.Utilities;
 
 
-public class EventCreation extends AppCompatActivity implements PlaceSelectionListener, TokenCompleteTextView.TokenListener<SimpleContact>{
+public class EventCreationActivity extends AppCompatActivity implements PlaceSelectionListener, TokenCompleteTextView.TokenListener<SimpleContact>{
 
 
     private EditText Event_name,date,time,Event_type,Event_key;
@@ -58,16 +64,18 @@ public class EventCreation extends AppCompatActivity implements PlaceSelectionLi
     private FilterAdapter filterAdapter;
     private ContactsCompletionView autoCompleteTextView;
     private DateAndTime dateAndTime;
-    private String place_name;
+    private Location place;
     private Button complete;
     private DatabaseReference mDatabaseReference;
+    private DatabaseReference mPeopleReference;
     private Switch mitch;
     private int REQUEST_CODE_PICKER = 2000;
     private ArrayList<Image> images = new ArrayList<>();
     private ImageView Event_image;
-    private ProgressDialog progressDialog;
     private AlertDialog alertDialog;
     private AlertDialog.Builder dialog;
+    private HashMap<String, Constants.UserStatus> participants;
+
 
 
     @Override
@@ -76,8 +84,8 @@ public class EventCreation extends AppCompatActivity implements PlaceSelectionLi
         setContentView(R.layout.activity_event_creation);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        progressDialog = new ProgressDialog(EventCreation.this);
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference(Constants.people);
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        mPeopleReference = mDatabaseReference.child(Constants.people);
         dialog = new AlertDialog.Builder(this).setCancelable(false);
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.alert_dialog_custom, null);
@@ -105,15 +113,15 @@ public class EventCreation extends AppCompatActivity implements PlaceSelectionLi
         autoCompleteTextView = (ContactsCompletionView) findViewById(R.id.autocomplete_textview);
         Fetch_And_Parse();
         filterAdapter = new FilterAdapter(this, R.layout.item_contact, contacts);
-        autoCompleteTextView.setTokenListener(EventCreation.this);
+        autoCompleteTextView.setTokenListener(EventCreationActivity.this);
         autoCompleteTextView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Select);
-
+        dateAndTime = new DateAndTime();
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Calendar calendar = Calendar.getInstance();
-                DatePickerDialog datePickerDialog = new DatePickerDialog(EventCreation.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(EventCreationActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         dateAndTime.setYear(year);
@@ -131,7 +139,7 @@ public class EventCreation extends AppCompatActivity implements PlaceSelectionLi
             public void onClick(View v) {
 
                 Calendar calendar = Calendar.getInstance();
-                TimePickerDialog timePickerDialog = new TimePickerDialog(EventCreation.this, new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(EventCreationActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         dateAndTime.setHourOfDay(hourOfDay);
@@ -149,16 +157,24 @@ public class EventCreation extends AppCompatActivity implements PlaceSelectionLi
 
                 if(!TextUtils.isEmpty(Event_name.getText().toString()) && !TextUtils.isEmpty(Event_type.getText().toString()) &&
                         !TextUtils.isEmpty(date.getText().toString()) && !TextUtils.isEmpty(time.getText().toString()) &&
-                        !TextUtils.isEmpty(place_name) )
+                        place!=null )
                 {
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    DatabaseReference EventRefUser = mDatabaseReference.child(Constants.users).child(EncodeString(user.getEmail()));
-                    DatabaseReference EventReference = mDatabaseReference.child(Constants.events);
-                    String my_keys = EventReference.push().getKey();
+                    DatabaseReference eventRefUser = mDatabaseReference.child(Constants.users).child(Utilities.encodeEmail(user.getEmail()));
+                    DatabaseReference eventReference = mDatabaseReference.child(Constants.events);
+                    String my_key = eventReference.push().getKey();
                     Boolean mPrivate = mitch.isChecked();
-                    EventRefUser.child(Constants.events).child(my_keys).setValue(GetValue());
-                    MyEvent event = new MyEvent(Event_name.getText().toString(),Event_type.getText().toString(),place_name,date.getText().toString(),time.getText().toString(),mPrivate,my_keys);
-                    EventReference.child(my_keys).setValue(event);
+                    eventRefUser.child(Constants.events).child(my_key).setValue(Constants.UserStatus.OWNER);
+                    participants = new HashMap<>();
+                    participants.put(Utilities.encodeEmail(user.getEmail()), Constants.UserStatus.OWNER);
+                    List<SimpleContact> selectedParticipants = autoCompleteTextView.getObjects();
+                    for(SimpleContact selectedParticipant : selectedParticipants) {
+                        participants.put(Utilities.encodeEmail(selectedParticipant.getEmail()), Constants.UserStatus.INVITED);
+                        eventRefUser = mDatabaseReference.child(Constants.users).child(Utilities.encodeEmail(selectedParticipant.getEmail()));
+                        eventRefUser.child(Constants.events).child(my_key).setValue(Constants.UserStatus.INVITED);
+                    }
+                    Event event = new Event(Event_name.getText().toString(),Event_type.getText().toString(),place,dateAndTime,mPrivate,my_key, Constants.EventStatus.UPCOMING, participants);
+                    eventReference.child(my_key).setValue(event);
 
                     Toast.makeText(getBaseContext(), R.string.success,Toast.LENGTH_LONG).show();
                     finish();
@@ -171,7 +187,6 @@ public class EventCreation extends AppCompatActivity implements PlaceSelectionLi
 
             }
         });
-        dateAndTime = new DateAndTime();
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_auto);
         autocompleteFragment.setOnPlaceSelectedListener(this);
@@ -188,13 +203,13 @@ public class EventCreation extends AppCompatActivity implements PlaceSelectionLi
 
     private void Fetch_And_Parse() {
         contacts = new ArrayList<>();
-        mDatabaseReference.addValueEventListener(new ValueEventListener() {
+        mPeopleReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 @SuppressWarnings("unchecked")
                 Map<String, Object> td = (HashMap<String,Object>) dataSnapshot.getValue();
                 for (Map.Entry<String, Object> e : td.entrySet()) {
-                    contacts.add(new SimpleContact(R.mipmap.male, e.getKey().replace(Constants.dot,"."), (String) e.getValue()));
+                    contacts.add(new SimpleContact(R.mipmap.male, e.getValue().toString(), e.getKey().replace(Constants.dot,".")));
                 }
                 autoCompleteTextView.setAdapter(filterAdapter);
                 alertDialog.dismiss();
@@ -203,7 +218,7 @@ public class EventCreation extends AppCompatActivity implements PlaceSelectionLi
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 alertDialog.dismiss();
-                Toast.makeText(EventCreation.this,getString(R.string.error_network),Toast.LENGTH_LONG).show();
+                Toast.makeText(EventCreationActivity.this,getString(R.string.error_network),Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -231,20 +246,10 @@ public class EventCreation extends AppCompatActivity implements PlaceSelectionLi
         }
     }
 
-    private String GetValue() {
-        return getString(R.string.ongoing);
-    }
-
-    private String EncodeString(String email) {
-        if(email != null)
-            return email.replace(".",Constants.dot);
-        else
-            return email;
-    }
-
     @Override
     public void onPlaceSelected(Place place) {
-        place_name = place.getName().toString();
+        this.place = new Location(place.getName().toString(), place.getLatLng().latitude, place.getLatLng().longitude);
+        String place_name = place.getName().toString();
         Toast.makeText(getBaseContext(),place_name,Toast.LENGTH_LONG).show();
     }
 
