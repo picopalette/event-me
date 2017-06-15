@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         Fragment selectedFragment = null;
+                        getSupportActionBar().show();
                         switch (item.getItemId()) {
                             case R.id.navigation_events:
                                 selectedFragment = EventsFragment.newInstance();
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
                                 selectedFragment = TeamsFragment.newInstance();
                                 break;
                             case R.id.navigation_profile:
+                                getSupportActionBar().hide();
                                 selectedFragment = ProfileFragment.newInstance();
                                 break;
                             case R.id.navigation_home:

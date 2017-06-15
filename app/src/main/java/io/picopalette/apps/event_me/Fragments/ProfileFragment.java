@@ -9,7 +9,6 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -52,6 +51,7 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Fresco.initialize(this.getContext());
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
         appbar = (AppBarLayout) v.findViewById( R.id.appbar );
         collapsing = (CollapsingToolbarLayout) v.findViewById( R.id.collapsing );
@@ -61,14 +61,9 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
         toolbar = (Toolbar) v.findViewById( R.id.toolbar );
         textviewTitle = (TextView) v.findViewById( R.id.textview_title );
         avatar = (SimpleDraweeView) v.findViewById(R.id.avatar);
-        Fresco.initialize(this.getContext());
-
-
         toolbar.setTitle("");
         appbar.addOnOffsetChangedListener(this);
-
-                startAlphaAnimation(textviewTitle, 0, View.INVISIBLE);
-
+        startAlphaAnimation(textviewTitle, 0, View.INVISIBLE);
         //set avatar and cover
         avatar.setImageURI(imageUri);
         coverImage.setImageResource(R.drawable.logo);
@@ -82,13 +77,6 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
      * Auto-created on 2016-03-03 11:32:38 by Android Layout Finder
      * (http://www.buzzingandroid.com/tools/android-layout-finder)
      */
-
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
 
     @Override

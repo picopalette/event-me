@@ -1,6 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -136,7 +135,7 @@
             android:layout_width="@dimen/image_width"
             android:layout_height="@dimen/image_width"
             android:layout_gravity="center"
-            app:layout_behavior="io.picopalette.apps.event_me.Models.ImageBehaviour"
+            app:layout_behavior="io.picopalette.apps.event_me.Utils.ImageBehaviour"
             fresco:roundAsCircle="true" />
 
     </android.support.design.widget.CoordinatorLayout>
