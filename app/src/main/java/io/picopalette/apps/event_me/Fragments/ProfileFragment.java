@@ -1,96 +1,147 @@
 package io.picopalette.apps.event_me.Fragments;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
+
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.nguyenhoanglam.imagepicker.activity.ImagePickerActivity;
-import com.nguyenhoanglam.imagepicker.model.Image;
-import java.util.ArrayList;
-import de.hdodenhof.circleimageview.CircleImageView;
+
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.view.SimpleDraweeView;
+
 import io.picopalette.apps.event_me.R;
-import static android.app.Activity.RESULT_OK;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetChangedListener{
 
-    private static final int REQUEST_CODE_PICKER = 69;
-    private ImageView header_image;
-    private CircleImageView profile_pic;
-    private TextView full_name, email_id;
-    private ProgressDialog progressDialog;
-    private String img_url;
+
+
+    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.9f;
+
+    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
+    private static final int ALPHA_ANIMATIONS_DURATION              = 200;
+    final Uri imageUri = Uri.parse("http://i.imgur.com/VIlcLfg.jpg");
+
+    private boolean mIsTheTitleVisible          = false;
+    private boolean mIsTheTitleContainerVisible = true;
+
+    private AppBarLayout appbar;
+    private CollapsingToolbarLayout collapsing;
+    private ImageView coverImage;
+    private FrameLayout framelayoutTitle;
+    private LinearLayout linearlayoutTitle;
+    private Toolbar toolbar;
+    private TextView textviewTitle;
+    private SimpleDraweeView avatar;
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
     }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_profile, container, false);
+        appbar = (AppBarLayout) v.findViewById( R.id.appbar );
+        collapsing = (CollapsingToolbarLayout) v.findViewById( R.id.collapsing );
+        coverImage = (ImageView) v.findViewById( R.id.imageview_placeholder );
+        framelayoutTitle = (FrameLayout) v.findViewById( R.id.framelayout_title );
+        linearlayoutTitle = (LinearLayout) v.findViewById( R.id.linearlayout_title );
+        toolbar = (Toolbar) v.findViewById( R.id.toolbar );
+        textviewTitle = (TextView) v.findViewById( R.id.textview_title );
+        avatar = (SimpleDraweeView) v.findViewById(R.id.avatar);
+        Fresco.initialize(this.getContext());
+
+
+        toolbar.setTitle("");
+        appbar.addOnOffsetChangedListener(this);
+
+                startAlphaAnimation(textviewTitle, 0, View.INVISIBLE);
+
+        //set avatar and cover
+        avatar.setImageURI(imageUri);
+        coverImage.setImageResource(R.drawable.logo);
+        return v;
+    }
+
+
+    /**
+     * Find the Views in the layout<br />
+     * <br />
+     * Auto-created on 2016-03-03 11:32:38 by Android Layout Finder
+     * (http://www.buzzingandroid.com/tools/android-layout-finder)
+     */
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v =  inflater.inflate(R.layout.fragment_profile, container, false);
-        progressDialog = new ProgressDialog(getContext());
-        header_image = (ImageView) v.findViewById(R.id.header_cover_image);
-        profile_pic = (CircleImageView) v.findViewById(R.id.profile_image);
-        full_name = (TextView) v.findViewById(R.id.user_profile_name);
-        email_id = (TextView) v.findViewById(R.id.user_profile_email);
-        progressDialog.setMessage("Getting your content");
-        progressDialog.show();
+    public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
+        int maxScroll = appBarLayout.getTotalScrollRange();
+        float percentage = (float) Math.abs(offset) / (float) maxScroll;
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user!= null)
-        {
-            String name = user.getDisplayName();
-            String email = user.getEmail();
-            Uri photoUrl = user.getPhotoUrl();
-            assert photoUrl != null;
-            img_url = photoUrl.toString();
-            full_name.setText(name);
-            email_id.setText(email);
-            Glide.with(getContext()).load(photoUrl).into(profile_pic);
-            Glide.with(getContext()).load(photoUrl).into(header_image);
-
-        }
-        progressDialog.dismiss();
-        return v;
+        handleAlphaOnTitle(percentage);
+        handleToolbarTitleVisibility(percentage);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE_PICKER && resultCode == RESULT_OK && data != null) {
-            ArrayList<Image> images = data.getParcelableArrayListExtra(ImagePickerActivity.INTENT_EXTRA_SELECTED_IMAGES);
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0, l = images.size(); i < l; i++) {
-                sb.append(images.get(i).getPath()).append("\n");
+    private void handleToolbarTitleVisibility(float percentage) {
+        if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
+
+            if(!mIsTheTitleVisible) {
+                startAlphaAnimation(textviewTitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                mIsTheTitleVisible = true;
             }
-            String uri = sb.toString();
-            profile_pic.setImageURI(Uri.parse(uri.trim()));
-            header_image.setImageURI(Uri.parse(uri.trim()));
+
+        } else {
+
+            if (mIsTheTitleVisible) {
+                startAlphaAnimation(textviewTitle, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+                mIsTheTitleVisible = false;
+            }
         }
     }
-}
 
-  // code for image picking
-  /* private void imagestart() {
-        ImagePicker.create(getActivity())
-                .folderMode(true)
-                .folderTitle("My Images")
-                .imageTitle("Select")
-                .single()
-                .showCamera(false)
-                .imageDirectory("Images/*.jpg")
-                .start(REQUEST_CODE_PICKER);
-    }*/
+    private void handleAlphaOnTitle(float percentage) {
+        if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
+            if(mIsTheTitleContainerVisible) {
+                startAlphaAnimation(linearlayoutTitle, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+                mIsTheTitleContainerVisible = false;
+            }
+
+        } else {
+
+            if (!mIsTheTitleContainerVisible) {
+                startAlphaAnimation(linearlayoutTitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                mIsTheTitleContainerVisible = true;
+            }
+        }
+    }
+
+    public static void startAlphaAnimation (View v, long duration, int visibility) {
+        AlphaAnimation alphaAnimation = (visibility == View.VISIBLE)
+                ? new AlphaAnimation(0f, 1f)
+                : new AlphaAnimation(1f, 0f);
+
+        alphaAnimation.setDuration(duration);
+        alphaAnimation.setFillAfter(true);
+        v.startAnimation(alphaAnimation);
+    }
+
+
+}
