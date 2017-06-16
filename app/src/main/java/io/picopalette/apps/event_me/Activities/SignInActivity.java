@@ -119,7 +119,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                         if (task.isSuccessful()) {
                             Log.d(TAG, "signInWithCredential:success");
                             final FirebaseUser user = mAuth.getCurrentUser();
-                            DatabaseReference userRef = mDatabase.child(Constants.users).child(user.getUid());
+                            DatabaseReference userRef = mDatabase.child(Constants.users).child(EncodeString(user.getEmail()));
                             userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
