@@ -10,6 +10,7 @@ public class DateAndTime {
     private String formattedDate;
 
     public DateAndTime() {
+
     }
 
     public DateAndTime( int hourOfDay, int minute, int dayOfMonth, int month, int year) {

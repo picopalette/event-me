@@ -81,14 +81,6 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
     }
 
 
-    /**
-     * Find the Views in the layout<br />
-     * <br />
-     * Auto-created on 2016-03-03 11:32:38 by Android Layout Finder
-     * (http://www.buzzingandroid.com/tools/android-layout-finder)
-     */
-
-
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
         int maxScroll = appBarLayout.getTotalScrollRange();
