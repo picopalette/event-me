@@ -51,15 +51,18 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/profile_view_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:gravity="bottom|center"
                             android:text="Grumpy Cat"
+                            android:layout_marginTop="20dp"
                             android:textColor="@android:color/white"
                             android:textSize="30sp" />
 
                         <TextView
+                            android:id="@+id/profile_view_email"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
@@ -123,7 +126,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="8dp"
                     android:gravity="center_vertical"
-                    android:text="Grumpy Cat information"
+                    android:text="Timeline"
                     android:textColor="@android:color/white"
                     android:textSize="20sp" />
 
@@ -134,9 +137,10 @@
             android:id="@+id/avatar"
             android:layout_width="@dimen/image_width"
             android:layout_height="@dimen/image_width"
-            android:layout_gravity="center"
+            android:layout_gravity="center_horizontal"
             app:layout_behavior="io.picopalette.apps.event_me.Utils.ImageBehaviour"
-            fresco:roundAsCircle="true" />
+            fresco:roundAsCircle="true"
+            />
 
     </android.support.design.widget.CoordinatorLayout>
 </LinearLayout>

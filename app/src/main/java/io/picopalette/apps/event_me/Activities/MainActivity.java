@@ -9,15 +9,19 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import io.picopalette.apps.event_me.Fragments.EventsFragment;
 import io.picopalette.apps.event_me.Fragments.NotificationFragment;
 import io.picopalette.apps.event_me.Fragments.ProfileFragment;
 import io.picopalette.apps.event_me.Fragments.TeamsFragment;
+import io.picopalette.apps.event_me.Models.User;
 import io.picopalette.apps.event_me.R;
 
 public class MainActivity extends AppCompatActivity {
 
     int mFlag=0;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
-        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+        bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.navigation);
 
         bottomNavigationView.setOnNavigationItemSelectedListener
@@ -48,7 +52,14 @@ public class MainActivity extends AppCompatActivity {
                                 break;
                             case R.id.navigation_profile:
                                 getSupportActionBar().hide();
+                                FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+                                Bundle userBundle = new Bundle();
+                                userBundle.putString("uid", fUser.getUid());
+                                userBundle.putString("name", fUser.getDisplayName());
+                                userBundle.putString("email", fUser.getEmail());
+                                userBundle.putString("dpurl", fUser.getPhotoUrl().toString());
                                 selectedFragment = ProfileFragment.newInstance();
+                                selectedFragment.setArguments(userBundle);
                                 break;
                             case R.id.navigation_home:
                                 selectedFragment = NotificationFragment.newInstance();
@@ -75,9 +86,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        getSupportActionBar().show();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.content, EventsFragment.newInstance());
         transaction.commit();
+        bottomNavigationView.setSelectedItemId(R.id.navigation_events);
         mFlag=0;
     }
 }

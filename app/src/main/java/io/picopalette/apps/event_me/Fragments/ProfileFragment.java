@@ -30,7 +30,9 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
     private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
     private static final int ALPHA_ANIMATIONS_DURATION              = 200;
-    final Uri imageUri = Uri.parse("http://i.imgur.com/VIlcLfg.jpg");
+    private Bundle userBundle;
+    private Uri coverUri = Uri.parse("");
+    private Uri imageUri = Uri.parse("http://i.imgur.com/VIlcLfg.jpg");
 
     private boolean mIsTheTitleVisible          = false;
     private boolean mIsTheTitleContainerVisible = true;
@@ -42,6 +44,8 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
     private LinearLayout linearlayoutTitle;
     private Toolbar toolbar;
     private TextView textviewTitle;
+    private TextView profileName;
+    private TextView profileEmail;
     private SimpleDraweeView avatar;
 
     public static ProfileFragment newInstance() {
@@ -53,6 +57,7 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Fresco.initialize(this.getContext());
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
+        userBundle = getArguments();
         appbar = (AppBarLayout) v.findViewById( R.id.appbar );
         collapsing = (CollapsingToolbarLayout) v.findViewById( R.id.collapsing );
         coverImage = (ImageView) v.findViewById( R.id.imageview_placeholder );
@@ -60,13 +65,18 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
         linearlayoutTitle = (LinearLayout) v.findViewById( R.id.linearlayout_title );
         toolbar = (Toolbar) v.findViewById( R.id.toolbar );
         textviewTitle = (TextView) v.findViewById( R.id.textview_title );
+        profileName = (TextView) v.findViewById(R.id.profile_view_name);
+        profileEmail = (TextView) v.findViewById(R.id.profile_view_email);
         avatar = (SimpleDraweeView) v.findViewById(R.id.avatar);
         toolbar.setTitle("");
         appbar.addOnOffsetChangedListener(this);
         startAlphaAnimation(textviewTitle, 0, View.INVISIBLE);
         //set avatar and cover
+        imageUri = Uri.parse(userBundle.getString("dpurl"));
         avatar.setImageURI(imageUri);
-        coverImage.setImageResource(R.drawable.logo);
+        coverImage.setImageURI(coverUri);
+        profileName.setText(userBundle.getString("name"));
+        profileEmail.setText(userBundle.getString("email"));
         return v;
     }
 
