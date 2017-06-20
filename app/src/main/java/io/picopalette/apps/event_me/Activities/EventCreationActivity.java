@@ -3,14 +3,17 @@ package io.picopalette.apps.event_me.Activities;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -25,6 +28,8 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,10 +37,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.nguyenhoanglam.imagepicker.activity.ImagePicker;
 import com.nguyenhoanglam.imagepicker.activity.ImagePickerActivity;
 import com.nguyenhoanglam.imagepicker.model.Image;
 import com.tokenautocomplete.TokenCompleteTextView;
+
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -71,7 +81,7 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
     private AlertDialog alertDialog;
     private AlertDialog.Builder dialog;
     private HashMap<String, Constants.UserStatus> participants;
-
+    private Uri downloadUrl;
 
 
     @Override
@@ -80,6 +90,7 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
         setContentView(R.layout.activity_event_creation);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        final StorageReference storageReference = FirebaseStorage.getInstance().getReference();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mPeopleReference = mDatabaseReference.child(Constants.people);
         dialog = new AlertDialog.Builder(this).setCancelable(false);
@@ -148,17 +159,40 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
             }
         });
         complete.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
 
                 if(!TextUtils.isEmpty(Event_name.getText().toString()) && !TextUtils.isEmpty(Event_type.getText().toString()) &&
                         !TextUtils.isEmpty(date.getText().toString()) && !TextUtils.isEmpty(time.getText().toString()) &&
-                        place!=null )
+                        (place!=null)  && (Event_image != null))
                 {
+
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     DatabaseReference eventRefUser = mDatabaseReference.child(Constants.users).child(Utilities.encodeEmail(user.getEmail()));
-                    DatabaseReference eventReference = mDatabaseReference.child(Constants.events);
-                    String my_key = eventReference.push().getKey();
+                    final DatabaseReference eventReference = mDatabaseReference.child(Constants.events);
+                    final String my_key = eventReference.push().getKey();
+                    StorageReference everef = storageReference.child("images/"+my_key);
+                    Log.d("sf", everef.toString());
+                    Event_image.setDrawingCacheEnabled(true);
+                    Event_image.buildDrawingCache();
+                    Bitmap bitmap = Event_image.getDrawingCache();
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] data = baos.toByteArray();
+                    UploadTask uploadTask = everef.putBytes(data);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            Toast.makeText(getBaseContext(),"Cannot Upload",Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            downloadUrl = taskSnapshot.getDownloadUrl();
+                            finish();
+                        }
+                    });
                     Boolean mPrivate = mitch.isChecked();
                     eventRefUser.child(Constants.events).child(my_key).setValue(Constants.UserStatus.OWNER);
                     participants = new HashMap<>();
@@ -169,17 +203,19 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
                         eventRefUser = mDatabaseReference.child(Constants.users).child(Utilities.encodeEmail(selectedParticipant.getEmail()));
                         eventRefUser.child(Constants.events).child(my_key).setValue(Constants.UserStatus.INVITED);
                     }
-                    Event event = new Event(Event_name.getText().toString(),Event_type.getText().toString(),place,dateAndTime,mPrivate,my_key, Constants.EventStatus.UPCOMING, participants);
+                    Event event = new Event(Event_name.getText().toString(),Event_type.getText().toString(),place,dateAndTime,mPrivate,my_key, Constants.EventStatus.UPCOMING, participants,downloadUrl);
                     eventReference.child(my_key).setValue(event);
 
                     Toast.makeText(getBaseContext(), R.string.success,Toast.LENGTH_LONG).show();
-                    finish();
+
 
                 }
                 else
                 {
                     Toast.makeText(getBaseContext(), R.string.fill_details,Toast.LENGTH_LONG).show();
                 }
+
+
 
             }
         });

@@ -50,8 +50,8 @@ public class EventsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_events, container, false);
         FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView_eve);
-        getDataTask();
         recyclerView.setHasFixedSize(true);
+        events = new ArrayList<>();
         adapter = new EventsAdapter(getContext(), events);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -63,12 +63,12 @@ public class EventsFragment extends Fragment {
                 getActivity().startActivity(intent);
             }
         });
+        getDataTask();
         return v;
     }
 
     private void getDataTask() {
         Log.d("tes1","inside getdatatask");
-        events = new ArrayList<>();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference eventReference = mDatabaseReference.child(Constants.users).child(Utilities.encodeEmail(user.getEmail())).child(Constants.events);
@@ -78,15 +78,18 @@ public class EventsFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.d("tes1","got datasnapshot"+ dataSnapshot.toString());
                 for(DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                    Log.d("testing",dataSnapshot.getChildren().toString());
                     DatabaseReference eventRef = mDatabaseReference.child(Constants.events).child(eventSnapshot.getKey());
+                    Log.d("keys",eventSnapshot.getKey());
                     eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
 
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Event event = dataSnapshot.getValue(Event.class);
                             Log.d("tes2","got datasnapshot"+ event.toString());
-                            events.add(event);
+                            adapter.events.add(event);
                             adapter.notifyDataSetChanged();
+                            Log.d("tes2", adapter.events.toString());
                         }
 
                         @Override
@@ -94,8 +97,11 @@ public class EventsFragment extends Fragment {
                             Log.d("tes3","cancelled");
 
                         }
+
                     });
                 }
+
+
             }
 
             @Override

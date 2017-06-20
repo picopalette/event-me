@@ -93,4 +93,14 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.navigation_events);
         mFlag=0;
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getSupportActionBar().show();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.content, EventsFragment.newInstance());
+        transaction.commit();
+        bottomNavigationView.setSelectedItemId(R.id.navigation_events);
+    }
 }

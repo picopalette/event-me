@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -22,8 +24,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -54,11 +58,13 @@ public class LiveShare extends FragmentActivity  implements OnMapReadyCallback{
     private DatabaseReference userdata, livedata;
     private FirebaseUser user;
     private String key;
+    private Context context;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_liveshare);
+
         userdata = FirebaseDatabase.getInstance().getReference().child("users");
 
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -138,6 +144,8 @@ public class LiveShare extends FragmentActivity  implements OnMapReadyCallback{
 
     @Override
     public void onMapReady(final GoogleMap googleMap) {
+        final Bitmap icon = BitmapFactory.decodeResource(getApplicationContext().getResources(),
+                R.drawable.logo);
 
         livedata.addValueEventListener(new ValueEventListener() {
             @Override
@@ -146,6 +154,7 @@ public class LiveShare extends FragmentActivity  implements OnMapReadyCallback{
                 for (final Map.Entry<String, Object> e : td.entrySet()) {
                     DatabaseReference val = userdata.child(e.getKey()).child("live");
                     val.addValueEventListener(new ValueEventListener() {
+                        Marker marker;
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -160,7 +169,12 @@ public class LiveShare extends FragmentActivity  implements OnMapReadyCallback{
                             }
                             if((lattitude != null) && (longitude != null)){
                                LatLng user = new LatLng(lattitude,longitude);
-                                googleMap.addMarker(new MarkerOptions().position(user).title(e.getKey()));
+                                if(marker != null){
+                                    marker.remove();
+                                }
+                                marker = googleMap.addMarker(new MarkerOptions().position(user).title(e.getKey())
+                                        .icon(BitmapDescriptorFactory.fromBitmap(icon)));
+
                             }
 
 
@@ -183,7 +197,7 @@ public class LiveShare extends FragmentActivity  implements OnMapReadyCallback{
         });
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(30.24,60.44))
+                .target(new LatLng(lat,lon))
                 .zoom(17)
                 .bearing(0)
                 .tilt(80)

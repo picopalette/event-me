@@ -1,6 +1,8 @@
 package io.picopalette.apps.event_me.Models;
 
 
+import android.net.Uri;
+
 import java.util.HashMap;
 
 import io.picopalette.apps.event_me.Utils.Constants;
@@ -13,11 +15,13 @@ public class Event {
     private Boolean isPrivate;
     private DateAndTime dateAndTime;
     private HashMap<String, Constants.UserStatus> participants;
+    private Uri uri;
 
     public Event() {
     }
 
-    public Event(String name, String type, Location place, DateAndTime dateAndTime, Boolean isPrivate, String id, Constants.EventStatus status, HashMap<String, Constants.UserStatus> participants) {
+    public Event(String name, String type, Location place, DateAndTime dateAndTime, Boolean isPrivate, String id, Constants.EventStatus status, HashMap<String, Constants.UserStatus> participants, Uri downloaduri) {
+        this.uri = downloaduri;
         this.name = name;
         this.type = type;
         this.place = place;
@@ -26,6 +30,14 @@ public class Event {
         this.status = status;
         this.id = id;
         this.participants = participants;
+    }
+
+    public Uri getUri() {
+        return uri;
+    }
+
+    public void setUri(Uri uri) {
+        this.uri = uri;
     }
 
     public String getId() {
