@@ -2,7 +2,10 @@ package io.picopalette.apps.event_me.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,6 +22,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.Serializable;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -33,6 +37,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
     private Context context;
     private View itemView;
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+    private Bitmap bitmap;
 
     public EventsAdapter(Context context, List<Event> events) {
         this.events = events;
@@ -68,11 +73,12 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
             }
         });
 
+
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, EventDisplayActivity.class);
-                intent.putExtra("event", homeEvent);
+                intent.putExtra("events",  homeEvent);
                 context.startActivity(intent);
 //                Intent intent = new Intent(context, LiveShare.class);
 //                intent.putExtra("lat", homeEvent.getPlace().getLat());

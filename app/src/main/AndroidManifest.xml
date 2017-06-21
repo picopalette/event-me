@@ -57,6 +57,7 @@
             </intent-filter>
         </service>
 
+
         <activity android:name=".Activities.LiveShare" />
         <activity android:name=".Activities.EventDisplayActivity" />
         <activity android:name=".Activities.NotificationsActivity"></activity>
