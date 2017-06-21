@@ -47,18 +47,18 @@ public class EventsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_events, container, false);
+        View v = inflater.inflate(R.layout.fragment_events, container,false);
         FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView_eve);
         recyclerView.setHasFixedSize(true);
         events = new ArrayList<>();
-        adapter = new EventsAdapter(getContext(), events);
+        adapter = new EventsAdapter(getActivity().getApplicationContext(), events);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),"fab clicked",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity().getApplicationContext(),"fab clicked",Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getActivity(), EventCreationActivity.class);
                 getActivity().startActivity(intent);
             }

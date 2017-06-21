@@ -1,6 +1,8 @@
 package io.picopalette.apps.event_me.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -41,12 +43,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private DatabaseReference mDatabase;
     private FirebaseUser user;
     private final String TAG = "SignInActivity";
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         ActionBar actionBar = getSupportActionBar();
+        sharedPreferences = getApplicationContext().getSharedPreferences("event_me", Context.MODE_PRIVATE);
         if(actionBar!=null)
             actionBar.hide();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -129,6 +133,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                                         mDatabase.child(Constants.users).child(EncodeString(user.getEmail())).setValue(newUser);
                                         mDatabase.child(Constants.people).child(EncodeString(user.getEmail())).setValue(user.getDisplayName());
                                     }
+                                    mDatabase.child(Constants.users).child(EncodeString(user.getEmail())).child("fcmtoken").setValue(sharedPreferences.getString("refreshtoken", null));
                                 }
 
                                 @Override

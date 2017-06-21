@@ -7,20 +7,18 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
 import io.picopalette.apps.event_me.Fragments.EventsFragment;
-import io.picopalette.apps.event_me.Fragments.NotificationFragment;
 import io.picopalette.apps.event_me.Fragments.ProfileFragment;
 import io.picopalette.apps.event_me.Fragments.TeamsFragment;
-import io.picopalette.apps.event_me.Models.User;
 import io.picopalette.apps.event_me.R;
 
 public class MainActivity extends AppCompatActivity {
-
-    int mFlag=0;
+    private boolean isInEvent = true;
     private BottomNavigationView bottomNavigationView;
 
     @Override
@@ -33,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-
         bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.navigation);
 
@@ -46,9 +43,11 @@ public class MainActivity extends AppCompatActivity {
                         switch (item.getItemId()) {
                             case R.id.navigation_events:
                                 selectedFragment = EventsFragment.newInstance();
+                                isInEvent = true;
                                 break;
                             case R.id.navigation_teams:
                                 selectedFragment = TeamsFragment.newInstance();
+                                isInEvent = false;
                                 break;
                             case R.id.navigation_profile:
                                 getSupportActionBar().hide();
@@ -60,38 +59,29 @@ public class MainActivity extends AppCompatActivity {
                                 userBundle.putString("dpurl", fUser.getPhotoUrl().toString());
                                 selectedFragment = ProfileFragment.newInstance();
                                 selectedFragment.setArguments(userBundle);
-                                break;
-                            case R.id.navigation_home:
-                                selectedFragment = NotificationFragment.newInstance();
+                                isInEvent = false;
                                 break;
                         }
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                         transaction.replace(R.id.content, selectedFragment);
-                        if(mFlag==0)
-                        {
-                            transaction.addToBackStack(null);
-                            mFlag=1;
-                        }
                         transaction.commit();
                         return true;
                     }
+
                 });
-        //Manually displaying the first fragment - one time only
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.content, EventsFragment.newInstance());
-        transaction.commit();
-        //Used to select an item programmatically
-        //bottomNavigationView.getMenu().getItem(2).setChecked(true);
     }
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        getSupportActionBar().show();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.content, EventsFragment.newInstance());
-        transaction.commit();
-        bottomNavigationView.setSelectedItemId(R.id.navigation_events);
-        mFlag=0;
+        if(isInEvent)
+            super.onBackPressed();
+        else {
+            getSupportActionBar().show();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.content, EventsFragment.newInstance());
+            transaction.commit();
+            bottomNavigationView.setSelectedItemId(R.id.navigation_events);
+            isInEvent = true;
+        }
     }
 
     @Override

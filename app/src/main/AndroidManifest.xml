@@ -21,6 +21,14 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDaOjx9zjd7QkKFtJiFwUkr3pEvjacPs2c" />
 
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/logo" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+
         <activity
             android:name=".Activities.MainActivity"
             android:label="@string/title_activity_main">
@@ -40,6 +48,18 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service android:name=".Services.LocationData" />
+        <service
+            android:name=".Services.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name=".Services.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
 
         <activity android:name=".Activities.LiveShare"></activity>
     </application>

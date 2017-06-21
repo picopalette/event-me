@@ -59,9 +59,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
             @Override
             public void onSuccess(Uri uri) {
                 // TODO: handle uri
-                Glide.with(itemView.getContext())
+                Glide.with(context)
                         .load(uri.toString())
-                        .dontAnimate()
                         .into(holder.event_image);
             }
         }).addOnFailureListener(new OnFailureListener() {
