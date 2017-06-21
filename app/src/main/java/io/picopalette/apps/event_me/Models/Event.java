@@ -3,11 +3,12 @@ package io.picopalette.apps.event_me.Models;
 
 import android.net.Uri;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import io.picopalette.apps.event_me.Utils.Constants;
 
-public class Event {
+public class Event implements Serializable {
 
     private String id, name, type;
     private Location place;

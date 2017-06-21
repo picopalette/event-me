@@ -58,50 +58,38 @@ public class EventsFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity().getApplicationContext(),"fab clicked",Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getActivity(), EventCreationActivity.class);
                 getActivity().startActivity(intent);
             }
         });
-        getDataTask();
         return v;
     }
 
     private void getDataTask() {
-        Log.d("tes1","inside getdatatask");
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference eventReference = mDatabaseReference.child(Constants.users).child(Utilities.encodeEmail(user.getEmail())).child(Constants.events);
-        Log.d("tes3","got event reference"+ eventReference.toString());
         eventReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d("tes1","got datasnapshot"+ dataSnapshot.toString());
                 for(DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-                    Log.d("testing",dataSnapshot.getChildren().toString());
                     DatabaseReference eventRef = mDatabaseReference.child(Constants.events).child(eventSnapshot.getKey());
-                    Log.d("keys",eventSnapshot.getKey());
                     eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
 
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Event event = dataSnapshot.getValue(Event.class);
-                            Log.d("tes2","got datasnapshot"+ event.toString());
-                            adapter.events.add(event);
+                            if(!adapter.events.contains(event))
+                                adapter.events.add(event);
                             adapter.notifyDataSetChanged();
-                            Log.d("tes2", adapter.events.toString());
                         }
 
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
-                            Log.d("tes3","cancelled");
-
                         }
 
                     });
                 }
-
-
             }
 
             @Override
@@ -109,33 +97,12 @@ public class EventsFragment extends Fragment {
                 Toast.makeText(getActivity(),getString(R.string.error_network),Toast.LENGTH_LONG).show();
             }
         });
+    }
 
-
-        eventReference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(),getString(R.string.error_network),Toast.LENGTH_LONG).show();
-            }
-        });
+    @Override
+    public void onResume() {
+        super.onResume();
+        events.clear();
+        getDataTask();
     }
 }

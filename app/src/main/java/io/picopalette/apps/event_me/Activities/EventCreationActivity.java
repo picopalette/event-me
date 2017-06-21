@@ -1,6 +1,7 @@
 package io.picopalette.apps.event_me.Activities;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -28,8 +29,10 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -38,6 +41,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnPausedListener;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.nguyenhoanglam.imagepicker.activity.ImagePicker;
@@ -63,7 +68,6 @@ import io.picopalette.apps.event_me.Utils.Utilities;
 
 public class EventCreationActivity extends AppCompatActivity implements PlaceSelectionListener, TokenCompleteTextView.TokenListener<SimpleContact>{
 
-
     private EditText Event_name,date,time,Event_type,Event_key;
     private ArrayList<SimpleContact> contacts;
     private FilterAdapter filterAdapter;
@@ -81,6 +85,7 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
     private AlertDialog.Builder dialog;
     private HashMap<String, Constants.UserStatus> participants;
     private Uri downloadUrl;
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -97,6 +102,8 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
         View dialogView = inflater.inflate(R.layout.alert_dialog_custom, null);
         dialog.setView(dialogView);
         alertDialog = dialog.create();
+        progressDialog = new ProgressDialog(EventCreationActivity.this);
+        progressDialog.setTitle("Creating Event");
         alertDialog.show();
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -164,7 +171,7 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
 
                 if(!TextUtils.isEmpty(Event_name.getText().toString()) && !TextUtils.isEmpty(Event_type.getText().toString()) &&
                         !TextUtils.isEmpty(date.getText().toString()) && !TextUtils.isEmpty(time.getText().toString()) &&
-                        (place!=null)  && (Event_image != null))
+                        (place!=null)  && (Event_image.getDrawable() != null))
                 {
 
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -180,6 +187,7 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     byte[] data = baos.toByteArray();
                     UploadTask uploadTask = everef.putBytes(data);
+                    progressDialog.show();
                     uploadTask.addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception exception) {
@@ -190,6 +198,24 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             downloadUrl = taskSnapshot.getDownloadUrl();
                             finish();
+                        }
+                    });
+                    uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = 100.0 * (taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                            progressDialog.setProgress((int) progress);
+                            progressDialog.setMessage("Uploading your Event");
+                        }
+                    }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.setMessage("Upload Paused");
+                        }
+                    }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            progressDialog.dismiss();
                         }
                     });
                     Boolean mPrivate = mitch.isChecked();
@@ -204,10 +230,7 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
                     }
                     Event event = new Event(Event_name.getText().toString(),Event_type.getText().toString(),place,dateAndTime,mPrivate,my_key, Constants.EventStatus.UPCOMING, participants,downloadUrl);
                     eventReference.child(my_key).setValue(event);
-
                     Toast.makeText(getBaseContext(), R.string.success,Toast.LENGTH_LONG).show();
-
-
                 }
                 else
                 {
@@ -226,7 +249,7 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               PickImage();
+               pickImage();
             }
         });
 
@@ -253,13 +276,13 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
             }
         });
     }
-    private void PickImage() {
+    private void pickImage() {
         ImagePicker.create(this)
                 .folderMode(true)
                 .folderTitle(getString(R.string.my_images))
                 .imageTitle(getString(R.string.select))
                 .single()
-                .showCamera(false)
+                .showCamera(true)
                 .imageDirectory(getString(R.string.imges_jpeg))
                 .start(REQUEST_CODE_PICKER);
     }

@@ -1,6 +1,8 @@
 package io.picopalette.apps.event_me.Models;
 
-public class DateAndTime {
+import java.io.Serializable;
+
+public class DateAndTime implements Serializable{
     private int dayOfMonth;
     private int month;
     private int year;

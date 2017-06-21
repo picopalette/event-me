@@ -2,11 +2,13 @@ package io.picopalette.apps.event_me.Models;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.Serializable;
+
 /**
  * Created by ramkumar on 10/06/17.
  */
 
-public class Location {
+public class Location implements Serializable{
     private String name;
     private double lat;
     private double lon;

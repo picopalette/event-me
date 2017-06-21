@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
@@ -69,7 +70,26 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 });
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.content, EventsFragment.newInstance());
+        transaction.commit();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.notification, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.navigation_notification) {
+            Intent intent = new Intent(this, NotificationsActivity.class);
+            startActivity(intent);
+        }
+        return true;
+    }
+
     @Override
     public void onBackPressed() {
         if(isInEvent)
@@ -84,13 +104,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getSupportActionBar().show();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.content, EventsFragment.newInstance());
-        transaction.commit();
-        bottomNavigationView.setSelectedItemId(R.id.navigation_events);
-    }
 }

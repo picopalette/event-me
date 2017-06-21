@@ -25,8 +25,6 @@
     <string name="signin">SignIn</string>
     <string name="fill_details">Fill all Details</string>
     <string name="success">Event Created Successfully</string>
-
-
     <string name="fetching">Collecting Users Data</string>
     <string name="error_network">Network Error</string>
     <string name="my_images">My Images</string>
@@ -35,6 +33,7 @@
     <string name="current_tokens">Current tokens:</string>
     <string name="events">Events</string>
     <string name="notify">Notify</string>
+    <string name="notification">Notifications</string>
     <string name="homepage">homepage</string>
     <string name="teams_fragment">Teams Fragment</string>
     <string name="eveimg">eveimage</string>

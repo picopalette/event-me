@@ -22,16 +22,15 @@ import com.google.firebase.storage.StorageReference;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.picopalette.apps.event_me.Activities.EventDisplayActivity;
 import io.picopalette.apps.event_me.Activities.LiveShare;
 import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.R;
 
-public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHolder> implements View.OnClickListener {
+public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHolder> {
 
     public List<Event> events;
     private Context context;
-    private Double lat, lon;
-    private String key;
     private View itemView;
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
@@ -49,7 +48,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        Log.d("adapter", events.get(position).toString());
         final Event homeEvent = events.get(position);
         holder.event_title.setText(homeEvent.getName());
         holder.event_type.setText(homeEvent.getType());
@@ -58,9 +56,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
         storageRef.child("images/"+homeEvent.getId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                // TODO: handle uri
                 Glide.with(context)
                         .load(uri.toString())
+                        .placeholder(R.drawable.logo)
                         .into(holder.event_image);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -73,11 +71,14 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, LiveShare.class);
-                intent.putExtra("lat", homeEvent.getPlace().getLat());
-                intent.putExtra("lon", homeEvent.getPlace().getLon());
-                intent.putExtra("uid", homeEvent.getId());
+                Intent intent = new Intent(context, EventDisplayActivity.class);
+                intent.putExtra("event", homeEvent);
                 context.startActivity(intent);
+//                Intent intent = new Intent(context, LiveShare.class);
+//                intent.putExtra("lat", homeEvent.getPlace().getLat());
+//                intent.putExtra("lon", homeEvent.getPlace().getLon());
+//                intent.putExtra("uid", homeEvent.getId());
+//                context.startActivity(intent);
             }
         });
 
@@ -88,12 +89,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
         return (null != events ? events.size() : 0);
     }
 
-    @Override
-    public void onClick(View v) {
-        Intent intent = new Intent(context, LiveShare.class);
-        context.startActivity(intent);
-
-    }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
