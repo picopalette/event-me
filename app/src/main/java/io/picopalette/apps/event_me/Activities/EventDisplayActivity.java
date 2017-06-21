@@ -25,6 +25,7 @@ public class EventDisplayActivity extends FragmentActivity implements OnMapReady
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_display);
+        eve = (Event) getIntent().getSerializableExtra("event");
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map2);
         mapFragment.getMapAsync(this);
@@ -33,12 +34,13 @@ public class EventDisplayActivity extends FragmentActivity implements OnMapReady
         TextView eName = (TextView) findViewById(R.id.eventName);
         TextView ePlace = (TextView) findViewById(R.id.eventPlace);
         TextView eTime = (TextView) findViewById(R.id.eventTime);
+        
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(lat,lon))
+                .target(new LatLng(eve.getPlace().getLat(),eve.getPlace().getLon()))
                 .zoom(17)
                 .bearing(0)
                 .tilt(80)

@@ -78,7 +78,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, EventDisplayActivity.class);
-                intent.putExtra("events",  homeEvent);
+                intent.putExtra("event", homeEvent);
                 context.startActivity(intent);
 //                Intent intent = new Intent(context, LiveShare.class);
 //                intent.putExtra("lat", homeEvent.getPlace().getLat());
