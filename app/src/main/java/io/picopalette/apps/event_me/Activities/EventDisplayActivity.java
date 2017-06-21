@@ -1,11 +1,13 @@
 package io.picopalette.apps.event_me.Activities;
 
-import android.graphics.Bitmap;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -13,6 +15,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.R;
@@ -29,12 +35,29 @@ public class EventDisplayActivity extends FragmentActivity implements OnMapReady
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map2);
         mapFragment.getMapAsync(this);
-        ImageView eImage = (ImageView) findViewById(R.id.eventPic);
+        final ImageView eImage = (ImageView) findViewById(R.id.eventPic);
         TextView eStatus = (TextView) findViewById(R.id.eventStatus);
         TextView eName = (TextView) findViewById(R.id.eventName);
         TextView ePlace = (TextView) findViewById(R.id.eventPlace);
         TextView eTime = (TextView) findViewById(R.id.eventTime);
-        
+        eName.setText(eve.getName());
+        ePlace.setText(eve.getPlace().getName());
+        eTime.setText(eve.getDateAndTime().getFormattedTime());
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+        storageRef.child("images/"+eve.getId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(getApplicationContext())
+                        .load(uri.toString())
+                        .placeholder(R.drawable.logo)
+                        .into(eImage);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+            }
+        });
     }
 
     @Override
@@ -46,7 +69,6 @@ public class EventDisplayActivity extends FragmentActivity implements OnMapReady
                 .tilt(80)
                 .build();
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        googleMap.addMarker(new MarkerOptions()).setPosition(new LatLng(lat,lon));
-
+        googleMap.addMarker(new MarkerOptions().position(new LatLng(eve.getPlace().getLat(),eve.getPlace().getLon())));
     }
 }
