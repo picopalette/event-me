@@ -30,7 +30,7 @@
                     android:id="@+id/eventStatus"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:textSize="20sp"
+                    android:textSize="17sp"
                     android:text="Ongoing Event"
                     android:background="#008000"
                     android:textColor="#ffffff"
@@ -39,10 +39,10 @@
             <TextView
                 android:id="@+id/eventName"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="110dp"
                 android:layout_below="@+id/eventPicAndState"
                 android:text="Event's Name"
-                android:paddingTop="15dp"
+                android:paddingTop="9dp"
                 android:textSize="42sp"
                 android:background="@color/colorPrimary"
                 android:textColor="#ffffff"
@@ -58,12 +58,12 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="79dp"
-                app:cardElevation="8dp"
+                app:cardElevation="15dp"
                 app:contentPadding="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="32dp"
+                    android:layout_height="28dp"
                     android:layout_below="@+id/eventName"
                     android:orientation="horizontal">
 
@@ -75,21 +75,21 @@
 
                         <android.support.v7.widget.AppCompatImageView
                             android:layout_width="wrap_content"
-                            android:layout_height="27dp"
+                            android:layout_height="22dp"
                             android:layout_weight="0.2"
-                            app:srcCompat="@drawable/ic_location" />
+                            app:srcCompat="@drawable/ic_calen" />
 
                         <TextView
-                            android:id="@+id/eventPlace"
+                            android:id="@+id/eventDate"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="0.8"
-                            android:text="Place"
-                            android:textSize="20sp" />
+                            android:text="Date"
+                            android:textSize="15sp" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/placeAndTime"
+                        android:id="@+id/dateAndTime"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -97,7 +97,7 @@
 
                         <android.support.v7.widget.AppCompatImageView
                             android:layout_width="wrap_content"
-                            android:layout_height="27dp"
+                            android:layout_height="22dp"
                             android:layout_weight="0.2"
                             app:srcCompat="@drawable/ic_clock" />
 
@@ -107,15 +107,61 @@
                             android:layout_height="match_parent"
                             android:layout_weight="0.8"
                             android:text="Time"
-                            android:textSize="20sp" />
+                            android:textSize="15sp" />
                     </LinearLayout>
                 </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_below="@+id/cardu"
+                android:layout_marginTop="10dp"
+                android:layout_height="290dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                app:cardElevation="15dp"
+                android:id="@+id/card2"
+                app:contentPadding="16dp">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="290dp">
+                    <LinearLayout
+                        android:id="@+id/eventPlace"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <android.support.v7.widget.AppCompatImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="22dp"
+                            app:srcCompat="@drawable/ic_location"/>
+                        <TextView
+                            android:id="@+id/eventPlaceName"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:text="Place"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginBottom="7dp"
+                            android:textSize="15sp"/>
+                    </LinearLayout>
+
+                    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:tools="http://schemas.android.com/tools"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_below="@+id/eventPlace"
+                        android:id="@+id/map2"
+                        android:layout_height="250dp" />
+
+                </RelativeLayout>
+
             </android.support.v7.widget.CardView>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/cardu"
+                android:layout_below="@+id/card2"
                 android:id="@+id/linear"
                 android:layout_centerHorizontal="true"
                 android:orientation="horizontal">
@@ -132,45 +178,50 @@
                     android:layout_centerHorizontal="true"/>
             </LinearLayout>
             <android.support.v7.widget.CardView
+                android:id="@+id/card3"
                 android:layout_width="match_parent"
-                android:layout_below="@+id/linear"
-                android:layout_height="290dp"
+                android:layout_height="55dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                app:cardElevation="8dp"
-                android:id="@+id/card2"
+                android:layout_below="@id/linear"
+                app:cardElevation="25dp"
                 app:contentPadding="16dp">
-
-
-
-                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:id="@+id/map2"
-                    android:layout_height="250dp" />
-
-
-
-
-
-
-
+                    android:layout_height="35dp"
+                    android:orientation="horizontal">
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="22dp"
+                        app:srcCompat="@drawable/ic_tracking"
+                        android:layout_weight="1"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="View locations of Participants"
+                        android:textAlignment="center"
+                        android:textSize="15sp"
+                        android:layout_weight="1"/>
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="22dp"
+                        app:srcCompat="@drawable/ic_tracking"
+                        android:layout_weight="1"
+                        />
+                </LinearLayout>
             </android.support.v7.widget.CardView>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="250dp"
-                android:text="View Locations of Participants"
-                android:id="@+id/locatio"
-                android:gravity="center"
-                android:layout_below="@id/card2"
-                android:textSize="20dp"/>
+                android:layout_below="@id/card3"
+                android:text="@string/Cab"
+                android:textSize="17sp"
+                android:textAlignment="center"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:textColor="@color/colorPrimary"
+                />
         </RelativeLayout>
     </ScrollView>
-
-
-
-
-
 </RelativeLayout>

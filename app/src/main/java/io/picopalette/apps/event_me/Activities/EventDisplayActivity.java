@@ -4,7 +4,14 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
+import android.view.Menu;
+import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -23,9 +30,9 @@ import com.google.firebase.storage.StorageReference;
 import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.R;
 
-public class EventDisplayActivity extends FragmentActivity implements OnMapReadyCallback {
+public class EventDisplayActivity extends AppCompatActivity implements OnMapReadyCallback {
     private Event eve;
-
+    private CardView mTrackify;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +45,24 @@ public class EventDisplayActivity extends FragmentActivity implements OnMapReady
         final ImageView eImage = (ImageView) findViewById(R.id.eventPic);
         TextView eStatus = (TextView) findViewById(R.id.eventStatus);
         TextView eName = (TextView) findViewById(R.id.eventName);
-        TextView ePlace = (TextView) findViewById(R.id.eventPlace);
+        TextView ePlace = (TextView) findViewById(R.id.eventDate);
         TextView eTime = (TextView) findViewById(R.id.eventTime);
+        mTrackify = (CardView) findViewById(R.id.card3);
+        Switch trackifySwitch = (Switch) findViewById(R.id.eve_switch2);
+        mTrackify.setVisibility(View.GONE);
+        trackifySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked)
+                {
+                    mTrackify.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    mTrackify.setVisibility(View.GONE);
+                }
+            }
+        });
         eName.setText(eve.getName());
         ePlace.setText(eve.getPlace().getName());
         eTime.setText(eve.getDateAndTime().getFormattedTime());
@@ -58,6 +81,12 @@ public class EventDisplayActivity extends FragmentActivity implements OnMapReady
                 // Handle any errors
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.event_display,menu);
+        return true;
     }
 
     @Override

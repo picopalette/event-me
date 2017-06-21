@@ -43,5 +43,6 @@
     <string name="simpleimg">simpleimg</string>
     <string name="big_text">This is a resource for some big text which runs through a few lines of text.
     We would also like to use these set of lines at several places in our app.</string>
+    <string name="Cab"><u>Want a Cab? Get Uber</u></string>
 
 </resources>

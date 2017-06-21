@@ -59,7 +59,10 @@
 
 
         <activity android:name=".Activities.LiveShare" />
-        <activity android:name=".Activities.EventDisplayActivity" />
+        <activity
+            android:name=".Activities.EventDisplayActivity"
+            android:label="Event's Name"
+            android:theme="@style/AppTheme"/>
         <activity android:name=".Activities.NotificationsActivity"></activity>
     </application>
 
