@@ -69,26 +69,28 @@ public class EventsFragment extends Fragment {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference eventReference = mDatabaseReference.child(Constants.users).child(Utilities.encodeEmail(user.getEmail())).child(Constants.events);
+        eventReference.keepSynced(true);
         eventReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                     DatabaseReference eventRef = mDatabaseReference.child(Constants.events).child(eventSnapshot.getKey());
-                    eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    if(eventSnapshot.getValue() == Constants.UserStatus.OWNER || eventSnapshot.getValue() == Constants.UserStatus.GOING) {
+                        eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
 
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            Event event = dataSnapshot.getValue(Event.class);
-                            if(!adapter.events.contains(event))
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Event event = dataSnapshot.getValue(Event.class);
                                 adapter.events.add(event);
-                            adapter.notifyDataSetChanged();
-                        }
+                                adapter.notifyDataSetChanged();
+                            }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                        }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
 
-                    });
+                        });
+                    }
                 }
             }
 
@@ -102,7 +104,7 @@ public class EventsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        events.clear();
+        adapter.events.clear();
         getDataTask();
     }
 }

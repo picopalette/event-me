@@ -37,7 +37,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
     private Context context;
     private View itemView;
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-    private Bitmap bitmap;
 
     public EventsAdapter(Context context, List<Event> events) {
         this.events = events;
