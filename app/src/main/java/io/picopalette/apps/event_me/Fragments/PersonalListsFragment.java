@@ -10,14 +10,14 @@ import android.view.ViewGroup;
 import io.picopalette.apps.event_me.R;
 
 /**
- * Created by Aswin Sundar on 24-06-2017.
+ * Created by Aswin Sundar on 25-06-2017.
  */
 
-public class TeamsFragment extends Fragment {
+public class PersonalListsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_teams,container,false);
-        return view;
+        View v = inflater.inflate(R.layout.fragment_personal_lists, container, false);
+        return v;
     }
 }

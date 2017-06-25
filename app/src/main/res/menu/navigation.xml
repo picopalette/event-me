@@ -8,9 +8,14 @@
         android:title="@string/events" />
 
     <item
-        android:id="@+id/navigation_teams"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_teams" />
+        android:id="@+id/navigation_lists"
+        android:icon="@drawable/ic_list_black_24dp"
+        android:title="@string/lists"/>
+
+    <item
+        android:id="@+id/navigation_favourites"
+        android:icon="@drawable/ic_favorite_black_24dp"
+        android:title="@string/fav" />
 
     <item
         android:id="@+id/navigation_profile"

@@ -7,15 +7,15 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import io.picopalette.apps.event_me.Fragments.EventsFragment;
+import io.picopalette.apps.event_me.Fragments.ListsFragment;
 import io.picopalette.apps.event_me.Fragments.ProfileFragment;
-import io.picopalette.apps.event_me.Fragments.TeamsFragment;
+import io.picopalette.apps.event_me.Fragments.FavFragment;
 import io.picopalette.apps.event_me.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -46,8 +46,12 @@ public class MainActivity extends AppCompatActivity {
                                 selectedFragment = EventsFragment.newInstance();
                                 isInEvent = true;
                                 break;
-                            case R.id.navigation_teams:
-                                selectedFragment = TeamsFragment.newInstance();
+                            case R.id.navigation_lists:
+                                selectedFragment = ListsFragment.newInstance();
+                                isInEvent = false;
+                                break;
+                            case R.id.navigation_favourites:
+                                selectedFragment = FavFragment.newInstance();
                                 isInEvent = false;
                                 break;
                             case R.id.navigation_profile:

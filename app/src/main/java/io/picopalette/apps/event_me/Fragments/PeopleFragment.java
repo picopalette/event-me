@@ -13,11 +13,11 @@ import io.picopalette.apps.event_me.R;
  * Created by Aswin Sundar on 24-06-2017.
  */
 
-public class TeamsFragment extends Fragment {
+public class PeopleFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_teams,container,false);
+        View view = inflater.inflate(R.layout.fragment_people, container, false);
         return view;
     }
 }
