@@ -5,6 +5,7 @@ public class Constants {
     public static String users = "users";
     public static CharSequence dot = "(dot)";
     public static String people= "people";
+    public static String lists = "lists";
 
     public enum EventStatus {
         UPCOMING,

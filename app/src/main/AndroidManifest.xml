@@ -8,9 +8,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
+        android:name=".EventMeApp"
         android:allowBackup="true"
         android:fullBackupContent="true"
-        android:name=".EventMeApp"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -58,13 +58,14 @@
             </intent-filter>
         </service>
 
-
         <activity android:name=".Activities.LiveShare" />
         <activity
             android:name=".Activities.EventDisplayActivity"
-            android:label="Event's Name"
-            android:theme="@style/AppTheme"/>
-        <activity android:name=".Activities.NotificationsActivity"></activity>
+            android:label="Event&apos;s Name"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".Activities.NotificationsActivity" />
+        <activity android:name=".Activities.ListCreationActivity" />
+        <activity android:name=".Activities.ListDisplayActivity"></activity>
     </application>
 
 </manifest>
