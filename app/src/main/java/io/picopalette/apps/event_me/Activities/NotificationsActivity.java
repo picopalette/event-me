@@ -15,8 +15,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
-import io.picopalette.apps.event_me.Adapters.NotificationAdapter;
+import io.picopalette.apps.event_me.Adapters.EventsAdapter;
 import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.R;
 import io.picopalette.apps.event_me.Utils.Constants;
@@ -26,7 +27,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private ArrayList<Event> events;
-    private NotificationAdapter adapter;
+    private EventsAdapter adapter;
     private DatabaseReference mDatabaseReference;
 
     @Override
@@ -34,13 +35,14 @@ public class NotificationsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
         recyclerView = (RecyclerView) findViewById(R.id.notification_rec_view);
+        getDataTasks();
         events = new ArrayList<>();
-        adapter = new NotificationAdapter(getApplicationContext(), events);
+        adapter = new EventsAdapter(getApplicationContext(), events);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
     }
 
-    private void getDataTask() {
+    private void getDataTasks() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference eventReference = mDatabaseReference.child(Constants.users).child(Utilities.encodeEmail(user.getEmail())).child(Constants.events);
@@ -50,7 +52,7 @@ public class NotificationsActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                     DatabaseReference eventRef = mDatabaseReference.child(Constants.events).child(eventSnapshot.getKey());
-                    if(eventSnapshot.getValue() == Constants.UserStatus.INVITED) {
+                    if(Objects.equals(eventSnapshot.getValue().toString(), Constants.UserStatus.INVITED.toString())) {
                         eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
 
                             @Override
@@ -76,11 +78,6 @@ public class NotificationsActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        adapter.events.clear();
-        getDataTask();
-    }
+
 
 }

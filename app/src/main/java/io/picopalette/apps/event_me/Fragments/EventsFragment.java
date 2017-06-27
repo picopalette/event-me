@@ -13,13 +13,14 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
+import java.util.Objects;
+
 import io.picopalette.apps.event_me.Adapters.EventsAdapter;
 import io.picopalette.apps.event_me.Activities.EventCreationActivity;
 import io.picopalette.apps.event_me.Models.Event;
@@ -50,11 +51,12 @@ public class EventsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_events, container,false);
         FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView_eve);
-        recyclerView.setHasFixedSize(true);
         events = new ArrayList<>();
+        recyclerView.setHasFixedSize(true);
         adapter = new EventsAdapter(getActivity().getApplicationContext(), events);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,15 +75,27 @@ public class EventsFragment extends Fragment {
         eventReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                Log.d("TESTI","Inddfs datasnaphot of eventfragment");
+                for(final DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                    Log.d("countsss", String.valueOf(dataSnapshot.getChildrenCount()));
+                        Log.d("counts", String.valueOf(dataSnapshot.getChildrenCount()));
                     DatabaseReference eventRef = mDatabaseReference.child(Constants.events).child(eventSnapshot.getKey());
-                    if(eventSnapshot.getValue() == Constants.UserStatus.OWNER || eventSnapshot.getValue() == Constants.UserStatus.GOING) {
+                    Log.d("Testi", eventSnapshot.getValue().toString());
+                    if (Objects.equals(eventSnapshot.getValue().toString(), Constants.UserStatus.OWNER.toString()) || Objects.equals(eventSnapshot.getValue().toString(), Constants.UserStatus.GOING.toString())) {
+
+                        Log.d("testify", "indie the if statement");
                         eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
 
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 Event event = dataSnapshot.getValue(Event.class);
-                                adapter.events.add(event);
+                                Log.d("TESTI", eventSnapshot.getValue().toString());
+                                if (event != null) {
+                                    adapter.events.add(event);
+
+                                }
+                                Log.d("testt", String.valueOf(events));
                                 adapter.notifyDataSetChanged();
                             }
 
@@ -90,7 +104,9 @@ public class EventsFragment extends Fragment {
                             }
 
                         });
+
                     }
+
                 }
             }
 
@@ -99,6 +115,8 @@ public class EventsFragment extends Fragment {
                 Toast.makeText(getActivity(),getString(R.string.error_network),Toast.LENGTH_LONG).show();
             }
         });
+
+
     }
 
     @Override
