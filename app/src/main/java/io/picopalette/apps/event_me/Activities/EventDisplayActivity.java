@@ -72,7 +72,6 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
             public void onSuccess(Uri uri) {
                 Glide.with(getApplicationContext())
                         .load(uri.toString())
-                        .placeholder(R.drawable.logo)
                         .into(eImage);
             }
         }).addOnFailureListener(new OnFailureListener() {

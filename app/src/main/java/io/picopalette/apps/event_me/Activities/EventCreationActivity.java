@@ -251,6 +251,18 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
             public void onClick(View view) {
                pickImage();
             }
+
+            private void pickImage() {
+                    ImagePicker.create(EventCreationActivity.this)
+                            .folderMode(true)
+                            .folderTitle(getString(R.string.my_images))
+                            .imageTitle(getString(R.string.select))
+                            .single()
+                            .showCamera(true)
+                            .imageDirectory("Images/ *jpg")
+                            .start(REQUEST_CODE_PICKER);
+
+            }
         });
 
     }
@@ -276,16 +288,7 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
             }
         });
     }
-    private void pickImage() {
-        ImagePicker.create(this)
-                .folderMode(true)
-                .folderTitle(getString(R.string.my_images))
-                .imageTitle(getString(R.string.select))
-                .single()
-                .showCamera(true)
-                .imageDirectory(getString(R.string.imges_jpeg))
-                .start(REQUEST_CODE_PICKER);
-    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

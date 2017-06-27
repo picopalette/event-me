@@ -52,6 +52,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
+        Log.d("TESTI","inside bindviewholder");
         final Event homeEvent = events.get(position);
         holder.event_title.setText(homeEvent.getName());
         holder.event_type.setText(homeEvent.getType());
@@ -62,7 +63,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
             public void onSuccess(Uri uri) {
                 Glide.with(context)
                         .load(uri.toString())
-                        .placeholder(R.drawable.logo)
                         .into(holder.event_image);
             }
         }).addOnFailureListener(new OnFailureListener() {

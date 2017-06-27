@@ -29,7 +29,7 @@
     <string name="error_network">Network Error</string>
     <string name="my_images">My Images</string>
     <string name="select">Select</string>
-    <string name="imges_jpeg">Images/*.jpg</string>
+    <string name="imges_jpg">Images/*.jpg</string>
     <string name="current_tokens">Current tokens:</string>
     <string name="events">Events</string>
     <string name="notify">Notify</string>
@@ -46,4 +46,5 @@
     <string name="Cab"><u>Want a Cab? Get Uber</u></string>
     <string name="lists">Lists</string>
     <string name="fav">Favourites</string>
+    <string name="imges_jpeg">Images/ *jpg</string>
 </resources>
