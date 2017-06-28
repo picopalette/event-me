@@ -1,6 +1,8 @@
 package io.picopalette.apps.event_me.Fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -23,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import io.picopalette.apps.event_me.Activities.ListCreationActivity;
+import io.picopalette.apps.event_me.Activities.ListDisplayActivity;
 import io.picopalette.apps.event_me.Adapters.PersonalListsViewHolder;
 import io.picopalette.apps.event_me.R;
 import io.picopalette.apps.event_me.Utils.Constants;
@@ -77,9 +80,10 @@ public class PersonalListsFragment extends Fragment {
                             String title = listTitle.getText().toString();
                             Intent intent = new Intent(getContext(), ListCreationActivity.class);
                             intent.putExtra(mListTitle,title);
+                            intent.putExtra("type", "personal");
                             startActivity(intent);
                             dialog.dismiss();
-                            Toast.makeText(getContext(),"Click the add/remove button to add/remove the list_item item",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(),"Click the add/remove button to add/remove the list_item_edit item",Toast.LENGTH_LONG).show();
                         }
 
                     }
@@ -90,7 +94,7 @@ public class PersonalListsFragment extends Fragment {
 
         listsAdapter = new FirebaseRecyclerAdapter<Object, PersonalListsViewHolder>(Object.class, R.layout.card_personal_list, PersonalListsViewHolder.class, mListReference) {
             @Override
-            protected void populateViewHolder(final PersonalListsViewHolder viewHolder, Object model, int position) {
+            protected void populateViewHolder(final PersonalListsViewHolder viewHolder, Object model, final int position) {
                 viewHolder.personalListTitle.setText(getRef(position).getKey());
                 viewHolder.personalListCard.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -101,6 +105,51 @@ public class PersonalListsFragment extends Fragment {
                             clicked(viewHolder);
                             viewHolder.personalListActions.setVisibility(View.VISIBLE);
                         }
+                    }
+                });
+                viewHolder.personalListView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), ListDisplayActivity.class);
+                        intent.putExtra("type", "personal");
+                        intent.putExtra("title", getRef(position).getKey());
+                        startActivity(intent);
+                    }
+                });
+                viewHolder.personalListEdit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getContext(), ListCreationActivity.class);
+                        intent.putExtra(mListTitle,getRef(position).getKey());
+                        intent.putExtra("type", "personal");
+                        startActivity(intent);
+                    }
+                });
+                viewHolder.personalListDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertDialog.Builder builder;
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                            builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
+//                        } else {
+                            builder = new AlertDialog.Builder(getActivity());
+//                        }
+                        builder.setTitle("Delete List")
+                                .setMessage("All the entries under the list will be Deleted")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // continue with delete
+                                        getRef(position).removeValue();
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+
                     }
                 });
             }

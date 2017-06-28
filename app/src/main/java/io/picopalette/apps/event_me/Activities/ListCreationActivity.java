@@ -30,6 +30,7 @@ public class ListCreationActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     private DatabaseReference mListReference;
     private String title;
+    private String type;
     private FirebaseRecyclerAdapter editAdapter;
     public static final String mListTitle = "List Title";
 
@@ -43,11 +44,16 @@ public class ListCreationActivity extends AppCompatActivity {
         mAddFAB = (FloatingActionButton) findViewById(R.id.addFAB);
         mTitle = (TextView) findViewById(R.id.titleTextView);
 
-        mListReference = FirebaseDatabase.getInstance().getReference().child(Constants.users).child(Utilities.encodeEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail())).child(Constants.lists);
-
         Intent intent = getIntent();
         title = intent.getStringExtra(mListTitle);
+        type = intent.getStringExtra("type");
         mTitle.setText(title);
+
+        if(type.matches("personal")) {
+            mListReference = FirebaseDatabase.getInstance().getReference().child(Constants.users).child(Utilities.encodeEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail())).child(Constants.lists).child(title);
+        } else {
+            mListReference = FirebaseDatabase.getInstance().getReference().child(Constants.events).child(title).child(Constants.lists);
+        }
 
         mAddFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,15 +65,15 @@ public class ListCreationActivity extends AppCompatActivity {
                 else
                 {
                     String newItemString = mListItem.getText().toString();
-                    String itemId = mListReference.child(title).push().getKey();
+                    String itemId = mListReference.push().getKey();
                     ListItem newItem = new ListItem(itemId, newItemString, false);
-                    mListReference.child(title).child(itemId).setValue(newItem);
+                    mListReference.child(itemId).setValue(newItem);
                     mListItem.setText("");
                 }
             }
         });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        editAdapter = new FirebaseRecyclerAdapter<ListItem, PersonalListEditViewHolder>(ListItem.class, R.layout.list_item, PersonalListEditViewHolder.class, mListReference.child(title)) {
+        editAdapter = new FirebaseRecyclerAdapter<ListItem, PersonalListEditViewHolder>(ListItem.class, R.layout.list_item_edit, PersonalListEditViewHolder.class, mListReference) {
 
             @Override
             protected void populateViewHolder(PersonalListEditViewHolder viewHolder, final ListItem model, int position) {
@@ -75,7 +81,7 @@ public class ListCreationActivity extends AppCompatActivity {
                 viewHolder.listDeleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mListReference.child(title).child(model.getId()).removeValue();
+                        mListReference.child(model.getId()).removeValue();
                     }
                 });
             }
@@ -92,8 +98,8 @@ public class ListCreationActivity extends AppCompatActivity {
 //            public void onDataChange(DataSnapshot dataSnapshot) {
 //                for(DataSnapshot listSnapshot : dataSnapshot.getChildren()) {
 //                    ListItem listItem = listSnapshot.getValue(ListItem.class);
-//                    if(!editAdapter.list_item.contains(listItem)) {
-//                        editAdapter.list_item.add(listItem);
+//                    if(!editAdapter.list_item_edit.contains(listItem)) {
+//                        editAdapter.list_item_edit.add(listItem);
 //                        editAdapter.notifyDataSetChanged();
 //                    }
 //                }
