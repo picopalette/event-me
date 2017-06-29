@@ -35,8 +35,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
 
     public List<Event> events;
     private int keep = 0;
+    public View itemView;
     private Context context;
-    private View itemView;
     private RecyclerView recyclerView;
     private SimpleDateFormat sdf;
     private String currentTime;
@@ -51,144 +51,145 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-         itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.event_tab_custom_row, parent, false);
 
-        Calendar c = Calendar.getInstance();
-        sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm aa");
-        currentTime = sdf.format(c.getTime());
 
-        //Perform Sorting
-        if (keep < events.size())
-        {
-            keep = events.size();
+             itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.event_tab_custom_row, parent, false);
 
-            Log.d("sizes", "keep: "+keep+"events.size"+ events.size());
-            for(int i = 0; i<keep; i++)
-            {
-                final Event homeeve = events.get(i);
-                Date time1 = null;
-                try {
-                    time1 = sdf.parse(homeeve.getDateAndTime().getFormattedDate()+" "+homeeve.getDateAndTime().getFormattedTime());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                for(int j = i+1; j< keep; j++)
-                {
-                    final Event homeeve2 = events.get(j);
-                    Date time2 = null;
-                    try {
-                        time2 = sdf.parse(homeeve2.getDateAndTime().getFormattedDate()+" "+homeeve2.getDateAndTime().getFormattedTime());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+            Calendar c = Calendar.getInstance();
+            sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm aa");
+            currentTime = sdf.format(c.getTime());
 
-                    Log.d("sorting","time1: "+time1+" time2: "+time2+" result: "+time1.compareTo(time2));
-                    if(time1.compareTo(time2)>0){
-                        Event itemA = events.get(i);
-                        Event itemB = events.get(j);
-                        events.set(i, itemB);
-                        events.set(j, itemA);
-                    }
-                }
-            }
-
-           // notifyDataSetChanged();
-
-        }
-
-//        recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//            @Override
-//            public void onGlobalLayout() {
-//                if (recyclerViewReadyCallback != null) {
-//                    recyclerViewReadyCallback.onLayoutReady();
-//                }
-//                recyclerViewReadyCallback = null;
-//            }
-//        });
-//        recyclerViewReadyCallback  = new RecyclerViewReadyCallback() {
-//            @Override
-//            public void onLayoutReady() {
-//                //Perform Sorting
-//                if (keep < events.size())
-//                {
-//                    keep = events.size();
+            //Perform Sorting
+//            if (keep < events.size()) {
+//                keep = events.size();
 //
-//                    Log.d("sizes", "keep: "+keep+"events.size"+ events.size());
-//                    for(int i = 0; i<keep; i++)
-//                    {
-//                        final Event homeeve = events.get(i);
-//                        Date time1 = null;
+//                Log.d("sizes", "keep: " + keep + "events.size" + events.size());
+//                for (int i = 0; i < keep; i++) {
+//                    final Event homeeve = events.get(i);
+//                    Date time1 = null;
+//                    try {
+//                        time1 = sdf.parse(homeeve.getDateAndTime().getFormattedDate() + " " + homeeve.getDateAndTime().getFormattedTime());
+//                    } catch (ParseException e) {
+//                        e.printStackTrace();
+//                    }
+//                    for (int j = i + 1; j < keep; j++) {
+//                        final Event homeeve2 = events.get(j);
+//                        Date time2 = null;
 //                        try {
-//                            time1 = sdf.parse(homeeve.getDateAndTime().getFormattedDate()+" "+homeeve.getDateAndTime().getFormattedTime());
+//                            time2 = sdf.parse(homeeve2.getDateAndTime().getFormattedDate() + " " + homeeve2.getDateAndTime().getFormattedTime());
 //                        } catch (ParseException e) {
 //                            e.printStackTrace();
 //                        }
-//                        for(int j = i+1; j< keep; j++)
-//                        {
-//                            final Event homeeve2 = events.get(j);
-//                            Date time2 = null;
-//                            try {
-//                                time2 = sdf.parse(homeeve2.getDateAndTime().getFormattedDate()+" "+homeeve2.getDateAndTime().getFormattedTime());
-//                            } catch (ParseException e) {
-//                                e.printStackTrace();
-//                            }
 //
-//                            Log.d("sorting","time1: "+time1+" time2: "+time2+" result: "+time1.compareTo(time2));
-//                            if(time1.compareTo(time2)>0){
-//                                Event itemA = events.get(i);
-//                                Event itemB = events.get(j);
-//                                events.set(i, itemB);
-//                                events.set(j, itemA);
-//                            }
+//                        Log.d("sorting", "time1: " + time1 + " time2: " + time2 + " result: " + time1.compareTo(time2));
+//                        if (time1.compareTo(time2) > 0) {
+//                            Event itemA = events.get(i);
+//                            Event itemB = events.get(j);
+//                            events.set(i, itemB);
+//                            events.set(j, itemA);
 //                        }
 //                    }
-//
-//                    notifyDataSetChanged();
-//
 //                }
+//
+//                // notifyDataSetChanged();
+//
 //            }
-//        };
+
+        recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (recyclerViewReadyCallback != null) {
+                    recyclerViewReadyCallback.onLayoutReady();
+                }
+                recyclerViewReadyCallback = null;
+            }
+        });
+        recyclerViewReadyCallback  = new RecyclerViewReadyCallback() {
+            @Override
+            public void onLayoutReady() {
+                //Perform Sorting
+                if (keep < events.size())
+                {
+                    keep = events.size();
+
+                    Log.d("sizes", "keep: "+keep+"events.size"+ events.size());
+                    for(int i = 0; i<keep; i++)
+                    {
+                        final Event homeeve = events.get(i);
+                        Date time1 = null;
+                        try {
+                            time1 = sdf.parse(homeeve.getDateAndTime().getFormattedDate()+" "+homeeve.getDateAndTime().getFormattedTime());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        for(int j = i+1; j< keep; j++)
+                        {
+                            final Event homeeve2 = events.get(j);
+                            Date time2 = null;
+                            try {
+                                time2 = sdf.parse(homeeve2.getDateAndTime().getFormattedDate()+" "+homeeve2.getDateAndTime().getFormattedTime());
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            Log.d("sorting","time1: "+time1+" time2: "+time2+" result: "+time1.compareTo(time2));
+                            if(time1.compareTo(time2)>0){
+                                Event itemA = events.get(i);
+                                Event itemB = events.get(j);
+                                events.set(i, itemB);
+                                events.set(j, itemA);
+                            }
+                        }
+                    }
+
+                    notifyDataSetChanged();
+
+                }
+            }
+        };
+
 
         return new MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        Log.d("TESTI","inside bindviewholder");
-        final Event homeEvent = events.get(position);
-        holder.event_title.setText(homeEvent.getName());
-        holder.event_type.setText(homeEvent.getType());
-        holder.event_date_time.setText(homeEvent.getDateAndTime().getFormattedDate() + " " + homeEvent.getDateAndTime().getFormattedTime());
-        holder.event_place.setText(homeEvent.getPlace().getName());
-        storageRef.child("images/"+homeEvent.getId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Glide.with(context)
-                        .load(uri.toString())
-                        .placeholder(R.drawable.logo)
-                        .into(holder.event_image);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-            }
-        });
 
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, EventDisplayActivity.class);
-                intent.putExtra("event", homeEvent);
-                context.startActivity(intent);
-//                Intent intent = new Intent(context, LiveShare.class);
-//                intent.putExtra("lat", homeEvent.getPlace().getLat());
-//                intent.putExtra("lon", homeEvent.getPlace().getLon());
-//                intent.putExtra("uid", homeEvent.getId());
-//                context.startActivity(intent);
-            }
-        });
+            Log.d("TESTI", "inside bindviewholder");
+            final Event homeEvent = events.get(position);
+            holder.event_title.setText(homeEvent.getName());
+            holder.event_type.setText(homeEvent.getType());
+            holder.event_date_time.setText(homeEvent.getDateAndTime().getFormattedDate() + " " + homeEvent.getDateAndTime().getFormattedTime());
+            holder.event_place.setText(homeEvent.getPlace().getName());
+            storageRef.child("images/" + homeEvent.getId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Glide.with(context)
+                            .load(uri.toString())
+                            .into(holder.event_image);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Toast.makeText(context,"cannot create your Event",Toast.LENGTH_LONG).show();
+                }
+            });
+
+
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, EventDisplayActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("event", homeEvent);
+                    context.startActivity(intent);
+
+                }
+            });
+
+
 
     }
 
@@ -202,9 +203,13 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
 
         TextView event_title, event_type, event_place, event_date_time;
         CircleImageView event_image;
+        TextView accept, decline, notificationText;
 
         MyViewHolder(View view) {
             super(view);
+            notificationText = (TextView) view.findViewById(R.id.notfication_tv);
+            accept = (TextView) view.findViewById(R.id.accept_tv);
+            decline = (TextView) view.findViewById(R.id.decline_tv);
             event_title = (TextView) view.findViewById(R.id.event_name_card);
             event_type = (TextView) view.findViewById(R.id.event_type_card);
             event_place = (TextView) view.findViewById(R.id.event_place_card);
@@ -213,5 +218,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
         }
 
     }
+
 
 }

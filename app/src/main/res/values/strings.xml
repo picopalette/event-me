@@ -47,4 +47,6 @@
     <string name="lists">Lists</string>
     <string name="fav">Favourites</string>
     <string name="imges_jpeg">Images/ *jpg</string>
+    <string name="invitedf">INVITED</string>
+    <string name="invited">INVITED</string>
 </resources>

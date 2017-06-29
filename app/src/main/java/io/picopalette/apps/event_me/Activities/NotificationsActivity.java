@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import io.picopalette.apps.event_me.Adapters.EventsAdapter;
+import io.picopalette.apps.event_me.Adapters.NotificationAdapter;
 import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.R;
 import io.picopalette.apps.event_me.Utils.Constants;
@@ -27,7 +29,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private ArrayList<Event> events;
-    private EventsAdapter adapter;
+    private NotificationAdapter adapter;
     private DatabaseReference mDatabaseReference;
 
     @Override
@@ -37,9 +39,12 @@ public class NotificationsActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.notification_rec_view);
         getDataTasks();
         events = new ArrayList<>();
-        adapter = new EventsAdapter(getApplicationContext(), events,recyclerView);
+        recyclerView.setHasFixedSize(true);
+        adapter = new NotificationAdapter(getBaseContext(), events,recyclerView);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+
+
     }
 
     private void getDataTasks() {
@@ -53,6 +58,7 @@ public class NotificationsActivity extends AppCompatActivity {
                 for(DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                     DatabaseReference eventRef = mDatabaseReference.child(Constants.events).child(eventSnapshot.getKey());
                     if(Objects.equals(eventSnapshot.getValue().toString(), Constants.UserStatus.INVITED.toString())) {
+                        Log.d("testt",eventSnapshot.getValue().toString());
                         eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
 
                             @Override
@@ -60,6 +66,7 @@ public class NotificationsActivity extends AppCompatActivity {
                                 Event event = dataSnapshot.getValue(Event.class);
                                 adapter.events.add(event);
                                 adapter.notifyDataSetChanged();
+
                             }
 
                             @Override

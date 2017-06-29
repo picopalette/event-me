@@ -1,6 +1,7 @@
 package io.picopalette.apps.event_me.Fragments;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -10,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,6 +36,7 @@ public class EventsFragment extends Fragment {
     private ArrayList<Event> events;
     private EventsAdapter adapter;
     private DatabaseReference mDatabaseReference;
+    private SharedPreferences eventkeys;
 
 
     public static EventsFragment newInstance() {
@@ -96,7 +97,6 @@ public class EventsFragment extends Fragment {
                                 Log.d("TESTI", eventSnapshot.getValue().toString());
                                 if (event != null) {
                                     adapter.events.add(event);
-
                                 }
                                 Log.d("testt", String.valueOf(events));
                                 adapter.notifyDataSetChanged();
@@ -107,6 +107,12 @@ public class EventsFragment extends Fragment {
                             }
 
                         });
+
+                    }
+                    else{
+
+
+
 
                     }
 
@@ -132,5 +138,6 @@ public class EventsFragment extends Fragment {
         super.onResume();
         adapter.events.clear();
         getDataTask();
+
     }
 }
