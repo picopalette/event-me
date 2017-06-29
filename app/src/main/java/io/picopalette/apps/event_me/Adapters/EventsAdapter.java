@@ -166,6 +166,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
             public void onSuccess(Uri uri) {
                 Glide.with(context)
                         .load(uri.toString())
+                        .placeholder(R.drawable.logo)
                         .into(holder.event_image);
             }
         }).addOnFailureListener(new OnFailureListener() {

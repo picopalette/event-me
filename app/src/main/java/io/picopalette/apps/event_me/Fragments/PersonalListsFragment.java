@@ -2,7 +2,6 @@ package io.picopalette.apps.event_me.Fragments;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -18,8 +17,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.android.gms.fitness.data.Goal;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -92,7 +89,7 @@ public class PersonalListsFragment extends Fragment {
             }
         });
 
-        listsAdapter = new FirebaseRecyclerAdapter<Object, PersonalListsViewHolder>(Object.class, R.layout.card_personal_list, PersonalListsViewHolder.class, mListReference) {
+        listsAdapter = new FirebaseRecyclerAdapter<Object, PersonalListsViewHolder>(Object.class, R.layout.card_list, PersonalListsViewHolder.class, mListReference) {
             @Override
             protected void populateViewHolder(final PersonalListsViewHolder viewHolder, Object model, final int position) {
                 viewHolder.personalListTitle.setText(getRef(position).getKey());

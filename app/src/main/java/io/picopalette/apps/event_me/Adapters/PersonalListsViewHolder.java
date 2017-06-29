@@ -1,5 +1,6 @@
 package io.picopalette.apps.event_me.Adapters;
 
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -14,9 +15,10 @@ import io.picopalette.apps.event_me.R;
 
 public class PersonalListsViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView personalListTitle;
+    public TextView personalListTitle, personalListDeleteText;
     public LinearLayout personalListView, personalListEdit, personalListDelete, personalListActions;
     public CardView personalListCard;
+    public AppCompatImageView personalListDeleteIcon;
     public PersonalListsViewHolder(View itemView) {
         super(itemView);
         personalListTitle = (TextView) itemView.findViewById(R.id.personal_list_title_TextView);
@@ -25,5 +27,7 @@ public class PersonalListsViewHolder extends RecyclerView.ViewHolder {
         personalListDelete = (LinearLayout) itemView.findViewById(R.id.personal_list_action_delete);
         personalListActions = (LinearLayout) itemView.findViewById(R.id.personal_list_actions);
         personalListCard = (CardView) itemView.findViewById(R.id.personal_list_card);
+        personalListDeleteIcon = (AppCompatImageView) itemView.findViewById(R.id.list_card_delete_icon);
+        personalListDeleteText = (TextView) itemView.findViewById(R.id.list_card_delete_text);
     }
 }
