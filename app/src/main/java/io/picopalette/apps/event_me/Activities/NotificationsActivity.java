@@ -37,7 +37,7 @@ public class NotificationsActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.notification_rec_view);
         getDataTasks();
         events = new ArrayList<>();
-        adapter = new EventsAdapter(getApplicationContext(), events);
+        adapter = new EventsAdapter(getApplicationContext(), events,recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
     }

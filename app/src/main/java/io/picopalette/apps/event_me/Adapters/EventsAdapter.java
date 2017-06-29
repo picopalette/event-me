@@ -2,32 +2,28 @@ package io.picopalette.apps.event_me.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.view.ViewTreeObserver;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.Serializable;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.picopalette.apps.event_me.Activities.EventDisplayActivity;
-import io.picopalette.apps.event_me.Activities.LiveShare;
+import io.picopalette.apps.event_me.Interfaces.RecyclerViewReadyCallback;
 import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.R;
 
@@ -36,23 +32,43 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
     public List<Event> events;
     private Context context;
     private View itemView;
+    private RecyclerView recyclerView;
+    private RecyclerViewReadyCallback recyclerViewReadyCallback;
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
-    public EventsAdapter(Context context, List<Event> events) {
+    public EventsAdapter(Context context, List<Event> events,RecyclerView recyclerView)  {
         this.events = events;
         this.context = context;
+        this.recyclerView = recyclerView;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
          itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.event_tab_custom_row, parent, false);
+
+        recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (recyclerViewReadyCallback != null) {
+                    recyclerViewReadyCallback.onLayoutReady();
+                }
+                recyclerViewReadyCallback = null;
+            }
+        });
+
         return new MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         Log.d("TESTI","inside bindviewholder");
+        recyclerViewReadyCallback  = new RecyclerViewReadyCallback() {
+            @Override
+            public void onLayoutReady() {
+                //Perform Sorting here
+            }
+        };
         final Event homeEvent = events.get(position);
         holder.event_title.setText(homeEvent.getName());
         holder.event_type.setText(homeEvent.getType());

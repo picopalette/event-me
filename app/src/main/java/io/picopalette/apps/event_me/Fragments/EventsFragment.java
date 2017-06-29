@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,6 +37,7 @@ public class EventsFragment extends Fragment {
     private EventsAdapter adapter;
     private DatabaseReference mDatabaseReference;
 
+
     public static EventsFragment newInstance() {
         return new EventsFragment();
     }
@@ -53,9 +55,10 @@ public class EventsFragment extends Fragment {
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView_eve);
         events = new ArrayList<>();
         recyclerView.setHasFixedSize(true);
-        adapter = new EventsAdapter(getActivity().getApplicationContext(), events);
+        adapter = new EventsAdapter(getActivity().getApplicationContext(), events,recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,6 +111,9 @@ public class EventsFragment extends Fragment {
                     }
 
                 }
+
+
+
             }
 
             @Override
@@ -115,6 +121,8 @@ public class EventsFragment extends Fragment {
                 Toast.makeText(getActivity(),getString(R.string.error_network),Toast.LENGTH_LONG).show();
             }
         });
+
+
 
 
     }

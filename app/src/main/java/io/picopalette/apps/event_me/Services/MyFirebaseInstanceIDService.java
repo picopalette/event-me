@@ -3,7 +3,6 @@ package io.picopalette.apps.event_me.Services;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -14,9 +13,6 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 import io.picopalette.apps.event_me.Utils.Constants;
 import io.picopalette.apps.event_me.Utils.Utilities;
 
-/**
- * Created by ramkumar on 21/06/17.
- */
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     private DatabaseReference userRef;
