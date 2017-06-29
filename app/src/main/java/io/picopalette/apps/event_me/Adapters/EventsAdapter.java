@@ -19,6 +19,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -30,9 +34,12 @@ import io.picopalette.apps.event_me.R;
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHolder> {
 
     public List<Event> events;
+    private int keep = 0;
     private Context context;
     private View itemView;
     private RecyclerView recyclerView;
+    private SimpleDateFormat sdf;
+    private String currentTime;
     private RecyclerViewReadyCallback recyclerViewReadyCallback;
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
@@ -47,15 +54,101 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
          itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.event_tab_custom_row, parent, false);
 
-        recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                if (recyclerViewReadyCallback != null) {
-                    recyclerViewReadyCallback.onLayoutReady();
+        Calendar c = Calendar.getInstance();
+        sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm aa");
+        currentTime = sdf.format(c.getTime());
+
+        //Perform Sorting
+        if (keep < events.size())
+        {
+            keep = events.size();
+
+            Log.d("sizes", "keep: "+keep+"events.size"+ events.size());
+            for(int i = 0; i<keep; i++)
+            {
+                final Event homeeve = events.get(i);
+                Date time1 = null;
+                try {
+                    time1 = sdf.parse(homeeve.getDateAndTime().getFormattedDate()+" "+homeeve.getDateAndTime().getFormattedTime());
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
-                recyclerViewReadyCallback = null;
+                for(int j = i+1; j< keep; j++)
+                {
+                    final Event homeeve2 = events.get(j);
+                    Date time2 = null;
+                    try {
+                        time2 = sdf.parse(homeeve2.getDateAndTime().getFormattedDate()+" "+homeeve2.getDateAndTime().getFormattedTime());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.d("sorting","time1: "+time1+" time2: "+time2+" result: "+time1.compareTo(time2));
+                    if(time1.compareTo(time2)>0){
+                        Event itemA = events.get(i);
+                        Event itemB = events.get(j);
+                        events.set(i, itemB);
+                        events.set(j, itemA);
+                    }
+                }
             }
-        });
+
+           // notifyDataSetChanged();
+
+        }
+
+//        recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//                if (recyclerViewReadyCallback != null) {
+//                    recyclerViewReadyCallback.onLayoutReady();
+//                }
+//                recyclerViewReadyCallback = null;
+//            }
+//        });
+//        recyclerViewReadyCallback  = new RecyclerViewReadyCallback() {
+//            @Override
+//            public void onLayoutReady() {
+//                //Perform Sorting
+//                if (keep < events.size())
+//                {
+//                    keep = events.size();
+//
+//                    Log.d("sizes", "keep: "+keep+"events.size"+ events.size());
+//                    for(int i = 0; i<keep; i++)
+//                    {
+//                        final Event homeeve = events.get(i);
+//                        Date time1 = null;
+//                        try {
+//                            time1 = sdf.parse(homeeve.getDateAndTime().getFormattedDate()+" "+homeeve.getDateAndTime().getFormattedTime());
+//                        } catch (ParseException e) {
+//                            e.printStackTrace();
+//                        }
+//                        for(int j = i+1; j< keep; j++)
+//                        {
+//                            final Event homeeve2 = events.get(j);
+//                            Date time2 = null;
+//                            try {
+//                                time2 = sdf.parse(homeeve2.getDateAndTime().getFormattedDate()+" "+homeeve2.getDateAndTime().getFormattedTime());
+//                            } catch (ParseException e) {
+//                                e.printStackTrace();
+//                            }
+//
+//                            Log.d("sorting","time1: "+time1+" time2: "+time2+" result: "+time1.compareTo(time2));
+//                            if(time1.compareTo(time2)>0){
+//                                Event itemA = events.get(i);
+//                                Event itemB = events.get(j);
+//                                events.set(i, itemB);
+//                                events.set(j, itemA);
+//                            }
+//                        }
+//                    }
+//
+//                    notifyDataSetChanged();
+//
+//                }
+//            }
+//        };
 
         return new MyViewHolder(itemView);
     }
@@ -63,12 +156,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         Log.d("TESTI","inside bindviewholder");
-        recyclerViewReadyCallback  = new RecyclerViewReadyCallback() {
-            @Override
-            public void onLayoutReady() {
-                //Perform Sorting here
-            }
-        };
         final Event homeEvent = events.get(position);
         holder.event_title.setText(homeEvent.getName());
         holder.event_type.setText(homeEvent.getType());
