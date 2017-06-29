@@ -10,7 +10,42 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
+        android:id="@+id/event_list_heading"
         android:text="Events' Lists"
         android:textSize="25sp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="textStart"
+        android:id="@+id/event_list_heading_owner"
+        android:layout_below="@id/event_list_heading"
+        android:text="Your Events"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/event_lists_RecyclerView_owner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/event_list_heading_owner">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="textStart"
+        android:id="@+id/event_list_heading_member"
+        android:layout_below="@id/event_lists_RecyclerView_owner"
+        android:text="Events you are in"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/event_lists_RecyclerView_member"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/event_list_heading_member">
+
+    </android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>
