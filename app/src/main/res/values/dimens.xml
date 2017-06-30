@@ -17,4 +17,10 @@
     <dimen name="image_small_width">32dp</dimen>
 
 
+    <dimen name="size_avatar_toolbar">50dp</dimen>
+    <dimen name="spacing_double">16dp</dimen>
+    <dimen name="elevation_header">4dp</dimen>
+
+
+
 </resources>

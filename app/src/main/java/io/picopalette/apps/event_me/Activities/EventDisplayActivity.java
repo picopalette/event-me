@@ -1,5 +1,6 @@
 package io.picopalette.apps.event_me.Activities;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
@@ -8,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -98,5 +100,19 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
                 .build();
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         googleMap.addMarker(new MarkerOptions().position(new LatLng(eve.getPlace().getLat(),eve.getPlace().getLon())));
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.chatIcon)
+        {
+            Intent intent = new Intent(EventDisplayActivity.this,MessagingActivity.class);
+            intent.putExtra("id",eve.getId());
+            startActivity(intent);
+
+
+        }
+        return true;
     }
 }

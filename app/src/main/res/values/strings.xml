@@ -49,4 +49,9 @@
     <string name="imges_jpeg">Images/ *jpg</string>
     <string name="invitedf">INVITED</string>
     <string name="invited">INVITED</string>
+    <string name="sendPhoto">Send Image</string>
+    <string name="sendPhotoGallery">Send Gallery</string>
+    <string name="sendLocation">Send Location</string>
+    <string name="select_picture_title">Get Photo From</string>
+    <string name="sendbutton">send Button</string>
 </resources>

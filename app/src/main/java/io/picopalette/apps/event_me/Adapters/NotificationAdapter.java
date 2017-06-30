@@ -30,6 +30,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.picopalette.apps.event_me.Activities.EventDisplayActivity;
+import io.picopalette.apps.event_me.Activities.NotificationsActivity;
 import io.picopalette.apps.event_me.Interfaces.RecyclerViewReadyCallback;
 import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.R;
@@ -67,16 +68,24 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         final Event homeEvent = events.get(position);
 
         holder.NotificationText.setText("You have been Invited to "+homeEvent.getName());
+        holder.accept.setText("ACCEPT");
+        holder.decline.setText("DECLINE");
+        Log.d("sizes", String.valueOf(events.size()));
         holder.accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseDatabase.getInstance().getReference().child(Constants.users)
                     .child(Utilities.encodeEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail()))
                         .child(Constants.events).child(homeEvent.getId()).setValue(Constants.UserStatus.GOING);
-                events.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position,events.size());
-                holder.itemView.setVisibility(View.GONE);
+                events.remove(holder.getAdapterPosition());
+                Log.d("sizes2", String.valueOf(events.size()));
+                notifyItemRemoved(holder.getAdapterPosition());
+                Log.d("sizes3", String.valueOf(events.size()));
+                notifyItemRangeRemoved(holder.getAdapterPosition(),events.size());
+                Log.d("sizes4", String.valueOf(events.size()));
+                events.clear();
+                notifyDataSetChanged();
+
 
             }
         });
@@ -93,7 +102,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public int getItemCount() {
-        return (null != events ? events.size() : 0);
+        return events.size();
     }
 
 

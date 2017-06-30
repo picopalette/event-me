@@ -24,13 +24,14 @@ import java.util.Objects;
 
 import io.picopalette.apps.event_me.Adapters.EventsAdapter;
 import io.picopalette.apps.event_me.Activities.EventCreationActivity;
+import io.picopalette.apps.event_me.Interfaces.RecyclerViewReadyCallback;
 import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.R;
 import io.picopalette.apps.event_me.Utils.Constants;
 import io.picopalette.apps.event_me.Utils.Utilities;
 
 
-public class EventsFragment extends Fragment {
+public class EventsFragment extends Fragment  {
 
     private RecyclerView recyclerView;
     private ArrayList<Event> events;
@@ -54,6 +55,7 @@ public class EventsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_events, container,false);
         FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView_eve);
+        getDataTask();
         events = new ArrayList<>();
         recyclerView.setHasFixedSize(true);
         adapter = new EventsAdapter(getActivity().getApplicationContext(), events,recyclerView);
@@ -136,8 +138,7 @@ public class EventsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        adapter.events.clear();
-        getDataTask();
 
     }
+
 }

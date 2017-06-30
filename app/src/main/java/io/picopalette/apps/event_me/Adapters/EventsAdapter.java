@@ -31,7 +31,7 @@ import io.picopalette.apps.event_me.Interfaces.RecyclerViewReadyCallback;
 import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.R;
 
-public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHolder> {
+public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHolder> implements RecyclerViewReadyCallback{
 
     public List<Event> events;
     private int keep = 0;
@@ -156,8 +156,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
 
+            holder.setIsRecyclable(false);
             Log.d("TESTI", "inside bindviewholder");
-            final Event homeEvent = events.get(position);
+            final Event homeEvent = events.get(holder.getAdapterPosition());
             holder.event_title.setText(homeEvent.getName());
             holder.event_type.setText(homeEvent.getType());
             holder.event_date_time.setText(homeEvent.getDateAndTime().getFormattedDate() + " " + homeEvent.getDateAndTime().getFormattedTime());
@@ -181,8 +182,11 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    final Event homeEvent = events.get(holder.getAdapterPosition());
+
                     Intent intent = new Intent(context, EventDisplayActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS);
                     intent.putExtra("event", homeEvent);
                     context.startActivity(intent);
 
@@ -196,6 +200,49 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
     @Override
     public int getItemCount() {
         return (null != events ? events.size() : 0);
+    }
+
+    @Override
+    public void onLayoutReady() {
+        //Perform Sorting
+        if (keep < events.size())
+        {
+            keep = events.size();
+
+            Log.d("sizes", "keep: "+keep+"events.size"+ events.size());
+            for(int i = 0; i<keep; i++)
+            {
+                final Event homeeve = events.get(i);
+                Date time1 = null;
+                try {
+                    time1 = sdf.parse(homeeve.getDateAndTime().getFormattedDate()+" "+homeeve.getDateAndTime().getFormattedTime());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                for(int j = i+1; j< keep; j++)
+                {
+                    final Event homeeve2 = events.get(j);
+                    Date time2 = null;
+                    try {
+                        time2 = sdf.parse(homeeve2.getDateAndTime().getFormattedDate()+" "+homeeve2.getDateAndTime().getFormattedTime());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.d("sorting","time1: "+time1+" time2: "+time2+" result: "+time1.compareTo(time2));
+                    if(time1.compareTo(time2)>0){
+                        Event itemA = events.get(i);
+                        Event itemB = events.get(j);
+                        events.set(i, itemB);
+                        events.set(j, itemA);
+                    }
+                }
+            }
+
+            notifyDataSetChanged();
+
+        }
+
     }
 
 
@@ -218,6 +265,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
         }
 
     }
+
 
 
 }

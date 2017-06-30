@@ -11,6 +11,8 @@ public class User {
     public User() {
     }
 
+
+
     public User(String uId, String displayName, String email, String dpUrl, String live) {
         this.uId = uId;
         this.displayName = displayName;

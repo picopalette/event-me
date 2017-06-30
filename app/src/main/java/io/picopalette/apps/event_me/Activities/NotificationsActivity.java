@@ -60,7 +60,6 @@ public class NotificationsActivity extends AppCompatActivity {
                     if(Objects.equals(eventSnapshot.getValue().toString(), Constants.UserStatus.INVITED.toString())) {
                         Log.d("testt",eventSnapshot.getValue().toString());
                         eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
-
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 Event event = dataSnapshot.getValue(Event.class);
@@ -83,8 +82,19 @@ public class NotificationsActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),getString(R.string.error_network),Toast.LENGTH_LONG).show();
             }
         });
+
+
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
 
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
 }
