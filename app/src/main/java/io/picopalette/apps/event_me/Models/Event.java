@@ -104,5 +104,19 @@ public class Event implements Serializable {
     public void setParticipants(HashMap<String, Constants.UserStatus> participants) {
         this.participants = participants;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean isEqual = false;
+        if(obj != null && obj instanceof Event) {
+            isEqual = (this.getId().matches(((Event) obj).getId()));
+        }
+        return isEqual;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getId().hashCode();
+    }
 }
 

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -90,15 +91,16 @@ public class EventsFragment extends Fragment  {
                     if (Objects.equals(eventSnapshot.getValue().toString(), Constants.UserStatus.OWNER.toString()) || Objects.equals(eventSnapshot.getValue().toString(), Constants.UserStatus.GOING.toString())) {
 
                         Log.d("testify", "indie the if statement");
-                        eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
-
+                        eventRef.addValueEventListener(new ValueEventListener() {
 
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 Event event = dataSnapshot.getValue(Event.class);
                                 Log.d("TESTI", eventSnapshot.getValue().toString());
-                                if (event != null) {
+                                if (event != null && !adapter.events.contains(event)) {
                                     adapter.events.add(event);
+                                } else if(event != null && adapter.events.contains(event)) {
+                                    adapter.events.set(adapter.events.indexOf(event), event);
                                 }
                                 Log.d("testt", String.valueOf(events));
                                 adapter.notifyDataSetChanged();
@@ -111,16 +113,8 @@ public class EventsFragment extends Fragment  {
                         });
 
                     }
-                    else{
-
-
-
-
-                    }
 
                 }
-
-
 
             }
 
@@ -131,14 +125,7 @@ public class EventsFragment extends Fragment  {
         });
 
 
-
-
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
 
 }

@@ -9,8 +9,11 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import io.picopalette.apps.event_me.Adapters.PersonalListViewViewHolder;
 import io.picopalette.apps.event_me.Models.ListItem;
@@ -34,7 +37,6 @@ public class ListDisplayActivity extends AppCompatActivity {
         type = getIntent().getStringExtra("type");
         title = getIntent().getStringExtra("title");
         listDisplayTitleView = (TextView) findViewById(R.id.list_dislay_title_TextView);
-        listDisplayTitleView.setText(title);
         listDisplayRecyclerView = (RecyclerView) findViewById(R.id.list_display_RecyclerView);
         listDisplayRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         mRef = FirebaseDatabase.getInstance().getReference();
@@ -43,6 +45,17 @@ public class ListDisplayActivity extends AppCompatActivity {
         }
         else {
             mRef = mRef.child(Constants.events).child(title).child(Constants.lists);
+            FirebaseDatabase.getInstance().getReference().child(Constants.events).child(title).child("name").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    listDisplayTitleView.setText(dataSnapshot.getValue().toString());
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    listDisplayTitleView.setText(title);
+                }
+            });
         }
         mRef.keepSynced(true);
         viewAdapter = new FirebaseRecyclerAdapter<ListItem, PersonalListViewViewHolder>(ListItem.class, R.layout.list_item_view, PersonalListViewViewHolder.class, mRef) {

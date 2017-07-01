@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import io.picopalette.apps.event_me.Activities.EventDisplayActivity;
 import io.picopalette.apps.event_me.Activities.ListCreationActivity;
 import io.picopalette.apps.event_me.Activities.ListDisplayActivity;
 import io.picopalette.apps.event_me.Adapters.PersonalListsViewHolder;
@@ -90,7 +91,7 @@ public class EventListsFragment extends Fragment {
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), ListDisplayActivity.class);
                         intent.putExtra("type", "event");
-                        intent.putExtra("title", viewHolder.personalListTitle.getText());
+                        intent.putExtra("title", getRef(position).getKey());
                         startActivity(intent);
                     }
                 });
@@ -98,7 +99,7 @@ public class EventListsFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getContext(), ListCreationActivity.class);
-                        intent.putExtra(mListTitle, viewHolder.personalListTitle.getText());
+                        intent.putExtra(mListTitle, getRef(position).getKey());
                         intent.putExtra("type", "event");
                         startActivity(intent);
                     }
@@ -109,7 +110,20 @@ public class EventListsFragment extends Fragment {
 
                     @Override
                     public void onClick(View v) {
+                        FirebaseDatabase.getInstance().getReference().child(Constants.events).child(getRef(position).getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Event event = dataSnapshot.getValue(Event.class);
+                                Intent intent = new Intent(getActivity(), EventDisplayActivity.class);
+                                intent.putExtra("event", event);
+                                startActivity(intent);
+                            }
 
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
                     }
                 });
             }
@@ -170,7 +184,20 @@ public class EventListsFragment extends Fragment {
                 viewHolder.personalListDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        FirebaseDatabase.getInstance().getReference().child(Constants.events).child(getRef(position).getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Event event = dataSnapshot.getValue(Event.class);
+                                Intent intent = new Intent(getActivity(), EventDisplayActivity.class);
+                                intent.putExtra("event", event);
+                                startActivity(intent);
+                            }
 
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
                     }
                 });
             }

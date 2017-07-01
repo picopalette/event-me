@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.picopalette.apps.event_me.Activities.EventDisplayActivity;
@@ -57,7 +58,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
                     .inflate(R.layout.event_tab_custom_row, parent, false);
 
             Calendar c = Calendar.getInstance();
-            sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm aa");
+            sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm aa", Locale.getDefault());
             currentTime = sdf.format(c.getTime());
 
             //Perform Sorting

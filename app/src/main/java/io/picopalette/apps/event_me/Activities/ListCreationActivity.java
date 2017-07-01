@@ -13,8 +13,11 @@ import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import io.picopalette.apps.event_me.Adapters.PersonalListEditViewHolder;
 import io.picopalette.apps.event_me.Models.ListItem;
@@ -47,12 +50,23 @@ public class ListCreationActivity extends AppCompatActivity {
         Intent intent = getIntent();
         title = intent.getStringExtra(mListTitle);
         type = intent.getStringExtra("type");
-        mTitle.setText(title);
 
         if(type.matches("personal")) {
             mListReference = FirebaseDatabase.getInstance().getReference().child(Constants.users).child(Utilities.encodeEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail())).child(Constants.lists).child(title);
+            mTitle.setText(title);
         } else {
             mListReference = FirebaseDatabase.getInstance().getReference().child(Constants.events).child(title).child(Constants.lists);
+            FirebaseDatabase.getInstance().getReference().child(Constants.events).child(title).child("name").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    mTitle.setText(dataSnapshot.getValue().toString());
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    mTitle.setText(title);
+                }
+            });
         }
 
         mAddFAB.setOnClickListener(new View.OnClickListener() {
