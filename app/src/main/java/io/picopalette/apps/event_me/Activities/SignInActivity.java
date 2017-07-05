@@ -108,7 +108,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
             } else {
-                Toast.makeText(getApplicationContext(),"error",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),result.getStatus().toString(),Toast.LENGTH_LONG).show();
             }
         }
     }

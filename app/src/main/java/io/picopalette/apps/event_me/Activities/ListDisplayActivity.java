@@ -41,6 +41,7 @@ public class ListDisplayActivity extends AppCompatActivity {
         listDisplayRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         mRef = FirebaseDatabase.getInstance().getReference();
         if(type.matches("personal")) {
+            listDisplayTitleView.setText(title);
             mRef = mRef.child(Constants.users).child(Utilities.encodeEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail())).child(Constants.lists).child(title);
         }
         else {

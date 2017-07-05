@@ -28,6 +28,15 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.uber.sdk.android.core.UberButton;
+import com.uber.sdk.android.core.UberSdk;
+import com.uber.sdk.android.rides.RideParameters;
+import com.uber.sdk.android.rides.RideRequestButton;
+import com.uber.sdk.core.auth.Scope;
+import com.uber.sdk.rides.client.ServerTokenSession;
+import com.uber.sdk.rides.client.SessionConfiguration;
+
+import java.util.Arrays;
 
 import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.R;
@@ -35,6 +44,8 @@ import io.picopalette.apps.event_me.R;
 public class EventDisplayActivity extends AppCompatActivity implements OnMapReadyCallback {
     private Event eve;
     private CardView mTrackify;
+    private RideRequestButton uberButton;
+    private SessionConfiguration uberConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +60,7 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
         TextView eName = (TextView) findViewById(R.id.eventName);
         TextView ePlace = (TextView) findViewById(R.id.eventDate);
         TextView eTime = (TextView) findViewById(R.id.eventTime);
+        uberButton = (RideRequestButton) findViewById(R.id.uberRequestButton);
         mTrackify = (CardView) findViewById(R.id.card3);
         Switch trackifySwitch = (Switch) findViewById(R.id.eve_switch2);
         mTrackify.setVisibility(View.GONE);
@@ -82,6 +94,26 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
                 // Handle any errors
             }
         });
+
+        uberConfig = new SessionConfiguration.Builder()
+                // mandatory
+                .setClientId("5OmjOvLDwGdW4Uytw78StTo4oLRMWa40")
+                // required for enhanced button features
+                .setServerToken("c0Ziye1-rVCAb3RqpnVIP6ZIg1-jaKQY55BVuKr9")
+                // required scope for Ride Request Widget features
+                .setScopes(Arrays.asList(Scope.RIDE_WIDGETS))
+                // optional: set Sandbox as operating environment
+                .setEnvironment(SessionConfiguration.Environment.SANDBOX)
+                .build();
+        UberSdk.initialize(uberConfig);
+
+        RideParameters rideParams = new RideParameters.Builder()
+                .setPickupToMyLocation()
+                // Required for price estimates; lat (Double), lng (Double), nickname (String), formatted address (String) of dropoff location.
+                .setDropoffLocation(eve.getPlace().getLat(), eve.getPlace().getLon(), eve.getPlace().getName(), eve.getName())
+                .build();
+// set parameters for the RideRequestButton instance
+        uberButton.setRideParameters(rideParams);
     }
 
     @Override
@@ -110,7 +142,6 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
             Intent intent = new Intent(EventDisplayActivity.this,MessagingActivity.class);
             intent.putExtra("id",eve.getId());
             startActivity(intent);
-
 
         }
         return true;
