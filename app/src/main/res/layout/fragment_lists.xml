@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -12,11 +12,23 @@
         app:tabTextColor="#ffffff"
         app:tabSelectedTextColor="#ffffff"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="50dp"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/listsViewPager"
+        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-</LinearLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/listsFAB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_playlist_add_white_24dp"
+        app:layout_anchor="@id/listsViewPager"
+        app:fabSize="normal"
+        app:layout_anchorGravity="bottom|right"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp" />
+
+</android.support.design.widget.CoordinatorLayout>

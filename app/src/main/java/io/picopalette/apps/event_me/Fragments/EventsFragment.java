@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,8 @@ public class EventsFragment extends Fragment  {
     private EventsAdapter adapter;
     private DatabaseReference mDatabaseReference;
     private SharedPreferences eventkeys;
+    private SearchView mPES;
+    private boolean activityStartUp = true;
 
 
     public static EventsFragment newInstance() {
@@ -62,6 +65,9 @@ public class EventsFragment extends Fragment  {
         adapter = new EventsAdapter(getActivity().getApplicationContext(), events,recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mPES = (SearchView) v.findViewById(R.id.publicEventsSearchView);
+
+        mPES.setQueryHint("Search Public Events");
 
 
         fab.setOnClickListener(new View.OnClickListener() {

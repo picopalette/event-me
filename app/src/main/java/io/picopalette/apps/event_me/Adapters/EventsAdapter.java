@@ -161,8 +161,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
             Log.d("TESTI", "inside bindviewholder");
             final Event homeEvent = events.get(holder.getAdapterPosition());
             holder.event_title.setText(homeEvent.getName());
-            holder.event_type.setText(homeEvent.getType());
-            holder.event_date_time.setText(homeEvent.getDateAndTime().getFormattedDate() + " " + homeEvent.getDateAndTime().getFormattedTime());
+            holder.event_date.setText(homeEvent.getDateAndTime().getFormattedDate());
+            holder.event_time.setText(homeEvent.getDateAndTime().getFormattedTime());
             holder.event_place.setText(homeEvent.getPlace().getName());
             storageRef.child("images/" + homeEvent.getId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
@@ -249,7 +249,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView event_title, event_type, event_place, event_date_time;
+        TextView event_title, event_place, event_date, event_time;
         CircleImageView event_image;
         TextView accept, decline, notificationText;
 
@@ -259,9 +259,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
             accept = (TextView) view.findViewById(R.id.accept_tv);
             decline = (TextView) view.findViewById(R.id.decline_tv);
             event_title = (TextView) view.findViewById(R.id.event_name_card);
-            event_type = (TextView) view.findViewById(R.id.event_type_card);
             event_place = (TextView) view.findViewById(R.id.event_place_card);
-            event_date_time = (TextView) view.findViewById(R.id.event_date_time_card);
+            event_date = (TextView) view.findViewById(R.id.event_date_card);
+            event_time = (TextView) view.findViewById(R.id.event_time_card);
             event_image = (CircleImageView) view.findViewById(R.id.event_image_card);
         }
 

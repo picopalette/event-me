@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:layout_marginTop="10dp"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName|textCapWords" />
 
     <Button
         android:id="@+id/nextButton"

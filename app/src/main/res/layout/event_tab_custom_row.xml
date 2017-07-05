@@ -1,76 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:focusable="true"
-    android:paddingLeft="16dp"
-    android:layout_marginTop="10dp"
-    android:paddingRight="16dp"
     android:clickable="true"
     android:background="?android:attr/selectableItemBackground"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginTop="10dp">
 
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="5dp">
+        android:layout_height="130dp">
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:id="@+id/event_image_card"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/event_name_card"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"/>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/event_image_card"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="20dp"/>
 
-            <View
-                android:layout_width="2dp"
-                android:layout_marginStart="10dp"
+            <LinearLayout
+                android:layout_toEndOf="@+id/event_image_card"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorPrimaryDark" />
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_marginStart="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:id="@+id/event_type_card"
+                <TextView
+                    android:id="@+id/event_name_card"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="3dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Event's Name"
+                    android:textSize="23sp"
+                    android:textAlignment="center"
+                    />
 
-                />
-        </LinearLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_marginTop="18dp"
-            android:id="@+id/event_place_card"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_marginTop="18dp"
-            android:id="@+id/event_date_time_card"/>
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/eventDatePic"
+                        android:layout_width="19dp"
+                        android:layout_height="19dp"
+                        android:layout_alignParentLeft="true"
+                        app:srcCompat="@drawable/ic_calen" />
 
-    </LinearLayout>
-    </LinearLayout>
+                    <TextView
+                        android:layout_toEndOf="@+id/eventDatePic"
+                        android:id="@+id/event_date_card"
+                        android:paddingLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Event's Date"
+                        android:textSize="16sp"/>
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_toStartOf="@+id/event_time_card"
+                        android:id="@+id/eventTimePic"
+                        android:layout_width="19dp"
+                        android:layout_height="19dp"
+                        app:srcCompat="@drawable/ic_clock" />
+
+                    <TextView
+                        android:layout_marginRight="5dp"
+                        android:layout_alignParentRight="true"
+                        android:id="@+id/event_time_card"
+                        android:paddingLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Event's Time"
+                        android:textSize="16sp" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp">
+
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="match_parent">
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:layout_width="19sp"
+                            android:layout_height="19sp"
+                            android:layout_marginRight="5dp"
+                            app:srcCompat="@drawable/ic_location"
+                            android:layout_toStartOf="@+id/event_place_card"/>
+
+                        <TextView
+                            android:id="@+id/event_place_card"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Event's Place"
+                            android:textAlignment="center"
+                            android:textSize="17sp"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true" />
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent">
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/eventCountPerson"
+                            android:layout_width="19dp"
+                            android:layout_height="19dp"
+                            android:layout_marginTop="5dp"
+                            app:srcCompat="@drawable/ic_person_black_24dp"
+                            android:layout_alignParentLeft="true"
+                            />
+
+                        <TextView
+                            android:layout_marginTop="5dp"
+                            android:paddingLeft="5dp"
+                            android:layout_toEndOf="@+id/eventCountPerson"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Num"
+                            android:textSize="16sp" />
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_marginTop="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="#hashtag"
+                            android:textSize="16sp"
+                            android:layout_alignParentRight="true"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
    </android.support.v7.widget.CardView>
+
 </LinearLayout>
