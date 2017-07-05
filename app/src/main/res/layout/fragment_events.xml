@@ -5,9 +5,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/publicEventsSearchCard"
+        android:layout_marginBottom="10dp">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="11dp"
+            app:cardBackgroundColor="#f6f6f6"
+            app:cardCornerRadius="8dp">
+
+            <android.support.v7.widget.SearchView
+                android:id="@+id/publicEventsSearchView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+
+
+        </android.support.v7.widget.CardView>
+
+
+
+
+    </android.support.v7.widget.CardView>
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/publicEventsSearchCard"
         android:id="@+id/recyclerView_eve">
 
     </android.support.v7.widget.RecyclerView>
@@ -16,12 +44,12 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="@dimen/fab_margin_end"
-        android:layout_marginBottom="@dimen/fab_margin_bottom"
-        app:srcCompat="@android:drawable/ic_input_add"
+        app:srcCompat="@drawable/ic_add_white_24dp"
+        app:fabSize="normal"
+        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"/>
 
 
 

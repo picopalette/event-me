@@ -1,9 +1,11 @@
 package io.picopalette.apps.event_me.Fragments;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,8 @@ import android.view.ViewGroup;
 import io.picopalette.apps.event_me.R;
 
 public class FavFragment extends Fragment {
+
+    private FloatingActionButton mFavFAB;
 
     public static FavFragment newInstance() {
         return new FavFragment();
@@ -24,6 +28,10 @@ public class FavFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v= inflater.inflate(R.layout.fragment_fav, container, false);
+
+        getActivity().setTitle("Favourites");
+
+        mFavFAB = (FloatingActionButton) v.findViewById(R.id.favFAB);
 
         final PeopleFragment peopleFragment = new PeopleFragment();
         final TeamsFragment teamsFragment = new TeamsFragment();
@@ -49,6 +57,48 @@ public class FavFragment extends Fragment {
 
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tabLay);
         tabLayout.setupWithViewPager(vp);
+
+        vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                switch (position)
+                {
+                    case 0:
+                        mFavFAB.setImageDrawable(ContextCompat.getDrawable(getContext(),R.drawable.ic_person_add_white_24dp));
+
+                        break;
+
+                    case 1:
+                        mFavFAB.setImageDrawable(ContextCompat.getDrawable(getContext(),R.drawable.ic_group_add_white_24dp));
+                        break;
+                    default:
+                        mFavFAB.setImageDrawable(ContextCompat.getDrawable(getContext(),R.drawable.ic_person_add_white_24dp));
+                }
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         return v;
+
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        getActivity().setTitle(getResources().getString(R.string.app_name));
+
     }
 }

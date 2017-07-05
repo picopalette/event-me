@@ -54,4 +54,5 @@
     <string name="sendLocation">Send Location</string>
     <string name="select_picture_title">Get Photo From</string>
     <string name="sendbutton">send Button</string>
+    <string name="list_title_hint">Type the list item here (One by One)</string>
 </resources>

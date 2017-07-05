@@ -45,49 +45,12 @@ public class PersonalListsFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_personal_lists, container, false);
 
-        FloatingActionButton createListFAB = (FloatingActionButton) v.findViewById(R.id.personalListsFAB);
+
         personalListsRecyclerView = (RecyclerView) v.findViewById(R.id.personal_lists_RecyclerView);
         personalListsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mListReference = FirebaseDatabase.getInstance().getReference().child(Constants.users).child(Utilities.encodeEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail())).child(Constants.lists);
 
-        createListFAB.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                AlertDialog.Builder mB = new AlertDialog.Builder(getContext());
-                View alertView = inflater.inflate(R.layout.dialog_list_title,null);
-                final EditText listTitle = (EditText) alertView.findViewById(R.id.listTitleEditText);
-                Button nextButton = (Button) alertView.findViewById(R.id.nextButton);
-                mB.setView(alertView);
-                final AlertDialog dialog = mB.create();
-                dialog.show();
-
-                nextButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        if(listTitle.getText().toString().equals(""))
-                        {
-                            Toast.makeText(getContext(),"Please enter the List's Title",Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                        {
-                            String title = listTitle.getText().toString();
-                            Intent intent = new Intent(getContext(), ListCreationActivity.class);
-                            intent.putExtra(mListTitle,title);
-                            intent.putExtra("type", "personal");
-                            startActivity(intent);
-                            dialog.dismiss();
-                            Toast.makeText(getContext(),"Click the add/remove button to add/remove the list_item_edit item",Toast.LENGTH_LONG).show();
-                        }
-
-                    }
-                });
-
-            }
-        });
 
         listsAdapter = new FirebaseRecyclerAdapter<Object, PersonalListsViewHolder>(Object.class, R.layout.card_list, PersonalListsViewHolder.class, mListReference) {
             @Override

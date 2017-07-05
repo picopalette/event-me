@@ -19,6 +19,6 @@ public class PersonalListEditViewHolder extends RecyclerView.ViewHolder {
     public PersonalListEditViewHolder(View itemView) {
         super(itemView);
         listTextView = (TextView) itemView.findViewById(R.id.list_textView);
-        listDeleteButton = (ImageButton) itemView.findViewById(R.id.list_deleteButton);
+        listDeleteButton = (ImageButton) itemView.findViewById(R.id.removeFAB);
     }
 }
