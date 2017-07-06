@@ -24,12 +24,15 @@
                     android:id="@+id/eventPic"
                     android:layout_width="wrap_content"
                     android:layout_height="190dp"
+                    android:scaleType="fitXY"
                     app:srcCompat="@drawable/logo"
                     />
 
                 <TextView
                     android:id="@+id/eventStatus"
                     android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_gravity="center"
                     android:layout_height="30dp"
                     android:textSize="17sp"
                     android:text="Ongoing Event"
@@ -126,7 +129,8 @@
                 app:contentPadding="16dp">
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="290dp">
+                    android:layout_height="290dp"
+                    android:id="@+id/map_card">
                     <LinearLayout
                         android:id="@+id/eventPlace"
                         android:layout_width="match_parent"
@@ -135,7 +139,7 @@
                         <android.support.v7.widget.AppCompatImageView
                             android:layout_width="wrap_content"
                             android:layout_height="22dp"
-                            app:srcCompat="@drawable/ic_location"/>
+                            app:srcCompat="@drawable/ic_location" />
                         <TextView
                             android:id="@+id/eventPlaceName"
                             android:layout_width="match_parent"
@@ -145,6 +149,11 @@
                             android:layout_marginLeft="5dp"
                             android:layout_marginBottom="7dp"
                             android:textSize="15sp"/>
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/navigation_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="22dp"
+                            app:srcCompat= "@drawable/ic_directions_black_24dp"/>
                     </LinearLayout>
 
                     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
@@ -157,26 +166,31 @@
 
                 </RelativeLayout>
 
+
             </android.support.v7.widget.CardView>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/card2"
                 android:id="@+id/linear"
-                android:layout_centerHorizontal="true"
+                android:padding="8dp"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_centerVertical="true"
                 android:orientation="horizontal">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
                     android:text="Share my Location"
+                    android:gravity="start"
                     android:layout_height="wrap_content" />
                 <Switch
                     android:id="@+id/eve_switch2"
-                    android:layout_below="@+id/scrollView2"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="50dp"
-                    android:layout_centerHorizontal="true"/>
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical" />
             </LinearLayout>
             <android.support.v7.widget.CardView
                 android:id="@+id/card3"
@@ -201,15 +215,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="View locations of Participants"
-                        android:textAlignment="center"
                         android:textSize="15sp"
-                        android:layout_weight="1"/>
-                    <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="22dp"
-                        app:srcCompat="@drawable/ic_tracking"
-                        android:layout_weight="1"
-                        />
+                        android:layout_weight="2"/>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
             <com.uber.sdk.android.rides.RideRequestButton

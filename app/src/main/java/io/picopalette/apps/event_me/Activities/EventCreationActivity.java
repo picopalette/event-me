@@ -228,7 +228,7 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
                         eventRefUser = mDatabaseReference.child(Constants.users).child(Utilities.encodeEmail(selectedParticipant.getEmail()));
                         eventRefUser.child(Constants.events).child(my_key).setValue(Constants.UserStatus.INVITED);
                     }
-                    Event event = new Event(Event_name.getText().toString(),Event_type.getText().toString(),place,dateAndTime,mPrivate,my_key, Constants.EventStatus.UPCOMING, participants,downloadUrl);
+                    Event event = new Event(Event_name.getText().toString(),Event_type.getText().toString(),place,dateAndTime,mPrivate,my_key, Constants.EventStatus.UPCOMING, participants,downloadUrl, Utilities.encodeEmail(user.getEmail()));
                     eventReference.child(my_key).setValue(event);
                     Toast.makeText(getBaseContext(), R.string.success,Toast.LENGTH_LONG).show();
                 }

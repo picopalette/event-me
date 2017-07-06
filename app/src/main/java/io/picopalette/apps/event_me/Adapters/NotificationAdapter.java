@@ -2,9 +2,12 @@ package io.picopalette.apps.event_me.Adapters;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -66,10 +70,26 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(final NotifViewHolder holder, final int position) {
         Log.d("TESTI", "inside bindviewholder");
         final Event homeEvent = events.get(position);
-
-        holder.NotificationText.setText("You have been Invited to "+homeEvent.getName());
+        holder.NotificationText.setText("You have been Invited to "+homeEvent.getName()+ " by "+homeEvent.getOwner().replace("(dot)", "."));
         holder.accept.setText("ACCEPT");
         holder.decline.setText("DECLINE");
+        holder.event_title.setText(homeEvent.getName());
+        holder.event_date.setText(homeEvent.getDateAndTime().getFormattedDate());
+        holder.event_time.setText(homeEvent.getDateAndTime().getFormattedTime());
+        holder.event_place.setText(homeEvent.getPlace().getName());
+        storageRef.child("images/" + homeEvent.getId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(context)
+                        .load(uri.toString())
+                        .into(holder.event_image);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(context,"cannot create your Event",Toast.LENGTH_LONG).show();
+            }
+        });
         Log.d("sizes", String.valueOf(events.size()));
         holder.accept.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +109,43 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
             }
         });
-        itemView.setOnClickListener(new View.OnClickListener() {
+        holder.decline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder;
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                            builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
+//                        } else {
+                builder = new AlertDialog.Builder(context);
+//                        }
+                builder.setTitle("Delete Event Request")
+                        .setMessage("You can't undo the action")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // continue with delete
+                                FirebaseDatabase.getInstance().getReference().child(Constants.users)
+                                        .child(Utilities.encodeEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail()))
+                                        .child(Constants.events).child(homeEvent.getId()).removeValue();
+                                events.remove(holder.getAdapterPosition());
+                                Log.d("sizes2", String.valueOf(events.size()));
+                                notifyItemRemoved(holder.getAdapterPosition());
+                                Log.d("sizes3", String.valueOf(events.size()));
+                                notifyItemRangeRemoved(holder.getAdapterPosition(),events.size());
+                                Log.d("sizes4", String.valueOf(events.size()));
+                                events.clear();
+                                notifyDataSetChanged();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+        });
+        holder.evevntView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, EventDisplayActivity.class);
@@ -108,11 +164,20 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     public class NotifViewHolder extends RecyclerView.ViewHolder {
         public TextView NotificationText, accept, decline;
+        public View evevntView;
+        TextView event_title, event_place, event_date, event_time;
+        CircleImageView event_image;
         public NotifViewHolder(View itemView) {
             super(itemView);
             NotificationText = (TextView) itemView.findViewById(R.id.notfication_tv);
             accept = (TextView) itemView.findViewById(R.id.accept_tv);
             decline = (TextView) itemView.findViewById(R.id.decline_tv);
+            evevntView = itemView.findViewById(R.id.notification_event_card);
+            event_title = (TextView) evevntView.findViewById(R.id.event_name_card);
+            event_place = (TextView) evevntView.findViewById(R.id.event_place_card);
+            event_date = (TextView) evevntView.findViewById(R.id.event_date_card);
+            event_time = (TextView) evevntView.findViewById(R.id.event_time_card);
+            event_image = (CircleImageView) evevntView.findViewById(R.id.event_image_card);
         }
     }
 }

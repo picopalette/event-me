@@ -56,47 +56,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
 
              itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.event_tab_custom_row, parent, false);
-
-            Calendar c = Calendar.getInstance();
-            sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm aa", Locale.getDefault());
-            currentTime = sdf.format(c.getTime());
-
-            //Perform Sorting
-//            if (keep < events.size()) {
-//                keep = events.size();
-//
-//                Log.d("sizes", "keep: " + keep + "events.size" + events.size());
-//                for (int i = 0; i < keep; i++) {
-//                    final Event homeeve = events.get(i);
-//                    Date time1 = null;
-//                    try {
-//                        time1 = sdf.parse(homeeve.getDateAndTime().getFormattedDate() + " " + homeeve.getDateAndTime().getFormattedTime());
-//                    } catch (ParseException e) {
-//                        e.printStackTrace();
-//                    }
-//                    for (int j = i + 1; j < keep; j++) {
-//                        final Event homeeve2 = events.get(j);
-//                        Date time2 = null;
-//                        try {
-//                            time2 = sdf.parse(homeeve2.getDateAndTime().getFormattedDate() + " " + homeeve2.getDateAndTime().getFormattedTime());
-//                        } catch (ParseException e) {
-//                            e.printStackTrace();
-//                        }
-//
-//                        Log.d("sorting", "time1: " + time1 + " time2: " + time2 + " result: " + time1.compareTo(time2));
-//                        if (time1.compareTo(time2) > 0) {
-//                            Event itemA = events.get(i);
-//                            Event itemB = events.get(j);
-//                            events.set(i, itemB);
-//                            events.set(j, itemA);
-//                        }
-//                    }
-//                }
-//
-//                // notifyDataSetChanged();
-//
-//            }
-
         recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -113,29 +72,20 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
                 if (keep < events.size())
                 {
                     keep = events.size();
-
                     Log.d("sizes", "keep: "+keep+"events.size"+ events.size());
                     for(int i = 0; i<keep; i++)
                     {
                         final Event homeeve = events.get(i);
                         Date time1 = null;
-                        try {
-                            time1 = sdf.parse(homeeve.getDateAndTime().getFormattedDate()+" "+homeeve.getDateAndTime().getFormattedTime());
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
+                        time1 = new Date(homeeve.getDateAndTime().getYear(), homeeve.getDateAndTime().getMonth(), homeeve.getDateAndTime().getDayOfMonth(), homeeve.getDateAndTime().getHourOfDay(), homeeve.getDateAndTime().getMinute());
+                        Log.d("time1", time1.toString());
                         for(int j = i+1; j< keep; j++)
                         {
                             final Event homeeve2 = events.get(j);
                             Date time2 = null;
-                            try {
-                                time2 = sdf.parse(homeeve2.getDateAndTime().getFormattedDate()+" "+homeeve2.getDateAndTime().getFormattedTime());
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-
+                            time2 = new Date(homeeve2.getDateAndTime().getYear(), homeeve2.getDateAndTime().getMonth(), homeeve2.getDateAndTime().getDayOfMonth(), homeeve2.getDateAndTime().getHourOfDay(), homeeve2.getDateAndTime().getMinute());
                             Log.d("sorting","time1: "+time1+" time2: "+time2+" result: "+time1.compareTo(time2));
-                            if(time1.compareTo(time2)>0){
+                            if(time1.after(time2)) {
                                 Event itemA = events.get(i);
                                 Event itemB = events.get(j);
                                 events.set(i, itemB);
@@ -178,19 +128,15 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
                 }
             });
 
-
-
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final Event homeEvent = events.get(holder.getAdapterPosition());
-
                     Intent intent = new Intent(context, EventDisplayActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS);
                     intent.putExtra("event", homeEvent);
                     context.startActivity(intent);
-
                 }
             });
 
@@ -251,13 +197,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
 
         TextView event_title, event_place, event_date, event_time;
         CircleImageView event_image;
-        TextView accept, decline, notificationText;
 
         MyViewHolder(View view) {
             super(view);
-            notificationText = (TextView) view.findViewById(R.id.notfication_tv);
-            accept = (TextView) view.findViewById(R.id.accept_tv);
-            decline = (TextView) view.findViewById(R.id.decline_tv);
             event_title = (TextView) view.findViewById(R.id.event_name_card);
             event_place = (TextView) view.findViewById(R.id.event_place_card);
             event_date = (TextView) view.findViewById(R.id.event_date_card);

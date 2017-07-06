@@ -17,11 +17,12 @@ public class Event implements Serializable {
     private DateAndTime dateAndTime;
     private HashMap<String, Constants.UserStatus> participants;
     private Uri uri;
+    private String owner;
 
     public Event() {
     }
 
-    public Event(String name, String type, Location place, DateAndTime dateAndTime, Boolean isPrivate, String id, Constants.EventStatus status, HashMap<String, Constants.UserStatus> participants, Uri downloaduri) {
+    public Event(String name, String type, Location place, DateAndTime dateAndTime, Boolean isPrivate, String id, Constants.EventStatus status, HashMap<String, Constants.UserStatus> participants, Uri downloaduri, String owner) {
         this.uri = downloaduri;
         this.name = name;
         this.type = type;
@@ -31,6 +32,7 @@ public class Event implements Serializable {
         this.status = status;
         this.id = id;
         this.participants = participants;
+        this.owner = owner;
     }
 
     public Uri getUri() {
@@ -103,6 +105,14 @@ public class Event implements Serializable {
 
     public void setParticipants(HashMap<String, Constants.UserStatus> participants) {
         this.participants = participants;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     @Override

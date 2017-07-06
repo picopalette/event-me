@@ -77,12 +77,15 @@
         <activity android:name=".Activities.LiveShare" />
         <activity
             android:name=".Activities.EventDisplayActivity"
-            android:label="Event&apos;s Name"
+            android:label=""
+            android:parentActivityName=".Activities.MainActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".Activities.NotificationsActivity" />
+        <activity android:name=".Activities.NotificationsActivity"
+            android:parentActivityName=".Activities.MainActivity"/>
         <activity android:name=".Activities.ListCreationActivity" />
         <activity android:name=".Activities.ListDisplayActivity" />
-        <activity android:name=".Activities.MessagingActivity"></activity>
+        <activity android:name=".Activities.MessagingActivity"
+            android:label="Chat Room"></activity>
         <activity android:name=".Activities.FullScreenImageActvity"></activity>
 
     </application>

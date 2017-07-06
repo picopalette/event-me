@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageButton;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,8 +60,11 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
         final ImageView eImage = (ImageView) findViewById(R.id.eventPic);
         TextView eStatus = (TextView) findViewById(R.id.eventStatus);
         TextView eName = (TextView) findViewById(R.id.eventName);
-        TextView ePlace = (TextView) findViewById(R.id.eventDate);
+        TextView ePlace = (TextView) findViewById(R.id.eventPlaceName);
+        TextView eDate = (TextView) findViewById(R.id.eventDate);
         TextView eTime = (TextView) findViewById(R.id.eventTime);
+        AppCompatImageView eNavi = (AppCompatImageView) findViewById(R.id.navigation_btn);
+        View mapCard = (View) findViewById(R.id.map_card);
         uberButton = (RideRequestButton) findViewById(R.id.uberRequestButton);
         mTrackify = (CardView) findViewById(R.id.card3);
         Switch trackifySwitch = (Switch) findViewById(R.id.eve_switch2);
@@ -78,8 +83,10 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
             }
         });
         eName.setText(eve.getName());
+        getSupportActionBar().setTitle(eve.getName());
         ePlace.setText(eve.getPlace().getName());
         eTime.setText(eve.getDateAndTime().getFormattedTime());
+        eDate.setText(eve.getDateAndTime().getFormattedDate());
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         storageRef.child("images/"+eve.getId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -94,7 +101,20 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
                 // Handle any errors
             }
         });
-
+        switch (eve.getStatus()) {
+            case UPCOMING:
+                eStatus.setText("Upcoming Event");
+                eStatus.setBackgroundColor(R.color.accent200);
+                break;
+            case ONGOING:
+                eStatus.setText("Ongoing Event");
+                eStatus.setBackgroundColor(R.color.ongoing_background);
+                break;
+            case ENDED:
+                eStatus.setText("Ended");
+                eStatus.setBackgroundColor(R.color.ended_red);
+                break;
+        }
         uberConfig = new SessionConfiguration.Builder()
                 // mandatory
                 .setClientId("5OmjOvLDwGdW4Uytw78StTo4oLRMWa40")
@@ -114,6 +134,30 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
                 .build();
 // set parameters for the RideRequestButton instance
         uberButton.setRideParameters(rideParams);
+
+        mapCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri gmmIntentUri = Uri.parse("geo:"+eve.getPlace().getLat()+","+eve.getPlace().getLon());
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                }
+            }
+        });
+
+        eNavi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri gmmIntentUri = Uri.parse("google.navigation:q="+eve.getPlace().getLat()+","+eve.getPlace().getLon()+"&mode=d");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                }
+            }
+        });
     }
 
     @Override

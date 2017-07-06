@@ -23,6 +23,8 @@
     <color name="text_color_1">#333333</color>
 
     <!-- Others -->
+    <color name="ended_red">#CC0000</color>
+    <color name="ongoing_background">#008000</color>
     <color name="blue_accent200">#2979FF</color>
     <color name="teal_500">#009688</color>
     <color name="textColor">#FF09</color>
