@@ -8,13 +8,30 @@
     android:focusable="true"
     android:clickable="true"
     android:background="?android:attr/selectableItemBackground"
-    android:orientation="vertical"
-    android:layout_marginTop="10dp">
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="10dp"/>
+
 
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="130dp">
+        android:layout_height="150dp">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardBackgroundColor="@color/colorPrimaryDark"
+            app:cardCornerRadius="5dp"
+            android:layout_margin="5dp">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="2dp"
+                app:cardCornerRadius="5dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -22,23 +39,33 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/event_image_card"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_margin="20dp"/>
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_margin="15dp"/>
+
+            <View
+                android:id="@+id/event_card_divider"
+                android:layout_toEndOf="@+id/event_image_card"
+                android:layout_width="2dp"
+                android:background="@color/colorPrimaryDark"
+                android:layout_height="match_parent"
+                android:layout_marginRight="3dp"/>
 
             <LinearLayout
-                android:layout_toEndOf="@+id/event_image_card"
+                android:layout_toEndOf="@+id/event_card_divider"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginRight="4dp">
 
                 <TextView
                     android:id="@+id/event_name_card"
                     android:layout_marginTop="3dp"
-                    android:layout_marginBottom="3dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Event's Name"
+                    android:textColor="#094782"
                     android:textSize="23sp"
                     android:textAlignment="center"
                     />
@@ -46,15 +73,15 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="4dp">
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp">
 
                     <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/eventDatePic"
-                        android:layout_width="19dp"
-                        android:layout_height="19dp"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:layout_alignParentLeft="true"
-                        app:srcCompat="@drawable/ic_calen" />
+                        app:srcCompat="@drawable/ic_calendar_event_card_24dp" />
 
                     <TextView
                         android:layout_toEndOf="@+id/eventDatePic"
@@ -63,24 +90,26 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Event's Date"
-                        android:textSize="16sp"/>
+                        android:textColor="@color/event_card_1"
+                        android:textSize="13sp"/>
 
                     <android.support.v7.widget.AppCompatImageView
                         android:layout_toStartOf="@+id/event_time_card"
                         android:id="@+id/eventTimePic"
-                        android:layout_width="19dp"
-                        android:layout_height="19dp"
-                        app:srcCompat="@drawable/ic_clock" />
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        app:srcCompat="@drawable/ic_clock_event_card_24dp" />
 
                     <TextView
                         android:layout_marginRight="5dp"
                         android:layout_alignParentRight="true"
                         android:id="@+id/event_time_card"
                         android:paddingLeft="5dp"
+                        android:textColor="@color/event_card_1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Event's Time"
-                        android:textSize="16sp" />
+                        android:textSize="13sp" />
 
                 </RelativeLayout>
 
@@ -88,8 +117,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="4dp">
+                    android:layout_marginTop="7dp"
+                    android:layout_marginBottom="5dp">
 
 
                     <RelativeLayout
@@ -98,10 +127,10 @@
                         android:layout_height="match_parent">
 
                         <android.support.v7.widget.AppCompatImageView
-                            android:layout_width="19sp"
-                            android:layout_height="19sp"
+                            android:layout_width="17sp"
+                            android:layout_height="17sp"
                             android:layout_marginRight="5dp"
-                            app:srcCompat="@drawable/ic_location"
+                            app:srcCompat="@drawable/ic_location_event_card_24dp"
                             android:layout_toStartOf="@+id/event_place_card"/>
 
                         <TextView
@@ -110,7 +139,8 @@
                             android:layout_height="wrap_content"
                             android:text="Event's Place"
                             android:textAlignment="center"
-                            android:textSize="17sp"
+                            android:textSize="14sp"
+                            android:textColor="@color/event_card_1"
                             android:layout_alignParentTop="true"
                             android:layout_centerHorizontal="true" />
 
@@ -122,7 +152,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="5dp">
 
                     <RelativeLayout
                         android:layout_width="0dp"
@@ -131,10 +163,10 @@
 
                         <android.support.v7.widget.AppCompatImageView
                             android:id="@+id/eventCountPerson"
-                            android:layout_width="19dp"
-                            android:layout_height="19dp"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
                             android:layout_marginTop="5dp"
-                            app:srcCompat="@drawable/ic_person_black_24dp"
+                            app:srcCompat="@drawable/ic_person_event_card_24dp"
                             android:layout_alignParentLeft="true"
                             />
 
@@ -145,7 +177,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:text="Num"
-                            android:textSize="16sp" />
+                            android:textColor="@color/event_card_1"
+                            android:textSize="13sp" />
 
                     </RelativeLayout>
 
@@ -161,7 +194,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:text="#hashtag"
-                            android:textSize="16sp"
+                            android:textSize="13sp"
+                            android:textColor="@color/colorAccent"
+                            android:textStyle="italic"
                             android:layout_alignParentRight="true"/>
 
                     </RelativeLayout>
@@ -172,6 +207,14 @@
 
         </RelativeLayout>
 
+            </android.support.v7.widget.CardView>
+        </android.support.v7.widget.CardView>
+
    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="4dp"/>
+
 
 </LinearLayout>
