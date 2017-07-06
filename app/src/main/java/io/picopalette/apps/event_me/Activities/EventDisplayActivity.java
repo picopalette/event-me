@@ -104,15 +104,15 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
         switch (eve.getStatus()) {
             case UPCOMING:
                 eStatus.setText("Upcoming Event");
-                eStatus.setBackgroundColor(R.color.accent200);
+                eStatus.setBackgroundResource(R.color.yellowStatus);
                 break;
             case ONGOING:
                 eStatus.setText("Ongoing Event");
-                eStatus.setBackgroundColor(R.color.ongoing_background);
+                eStatus.setBackgroundResource(R.color.ongoing_background);
                 break;
             case ENDED:
                 eStatus.setText("Ended");
-                eStatus.setBackgroundColor(R.color.ended_red);
+                eStatus.setBackgroundResource(R.color.ended_red);
                 break;
         }
         uberConfig = new SessionConfiguration.Builder()
