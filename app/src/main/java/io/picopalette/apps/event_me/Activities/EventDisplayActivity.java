@@ -10,6 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,8 +41,11 @@ import com.uber.sdk.core.auth.Scope;
 import com.uber.sdk.rides.client.ServerTokenSession;
 import com.uber.sdk.rides.client.SessionConfiguration;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
+import io.picopalette.apps.event_me.Adapters.ParticipantsAdapter;
 import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.R;
 
@@ -63,6 +69,7 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
         TextView ePlace = (TextView) findViewById(R.id.eventPlaceName);
         TextView eDate = (TextView) findViewById(R.id.eventDate);
         TextView eTime = (TextView) findViewById(R.id.eventTime);
+        RecyclerView participantsRecyclerView = (RecyclerView) findViewById(R.id.event_display_rec_view);
         AppCompatImageView eNavi = (AppCompatImageView) findViewById(R.id.navigation_btn);
         View mapCard = (View) findViewById(R.id.map_card);
         uberButton = (RideRequestButton) findViewById(R.id.uberRequestButton);
@@ -115,6 +122,15 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
                 eStatus.setBackgroundColor(R.color.ended_red);
                 break;
         }
+
+        ArrayList<String> partiEmails = new ArrayList<>();
+        for(String email : eve.getParticipants().keySet())
+            partiEmails.add(email);
+        Log.d("userEmails", partiEmails.toString());
+        ParticipantsAdapter participantsAdapter = new ParticipantsAdapter(this, partiEmails);
+        participantsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        participantsRecyclerView.setAdapter(participantsAdapter);
+
         uberConfig = new SessionConfiguration.Builder()
                 // mandatory
                 .setClientId("5OmjOvLDwGdW4Uytw78StTo4oLRMWa40")

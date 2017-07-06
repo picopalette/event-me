@@ -21,8 +21,11 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -70,7 +73,18 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(final NotifViewHolder holder, final int position) {
         Log.d("TESTI", "inside bindviewholder");
         final Event homeEvent = events.get(position);
-        holder.NotificationText.setText("You have been Invited to "+homeEvent.getName()+ " by "+homeEvent.getOwner().replace("(dot)", "."));
+        FirebaseDatabase.getInstance().getReference().child(Constants.users).child(homeEvent.getOwner()).child("displayName").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String name = dataSnapshot.getValue(String.class);
+                holder.NotificationText.setText("You have been Invited to "+homeEvent.getName()+ " by "+name);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         holder.accept.setText("ACCEPT");
         holder.decline.setText("DECLINE");
         holder.event_title.setText(homeEvent.getName());
