@@ -171,6 +171,7 @@
                             />
 
                         <TextView
+                            android:id="@+id/event_card_personCount"
                             android:layout_marginTop="5dp"
                             android:paddingLeft="5dp"
                             android:layout_toEndOf="@+id/eventCountPerson"
@@ -189,6 +190,7 @@
                         android:layout_height="match_parent">
 
                         <TextView
+                            android:id="@+id/event_card_hashtag"
                             android:layout_marginTop="5dp"
                             android:layout_marginRight="5dp"
                             android:layout_width="wrap_content"
@@ -197,6 +199,8 @@
                             android:textSize="13sp"
                             android:textColor="@color/colorAccent"
                             android:textStyle="italic"
+                            android:maxLines="1"
+                            android:textAlignment="textEnd"
                             android:layout_alignParentRight="true"/>
 
                     </RelativeLayout>

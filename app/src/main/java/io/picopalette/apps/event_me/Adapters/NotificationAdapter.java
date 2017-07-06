@@ -77,6 +77,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         holder.event_date.setText(homeEvent.getDateAndTime().getFormattedDate());
         holder.event_time.setText(homeEvent.getDateAndTime().getFormattedTime());
         holder.event_place.setText(homeEvent.getPlace().getName());
+        holder.event_hashtag.setText(homeEvent.getType());
+        holder.event_p_count.setText(String.valueOf(homeEvent.getParticipants().size()));
         storageRef.child("images/" + homeEvent.getId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
@@ -165,7 +167,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public class NotifViewHolder extends RecyclerView.ViewHolder {
         public TextView NotificationText, accept, decline;
         public View evevntView;
-        TextView event_title, event_place, event_date, event_time;
+        TextView event_title, event_place, event_date, event_time, event_p_count, event_hashtag;
         CircleImageView event_image;
         public NotifViewHolder(View itemView) {
             super(itemView);
@@ -178,6 +180,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             event_date = (TextView) evevntView.findViewById(R.id.event_date_card);
             event_time = (TextView) evevntView.findViewById(R.id.event_time_card);
             event_image = (CircleImageView) evevntView.findViewById(R.id.event_image_card);
+            event_hashtag = (TextView) evevntView.findViewById(R.id.event_card_hashtag);
+            event_p_count = (TextView) evevntView.findViewById(R.id.event_card_personCount);
         }
     }
 }
