@@ -48,6 +48,8 @@ import com.google.firebase.storage.UploadTask;
 import com.nguyenhoanglam.imagepicker.activity.ImagePicker;
 import com.nguyenhoanglam.imagepicker.activity.ImagePickerActivity;
 import com.nguyenhoanglam.imagepicker.model.Image;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 import com.tokenautocomplete.TokenCompleteTextView;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -253,14 +255,18 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
             }
 
             private void pickImage() {
-                    ImagePicker.create(EventCreationActivity.this)
-                            .folderMode(true)
-                            .folderTitle(getString(R.string.my_images))
-                            .imageTitle(getString(R.string.select))
-                            .single()
-                            .showCamera(true)
-                            .imageDirectory("Images/ *jpg")
-                            .start(REQUEST_CODE_PICKER);
+//                    ImagePicker.create(EventCreationActivity.this)
+//                            .folderMode(true)
+//                            .folderTitle(getString(R.string.my_images))
+//                            .imageTitle(getString(R.string.select))
+//                            .single()
+//                            .showCamera(true)
+//                            .imageDirectory("Images/ *jpg")
+//                            .start(REQUEST_CODE_PICKER);
+                CropImage.activity()
+                        .setAspectRatio(2,1)
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .start(EventCreationActivity.this);
 
             }
         });
@@ -290,16 +296,29 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
     }
 
 
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == REQUEST_CODE_PICKER && resultCode == RESULT_OK && data != null) {
+//            images =  data.getParcelableArrayListExtra(ImagePickerActivity.INTENT_EXTRA_SELECTED_IMAGES);
+//            StringBuilder sb = new StringBuilder();
+//            for (int i = 0, l = images.size(); i < l; i++) {
+//                sb.append(images.get(i).getPath()).append("\n");
+//            }
+//            String uri = sb.toString();
+//            Event_image.setImageURI(Uri.parse(uri.trim()));
+//        }
+//    }
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE_PICKER && resultCode == RESULT_OK && data != null) {
-            images =  data.getParcelableArrayListExtra(ImagePickerActivity.INTENT_EXTRA_SELECTED_IMAGES);
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0, l = images.size(); i < l; i++) {
-                sb.append(images.get(i).getPath()).append("\n");
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                Event_image.setImageURI(resultUri);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
             }
-            String uri = sb.toString();
-            Event_image.setImageURI(Uri.parse(uri.trim()));
         }
     }
 
