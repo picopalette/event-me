@@ -128,7 +128,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
-                    Toast.makeText(context,"cannot create your Event",Toast.LENGTH_LONG).show();
+
                 }
             });
 

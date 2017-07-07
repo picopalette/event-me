@@ -62,7 +62,7 @@ public class EventsFragment extends Fragment  {
         getDataTask();
         events = new ArrayList<>();
         recyclerView.setHasFixedSize(true);
-        adapter = new EventsAdapter(getActivity(), events,recyclerView);
+        adapter = new EventsAdapter(getActivity().getApplicationContext(), events,recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mPES = (SearchView) v.findViewById(R.id.publicEventsSearchView);

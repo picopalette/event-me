@@ -128,7 +128,7 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
             partiEmails.add(email);
         Log.d("userEmails", partiEmails.toString());
         ParticipantsAdapter participantsAdapter = new ParticipantsAdapter(this, partiEmails);
-        participantsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        participantsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         participantsRecyclerView.setAdapter(participantsAdapter);
 
         uberConfig = new SessionConfiguration.Builder()

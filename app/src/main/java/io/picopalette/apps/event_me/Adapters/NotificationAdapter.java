@@ -103,7 +103,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(context,"cannot create your Event",Toast.LENGTH_LONG).show();
+
             }
         });
         Log.d("sizes", String.valueOf(events.size()));
