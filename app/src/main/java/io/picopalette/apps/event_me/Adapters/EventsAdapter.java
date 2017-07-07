@@ -70,27 +70,28 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
             @Override
             public void onLayoutReady() {
                 //Perform Sorting
-                if (keep < events.size())
+                if (keep != events.size())
                 {
                     keep = events.size();
                     Log.d("sizes", "keep: "+keep+"events.size"+ events.size());
                     for(int i = 0; i<keep; i++)
                     {
-                        final Event homeeve = events.get(i);
-                        Date time1 = null;
-                        time1 = new Date(homeeve.getDateAndTime().getYear(), homeeve.getDateAndTime().getMonth(), homeeve.getDateAndTime().getDayOfMonth(), homeeve.getDateAndTime().getHourOfDay(), homeeve.getDateAndTime().getMinute());
-                        Log.d("time1", time1.toString());
                         for(int j = i+1; j< keep; j++)
                         {
-                            final Event homeeve2 = events.get(j);
+                            Event homeeve = events.get(i);
+                            Date time1 = null;
+                            time1 = new Date(homeeve.getDateAndTime().getYear(), homeeve.getDateAndTime().getMonth(), homeeve.getDateAndTime().getDayOfMonth(), homeeve.getDateAndTime().getHourOfDay(), homeeve.getDateAndTime().getMinute());
+                            Event homeeve2 = events.get(j);
                             Date time2 = null;
                             time2 = new Date(homeeve2.getDateAndTime().getYear(), homeeve2.getDateAndTime().getMonth(), homeeve2.getDateAndTime().getDayOfMonth(), homeeve2.getDateAndTime().getHourOfDay(), homeeve2.getDateAndTime().getMinute());
-                            Log.d("sorting","time1: "+time1+" time2: "+time2+" result: "+time1.compareTo(time2));
                             if(time1.after(time2)) {
                                 Event itemA = events.get(i);
                                 Event itemB = events.get(j);
                                 events.set(i, itemB);
                                 events.set(j, itemA);
+                                Log.d("sorting time1", time1.toString());
+                                Log.d("sorting time2", time2.toString());
+                                Log.d("sorted events", events.get(0).toString());
                             }
                         }
                     }
@@ -155,8 +156,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
 
     @Override
     public void onLayoutReady() {
+        Log.d("Event Adapter", "sorting events");
         //Perform Sorting
-        if (keep < events.size())
+        if (keep != events.size())
         {
             keep = events.size();
 
