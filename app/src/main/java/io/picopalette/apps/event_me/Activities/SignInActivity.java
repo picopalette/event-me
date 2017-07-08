@@ -129,7 +129,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     if(!dataSnapshot.exists()) {
                                         Log.d(TAG, getString(R.string.new_user));
-                                        User newUser = new User(user.getUid(), user.getDisplayName(), user.getEmail(), user.getPhotoUrl().toString(), "off");
+                                        User newUser = new User(user.getUid(), user.getDisplayName(), user.getEmail(), user.getPhotoUrl().toString());
                                         mDatabase.child(Constants.users).child(EncodeString(user.getEmail())).setValue(newUser);
                                         mDatabase.child(Constants.people).child(EncodeString(user.getEmail())).setValue(user.getDisplayName());
                                     }
