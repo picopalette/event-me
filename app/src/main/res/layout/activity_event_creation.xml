@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="@color/dark_brown"
+            app:contentScrim="@color/dark_blue_theme"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
@@ -46,13 +46,13 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
+        app:fabSize="normal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@drawable/ic_cam" />
-
+        app:srcCompat="@drawable/ic_camera_white_24dp"/>
 
 
 </android.support.design.widget.CoordinatorLayout>

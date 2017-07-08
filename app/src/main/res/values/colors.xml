@@ -23,6 +23,8 @@
     <color name="black_alpha_30">#4D000000</color>
     <color name="text_color_1">#333333</color>
     <color name="event_card_1">#4C89C1</color>
+    <color name="dark_blue_theme">#094782</color>
+    <color name="hint_color">#666</color>
 
     <!-- Others -->
     <color name="ended_red">#CC0000</color>
