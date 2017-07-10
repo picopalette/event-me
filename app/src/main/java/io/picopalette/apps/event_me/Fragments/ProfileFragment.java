@@ -7,7 +7,10 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +19,34 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
+import io.picopalette.apps.event_me.Adapters.TimelineAdapter;
+import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.R;
+import io.picopalette.apps.event_me.Utils.Constants;
+import io.picopalette.apps.event_me.Utils.Utilities;
 
 public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetChangedListener{
 
 
+    private RecyclerView recyclerView;
+    private ArrayList<Event> events;
+    private TimelineAdapter adapter;
+    private DatabaseReference mDatabaseReference;
 
     private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.9f;
 
@@ -77,7 +99,67 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
         coverImage.setImageURI(coverUri);
         profileName.setText(userBundle.getString("name"));
         profileEmail.setText(userBundle.getString("email"));
+        recyclerView = (RecyclerView) v.findViewById(R.id.timelineRecycle);
+        getDataTask();
+        events = new ArrayList<>();
+        recyclerView.setHasFixedSize(true);
+        adapter = new TimelineAdapter(getActivity().getApplicationContext(), events,recyclerView);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         return v;
+    }
+
+
+    private void getDataTask(){
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference eventReference = mDatabaseReference.child(Constants.users).child(Utilities.encodeEmail(user.getEmail())).child(Constants.events);
+        eventReference.keepSynced(true);
+        eventReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d("TESTI","Inddfs datasnaphot of Profilefragment");
+                for(final DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                    Log.d("countsss", String.valueOf(dataSnapshot.getChildrenCount()));
+                    Log.d("counts", String.valueOf(dataSnapshot.getChildrenCount()));
+                    DatabaseReference eventRef = mDatabaseReference.child(Constants.events).child(eventSnapshot.getKey());
+                    Log.d("Testi", eventSnapshot.getValue().toString());
+                    if (Objects.equals(eventSnapshot.getValue().toString(), Constants.UserStatus.OWNER.toString()) || Objects.equals(eventSnapshot.getValue().toString(), Constants.UserStatus.GOING.toString())) {
+
+                        Log.d("testify", "indie the if statement");
+                        eventRef.addValueEventListener(new ValueEventListener() {
+
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Event event = dataSnapshot.getValue(Event.class);
+                                Log.d("TESTI", eventSnapshot.getValue().toString());
+                                if (event != null && !adapter.events.contains(event)) {
+                                    adapter.events.add(event);
+                                } else if(event != null && adapter.events.contains(event)) {
+                                    adapter.events.set(adapter.events.indexOf(event), event);
+                                }
+                                Log.d("testt", String.valueOf(events));
+                                adapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+
+                        });
+
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getActivity(),getString(R.string.error_network),Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 

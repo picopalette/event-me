@@ -28,6 +28,7 @@
                     android:orientation="horizontal">
 
                     <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/timelineImage"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"/>
@@ -54,6 +55,7 @@
                             android:background="@color/colorPrimary">
 
                             <TextView
+                                android:id="@+id/timelineEventsName"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Event's Name"
@@ -79,6 +81,7 @@
                                     android:layout_marginTop="2dp">
 
                                     <TextView
+                                        android:id="@+id/timelineEventPlace"
                                         android:layout_width="0dp"
                                         android:layout_weight="2"
                                         android:layout_height="wrap_content"
@@ -88,6 +91,7 @@
                                         android:textSize="18sp"/>
 
                                     <TextView
+                                        android:id="@+id/timelineHashTag"
                                         android:layout_width="0dp"
                                         android:layout_weight="1"
                                         android:layout_height="wrap_content"
@@ -112,6 +116,7 @@
                             android:orientation="horizontal">
 
                             <TextView
+                                android:id="@+id/timelineEventMonth"
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
                                 android:layout_height="match_parent"
@@ -123,6 +128,7 @@
                                 android:textColor="@color/dark_blue_theme"/>
 
                             <TextView
+                                android:id="@+id/timelineEventDate"
                                 android:layout_width="0dp"
                                 android:layout_weight="3"
                                 android:layout_height="match_parent"
@@ -132,6 +138,7 @@
                                 android:textSize="53sp"/>
 
                             <TextView
+                                android:id="@+id/timelineEventYear"
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
                                 android:layout_height="match_parent"
@@ -144,6 +151,7 @@
                         </LinearLayout>
 
                         <TextView
+                            android:id="@+id/timelineEventTime"
                             android:layout_width="match_parent"
                             android:layout_height="25dp"
                             android:text="Event's time"
@@ -201,6 +209,7 @@
                                         />
 
                                     <TextView
+                                        android:id="@+id/timelineParticipantsCount"
                                         android:layout_width="40dp"
                                         android:layout_height="match_parent"
                                         android:text="3"
