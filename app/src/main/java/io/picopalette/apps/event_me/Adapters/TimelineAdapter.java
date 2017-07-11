@@ -109,14 +109,15 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
         holder.setIsRecyclable(false);
         Log.d("TESTI", "inside bindviewholder");
         final Event homeEvent = events.get(holder.getAdapterPosition());
+        Log.d("TESTI", String.valueOf(homeEvent.getDateAndTime().getYear()));
         holder.timeEventName.setText(homeEvent.getName());
         holder.timeEventPlace.setText(homeEvent.getPlace().getName());
         holder.timeEventHashTag.setText(homeEvent.getType());
         holder.timeEventTime.setText(homeEvent.getDateAndTime().getFormattedTime());
-        holder.timeEventDay.setText(homeEvent.getDateAndTime().getDayOfMonth());
-        holder.timeEventMonth.setText(homeEvent.getDateAndTime().getMonth());
-        holder.timeEventYear.setText(homeEvent.getDateAndTime().getYear());
-        holder.timeEventCount.setText(homeEvent.getParticipants().size());
+        holder.timeEventDay.setText(String.valueOf(homeEvent.getDateAndTime().getDayOfMonth()));
+        holder.timeEventMonth.setText(String.valueOf(homeEvent.getDateAndTime().getMonth() + 1));
+        holder.timeEventYear.setText(String.valueOf(homeEvent.getDateAndTime().getYear()));
+        holder.timeEventCount.setText(String.valueOf(homeEvent.getParticipants().size()));
 
         storageRef.child("images/" + homeEvent.getId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -141,7 +142,6 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
 
     @Override
     public void onLayoutReady() {
-
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -162,7 +162,6 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
             timeEventYear = (TextView) itemView.findViewById(R.id.timelineEventYear);
             timeEventTime = (TextView) itemView.findViewById(R.id.timelineEventTime);
             timeEventCount = (TextView) itemView.findViewById(R.id.timelineParticipantsCount);
-
             timeEventPic = (ImageView) itemView.findViewById(R.id.timelineImage);
 
         }
