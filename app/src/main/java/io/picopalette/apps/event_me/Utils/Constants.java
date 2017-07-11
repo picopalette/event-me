@@ -7,6 +7,7 @@ public class Constants {
     public static String people= "people";
     public static String lists = "lists";
     public static String chatmodel = "chatmodel";
+    public static String gallery = "gallery";
 
     public enum EventStatus {
         UPCOMING,

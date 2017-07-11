@@ -62,7 +62,11 @@ public class NotificationsActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 Event event = dataSnapshot.getValue(Event.class);
-                                adapter.events.add(event);
+                                if (event != null && !adapter.events.contains(event)) {
+                                    adapter.events.add(event);
+                                } else if(event != null && adapter.events.contains(event)) {
+                                    adapter.events.set(adapter.events.indexOf(event), event);
+                                }
                                 adapter.notifyDataSetChanged();
 
                             }

@@ -2,6 +2,7 @@ package io.picopalette.apps.event_me.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ public class ParticipantsAdapter extends RecyclerView.Adapter<ParticipantsAdapte
     @Override
     public void onBindViewHolder(final ParticipantsViewHolder holder, int position) {
         String emailKey = participantEmails.get(position);
+        Log.d("userEmail", emailKey);
         FirebaseDatabase.getInstance().getReference().child(Constants.users).child(emailKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

@@ -93,7 +93,6 @@ public class LiveShare extends FragmentActivity  implements OnMapReadyCallback{
             return true;
         }
         return false;
-
     }
 
     @Override

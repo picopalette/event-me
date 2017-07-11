@@ -45,8 +45,6 @@ public class LocationData extends Service {
 
                 users.child(useremail).child("live").child("lat").setValue(location.getLatitude());
                 users.child(useremail).child("live").child("lon").setValue(location.getLongitude());
-
-
                 Intent i = new Intent("location_data");
                 i.putExtra("lattitude",location.getLatitude());
                 i.putExtra("longitude",location.getLongitude());

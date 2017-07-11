@@ -21,15 +21,20 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mzelzoghbi.zgallery.ZGallery;
+import com.mzelzoghbi.zgallery.entities.ZColor;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
+import io.picopalette.apps.event_me.Activities.MainActivity;
 import io.picopalette.apps.event_me.Adapters.EventsAdapter;
 import io.picopalette.apps.event_me.Activities.EventCreationActivity;
 import io.picopalette.apps.event_me.Interfaces.RecyclerViewReadyCallback;
 import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.R;
 import io.picopalette.apps.event_me.Utils.Constants;
+import io.picopalette.apps.event_me.Utils.EventGallery;
 import io.picopalette.apps.event_me.Utils.Utilities;
 
 
@@ -68,6 +73,18 @@ public class EventsFragment extends Fragment  {
         mPES = (SearchView) v.findViewById(R.id.publicEventsSearchView);
 
         mPES.setQueryHint("Search Public Events");
+
+        mPES.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventGallery.with(EventsFragment.this.getActivity(), "eventId")
+                        .setToolbarTitleColor(ZColor.WHITE) // toolbar title color
+                        .setGalleryBackgroundColor(ZColor.WHITE) // activity background color
+                        .setToolbarColorResId(R.color.colorPrimary) // toolbar color
+                        .setTitle("eventId") // toolbar title
+                        .show();
+            }
+        });
 
 
         fab.setOnClickListener(new View.OnClickListener() {

@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -21,17 +20,14 @@ import com.google.firebase.storage.StorageReference;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.picopalette.apps.event_me.Activities.EventDisplayActivity;
 import io.picopalette.apps.event_me.Interfaces.RecyclerViewReadyCallback;
 import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.R;
-import io.picopalette.apps.event_me.Utils.Constants;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHolder> implements RecyclerViewReadyCallback{
 
@@ -91,7 +87,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
                                 events.set(j, itemA);
                                 Log.d("sorting time1", time1.toString());
                                 Log.d("sorting time2", time2.toString());
-                                Log.d("sorted events", events.get(0).toString());
                             }
                         }
                     }
