@@ -65,7 +65,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Event's Name"
-                    android:textColor="#094782"
+                    android:textColor="@color/dark_blue_theme"
                     android:textSize="23sp"
                     android:textAlignment="center"
                     />

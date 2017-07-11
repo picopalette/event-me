@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,10 +21,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import com.google.android.gms.common.api.Status;
@@ -88,6 +92,7 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
     private HashMap<String, Constants.UserStatus> participants;
     private Uri downloadUrl;
     private ProgressDialog progressDialog;
+    private TextView mPrivateEvent;
 
 
     @Override
@@ -125,12 +130,32 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
         Event_key = (EditText) findViewById(R.id.eve_keyword);
         Event_image = (ImageView) findViewById(R.id.event_image);
         complete = (Button) findViewById(R.id.add_event);
+        mPrivateEvent = (TextView) findViewById(R.id.privateEventTV);
         autoCompleteTextView = (ContactsCompletionView) findViewById(R.id.autocomplete_textview);
         Fetch_And_Parse();
         filterAdapter = new FilterAdapter(this, R.layout.item_contact, contacts);
         autoCompleteTextView.setTokenListener(EventCreationActivity.this);
         autoCompleteTextView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Select);
         dateAndTime = new DateAndTime();
+
+        mitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if(isChecked)
+                {
+                    mPrivateEvent.setTextColor(Color.parseColor("#094782"));
+                    mPrivateEvent.setTypeface(null, Typeface.BOLD);
+                }
+                else
+                {
+                    mPrivateEvent.setTextColor(Color.parseColor("#666666"));
+                    mPrivateEvent.setTypeface(null, Typeface.NORMAL);
+                }
+
+            }
+        });
+
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

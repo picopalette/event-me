@@ -13,130 +13,133 @@
         android:layout_height="fill_parent"
         android:orientation="vertical"
         android:padding="10dp">
-        <com.github.florent37.materialtextfield.MaterialTextField
+
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:mtf_image="@drawable/ic_event_name"
-            app:mtf_labelColor="@android:color/holo_orange_dark"
-            android:layout_gravity="center"
-            >
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="3dp">
 
             <EditText
                 android:id="@+id/eve_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/event_name"
-                android:textColor="#333"
+                android:textColor="@color/dark_blue_theme"
                 android:textColorHint="#666"
-                android:textSize="15sp" />
+                android:textSize="17sp"
+                android:inputType="textCapWords|textPersonName"/>
 
-        </com.github.florent37.materialtextfield.MaterialTextField>
+        </android.support.design.widget.TextInputLayout>
 
-        <com.github.florent37.materialtextfield.MaterialTextField
+
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:mtf_image="@drawable/ic_event_type"
-            app:mtf_labelColor="@android:color/holo_orange_dark"
-            android:layout_gravity="center"
-            >
+            android:layout_height="wrap_content">
+
 
             <EditText
                 android:id="@+id/eve_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/event_type"
-                android:textColor="#333"
+                android:textColor="@color/dark_blue_theme"
                 android:textColorHint="#666"
-                android:textSize="15sp" />
+                android:textSize="17sp"
+                android:inputType="textCapWords"/>
 
-        </com.github.florent37.materialtextfield.MaterialTextField>
+
+        </android.support.design.widget.TextInputLayout>
+
 
        <LinearLayout
            android:layout_width="match_parent"
-           android:layout_height="wrap_content"
+           android:layout_height="30dp"
            android:orientation="horizontal"
-           android:padding="10dp"
-           android:layout_marginTop="30dp"
-           android:layout_gravity="center"
-           android:gravity="center">
+           android:layout_marginTop="15dp"
+           android:layout_marginLeft="2dp">
+
            <TextView
-               android:layout_width="wrap_content"
+               android:id="@+id/privateEventTV"
+               android:layout_width="0dp"
+               android:layout_weight="1"
                android:layout_height="wrap_content"
                android:text="@string/private_event"
-               android:textSize="29sp"/>
-
-           <View
-               android:layout_marginLeft="10dp"
-               android:layout_marginRight="10dp"
-               android:layout_width="2dp"
-               android:layout_height="match_parent"
-               android:background="@color/black">
-           </View>
+               android:textSize="18sp"/>
 
            <Switch
+               android:paddingRight="6dp"
                android:id="@+id/eve_switch"
-               android:layout_width="100dp"
+               android:layout_width="0dp"
+               android:layout_weight="1"
                android:layout_height="match_parent" />
 
        </LinearLayout>
 
-        <com.github.florent37.materialtextfield.MaterialTextField
+
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:mtf_image="@drawable/ic_event_key"
-            app:mtf_labelColor="@android:color/holo_orange_dark"
-            android:layout_gravity="center"
-            >
+            android:layout_height="wrap_content">
+
 
             <EditText
                 android:id="@+id/eve_keyword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/keyword"
-                android:textColor="#333"
+                android:textColor="@color/dark_blue_theme"
                 android:textColorHint="#666"
-                android:textSize="15sp" />
+                android:textSize="17sp"
+                android:inputType="textCapWords"/>
 
-        </com.github.florent37.materialtextfield.MaterialTextField>
+
+        </android.support.design.widget.TextInputLayout>
+
 
 
         <LinearLayout
             android:baselineAligned="false"
             android:layout_width="match_parent"
-            android:layout_marginTop="19dp"
+            android:layout_marginTop="8dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="3">
+                android:layout_weight="1.5">
+
                 <EditText android:id="@+id/date_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/dark_blue_theme"
                     android:fontFamily="sans-serif"
-                    android:textAppearance="@android:style/TextAppearance.Medium"
+                    android:textSize="17sp"
                     android:enabled="true"
                     android:textAlignment="center"
                     android:inputType="date"
                     android:focusable="false"
                     android:hint="@string/set_date" />
+
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2">
+                android:layout_weight="1">
+
                 <EditText android:id="@+id/time_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
-                    android:textAppearance="@android:style/TextAppearance.Medium"
+                    android:textSize="17sp"
+                    android:textColor="@color/dark_blue_theme"
                     android:enabled="true"
                     android:textAlignment="center"
                     android:inputType="time"
                     android:focusable="false"
                     android:hint="@string/set_time" />
+
             </android.support.design.widget.TextInputLayout>
 
 
