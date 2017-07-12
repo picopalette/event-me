@@ -97,47 +97,48 @@ public class EventsFragment extends Fragment  {
         return v;
     }
 
-    private void getDataTask() {
+    private void getDataTask()
+    {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference eventReference = mDatabaseReference.child(Constants.users).child(Utilities.encodeEmail(user.getEmail())).child(Constants.events);
-        eventReference.keepSynced(true);
-        eventReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d("TESTI","Inddfs datasnaphot of eventfragment");
-                for(final DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-                    Log.d("countsss", String.valueOf(dataSnapshot.getChildrenCount()));
-                        Log.d("counts", String.valueOf(dataSnapshot.getChildrenCount()));
-                    DatabaseReference eventRef = mDatabaseReference.child(Constants.events).child(eventSnapshot.getKey());
-                    Log.d("Testi", eventSnapshot.getValue().toString());
-                    if (Objects.equals(eventSnapshot.getValue().toString(), Constants.UserStatus.OWNER.toString()) || Objects.equals(eventSnapshot.getValue().toString(), Constants.UserStatus.GOING.toString())) {
+                mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+                DatabaseReference eventReference = mDatabaseReference.child(Constants.users).child(Utilities.encodeEmail(user.getEmail())).child(Constants.events);
+                eventReference.keepSynced(true);
+                eventReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.d("TESTI","Inddfs datasnaphot of eventfragment");
+                        for(final DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                            Log.d("countsss", String.valueOf(dataSnapshot.getChildrenCount()));
+                            Log.d("counts", String.valueOf(dataSnapshot.getChildrenCount()));
+                            DatabaseReference eventRef = mDatabaseReference.child(Constants.events).child(eventSnapshot.getKey());
+                            Log.d("Testi", eventSnapshot.getValue().toString());
+                            if (Objects.equals(eventSnapshot.getValue().toString(), Constants.UserStatus.OWNER.toString()) || Objects.equals(eventSnapshot.getValue().toString(), Constants.UserStatus.GOING.toString())) {
 
-                        Log.d("testify", "indie the if statement");
-                        eventRef.addValueEventListener(new ValueEventListener() {
+                                Log.d("testify", "indie the if statement");
+                                eventRef.addValueEventListener(new ValueEventListener() {
 
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                Event event = dataSnapshot.getValue(Event.class);
-                                Log.d("TESTI", eventSnapshot.getValue().toString());
-                                if (event != null && !adapter.events.contains(event)) {
-                                    adapter.events.add(event);
-                                } else if(event != null && adapter.events.contains(event)) {
-                                    adapter.events.set(adapter.events.indexOf(event), event);
-                                }
-                                Log.d("testt", String.valueOf(events));
-                                adapter.notifyDataSetChanged();
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        Event event = dataSnapshot.getValue(Event.class);
+                                        Log.d("TESTI", eventSnapshot.getValue().toString());
+                                        if (event != null && !adapter.events.contains(event)) {
+                                            adapter.events.add(event);
+                                        } else if(event != null && adapter.events.contains(event)) {
+                                            adapter.events.set(adapter.events.indexOf(event), event);
+                                        }
+                                        Log.d("testt", String.valueOf(events));
+                                        adapter.notifyDataSetChanged();
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                    }
+
+                                });
+
                             }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                            }
-
-                        });
-
-                    }
-
-                }
+                        }
 
             }
 
