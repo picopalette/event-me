@@ -30,8 +30,8 @@
             tools:replace="android:authorities">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                tools:replace="android:resource"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths"
+                tools:replace="android:resource" />
         </provider>
 
         <meta-data
@@ -80,17 +80,20 @@
             android:label=""
             android:parentActivityName=".Activities.MainActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".Activities.NotificationsActivity"
-            android:parentActivityName=".Activities.MainActivity"/>
+        <activity
+            android:name=".Activities.NotificationsActivity"
+            android:parentActivityName=".Activities.MainActivity" />
         <activity android:name=".Activities.ListCreationActivity" />
         <activity android:name=".Activities.ListDisplayActivity" />
-        <activity android:name=".Activities.MessagingActivity"
-            android:label="Chat Room"></activity>
-        <activity android:name=".Activities.FullScreenImageActvity"></activity>
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/>
+        <activity
+            android:name=".Activities.MessagingActivity"
+            android:label="Chat Room" />
+        <activity android:name=".Activities.FullScreenImageActvity" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
         <activity android:name=".Activities.EventGalleryActivity" />
-
+        <activity android:name=".Activities.PeopleSearchActivity"></activity>
     </application>
 
 </manifest>

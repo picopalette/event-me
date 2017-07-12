@@ -74,17 +74,18 @@ public class EventsFragment extends Fragment  {
 
         mPES.setQueryHint("Search Public Events");
 
-        mPES.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EventGallery.with(EventsFragment.this.getActivity(), "eventId")
-                        .setToolbarTitleColor(ZColor.WHITE) // toolbar title color
-                        .setGalleryBackgroundColor(ZColor.WHITE) // activity background color
-                        .setToolbarColorResId(R.color.colorPrimary) // toolbar color
-                        .setTitle("eventId") // toolbar title
-                        .show();
-            }
-        });
+//        mPES.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                EventGallery.with(EventsFragment.this.getActivity(), "eventId")
+//                        .setToolbarTitleColor(ZColor.WHITE) // toolbar title color
+//                        .setGalleryBackgroundColor(ZColor.WHITE) // activity background color
+//                        .setToolbarColorResId(R.color.colorPrimary) // toolbar color
+//                        .setTitle("eventId") // toolbar title
+//                        .show();
+//            }
+//        });
+
 
 
         fab.setOnClickListener(new View.OnClickListener() {

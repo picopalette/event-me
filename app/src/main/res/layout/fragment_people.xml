@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -8,11 +8,19 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="People"
+        android:text="Favourite Contacts"
         android:textAlignment="center"
-        android:layout_marginTop="50dp"
-        android:textSize="25sp"/>
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp"
+        android:textSize="25sp"
+        android:id="@+id/textView" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/people_recView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
 
 
-
-</RelativeLayout>
+</LinearLayout>
