@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="70dp"
+    android:layout_height="74dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/timelineProfilePic"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="4dp"/>
+        <TextView
+            android:id="@+id/timelineProfileName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:textSize="11sp"
+            android:textAlignment="center"
+            android:textColor="@color/dark_blue_theme"/>
+
+</LinearLayout>
+

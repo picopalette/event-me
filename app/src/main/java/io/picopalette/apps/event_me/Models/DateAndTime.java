@@ -1,6 +1,7 @@
 package io.picopalette.apps.event_me.Models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class DateAndTime implements Serializable{
     private int dayOfMonth;
@@ -93,7 +94,7 @@ public class DateAndTime implements Serializable{
             mHour = 12;
 
         if(mHour < 10 )
-            sHour = "0"+mHour;
+            sHour = ""+mHour;
         else
             sHour = ""+mHour;
 
@@ -103,6 +104,35 @@ public class DateAndTime implements Serializable{
             sMinute = ""+mMinute;
 
         return sHour+":"+sMinute+" "+mtime;
+    }
+
+    public ArrayList<String> getSplitTime(){
+        ArrayList<String> mTime = new ArrayList<String>();
+        String mtime = "a.m.";
+        int mHour = hourOfDay;
+        int mMinute = minute;
+        String sHour,sMinute;
+        if(mHour >= 12) {
+            mtime = "p.m.";
+            mHour = mHour - 12;
+        }
+        if(mHour == 0)
+            mHour = 12;
+
+        if(mHour < 10 )
+            sHour = ""+mHour;
+        else
+            sHour = ""+mHour;
+
+        if(mMinute < 10 )
+            sMinute = "0"+mMinute;
+        else
+            sMinute = ""+mMinute;
+        mTime.add(sHour);
+        mTime.add(sMinute);
+        mTime.add(mtime);
+
+        return mTime;
     }
 
     public void setFormattedTime(String formattedTime) {
