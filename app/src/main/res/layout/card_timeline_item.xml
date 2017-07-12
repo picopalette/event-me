@@ -1,243 +1,334 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="180dp">
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_marginTop="4dp"
+        android:paddingRight="5dp"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.4"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/timelineEventMonth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="aug"
+                android:textSize="10sp"
+                android:gravity="right"
+                android:layout_marginTop="19dp"
+                android:textAllCaps="true"
+                android:textColor="@color/dark_blue_theme"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_gravity="center"
+                android:background="@color/colorAccent"/>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/timelineEventDate"
+            android:layout_width="0dp"
+            android:layout_weight="0.4"
+            android:layout_height="match_parent"
+            android:text="31"
+            android:textColor="@color/dark_blue_theme"
+            android:gravity="center"
+            android:textSize="28sp"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.4"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="31dp"
+                android:background="@color/colorAccent"/>
+
+            <TextView
+                android:id="@+id/timelineEventYear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:text="2017"
+                android:textSize="10sp"
+                android:textColor="@color/dark_blue_theme"/>
+
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="2dp"
+            android:layout_marginTop="31dp"
+            android:background="@color/colorAccent"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.4"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="31dp"
+                android:background="@color/colorAccent"/>
+
+            <TextView
+                android:id="@+id/timelineMeridian"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="a.m."
+                android:textSize="10sp"
+                android:textColor="@color/dark_blue_theme"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/timelineHours"
+            android:layout_width="0dp"
+            android:layout_weight="0.4"
+            android:layout_height="match_parent"
+            android:text="11"
+            android:textColor="@color/dark_blue_theme"
+            android:gravity="center"
+            android:textSize="28sp"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.4"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/timelineMinutes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="30"
+                android:textSize="10sp"
+                android:gravity="left"
+                android:layout_marginTop="19dp"
+                android:textAllCaps="true"
+                android:textColor="@color/dark_blue_theme"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_gravity="center"
+                android:background="@color/colorAccent"/>
+
+
+
+            </LinearLayout>
+        </LinearLayout>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        app:cardBackgroundColor="@color/colorPrimary"
-        app:cardCornerRadius="3dp">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="5dp"
+        app:cardElevation="7dp">
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="2dp">
+            android:layout_margin="6dp"
+            app:cardBackgroundColor="@color/colorPrimary"
+            app:cardCornerRadius="3dp">
 
-            <LinearLayout
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_margin="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="110dp"
-                    android:orientation="horizontal">
-
-                    <android.support.v7.widget.AppCompatImageView
-                        android:id="@+id/timelineImage"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"/>
-                    <View
-                        android:layout_width="2dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/colorPrimary"/>
-
-                    <ScrollView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1.5">
-
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_height="69dp"
+                        android:orientation="horizontal">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:background="@color/colorPrimary">
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/timelineImage"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"/>
+                        <View
+                            android:layout_width="2dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorPrimary"/>
 
-                            <TextView
-                                android:id="@+id/timelineEventsName"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Event's Name"
-                                android:paddingTop="4dp"
-                                android:paddingBottom="4dp"
-                                android:textColor="@color/white"
-                                android:textSize="22sp"
-                                android:textAlignment="center"/>
-
-                            <android.support.v7.widget.CardView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:layout_marginBottom="3dp"
-                                android:layout_marginLeft="2dp"
-                                android:layout_marginRight="2dp"
-                                app:cardCornerRadius="3dp">
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1.5"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:layout_marginTop="2dp">
+                                    android:orientation="vertical"
+                                    android:background="@color/colorPrimary">
 
                                     <TextView
-                                        android:id="@+id/timelineEventPlace"
-                                        android:layout_width="0dp"
-                                        android:layout_weight="2"
+                                        android:id="@+id/timelineEventsName"
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:text="Place"
-                                        android:textColor="@color/dark_blue_theme"
-                                        android:padding="4dp"
-                                        android:textSize="18sp"/>
+                                        android:text="Event's Name"
+                                        android:paddingTop="5dp"
+                                        android:paddingBottom="5dp"
+                                        android:textColor="@color/white"
+                                        android:textSize="22sp"
+                                        android:textAlignment="center"/>
 
-                                    <TextView
-                                        android:id="@+id/timelineHashTag"
-                                        android:layout_width="0dp"
-                                        android:layout_weight="1"
+                                    <android.support.v7.widget.CardView
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:text="#hashtag"
-                                        android:paddingTop="4dp"
-                                        android:paddingRight="3dp"
-                                        android:paddingBottom="4dp"
-                                        android:textAlignment="textEnd"
-                                        android:textStyle="italic"
-                                        android:textColor="@color/colorAccent"
-                                        />
+                                        android:layout_marginTop="2dp"
+                                        android:layout_marginBottom="3dp"
+                                        android:layout_marginLeft="2dp"
+                                        android:layout_marginRight="2dp"
+                                        app:cardCornerRadius="3dp">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal"
+                                            android:layout_marginTop="2dp">
+
+                                            <TextView
+                                                android:id="@+id/timelineEventPlace"
+                                                android:layout_width="0dp"
+                                                android:layout_weight="2"
+                                                android:layout_height="wrap_content"
+                                                android:text="Place"
+                                                android:textColor="@color/dark_blue_theme"
+                                                android:padding="4dp"
+                                                android:textSize="15sp"/>
+
+                                            <TextView
+                                                android:id="@+id/timelineHashTag"
+                                                android:layout_width="0dp"
+                                                android:layout_weight="1"
+                                                android:layout_height="wrap_content"
+                                                android:text="#hashtag"
+                                                android:paddingTop="4dp"
+                                                android:paddingRight="3dp"
+                                                android:paddingBottom="4dp"
+                                                android:textAlignment="textEnd"
+                                                android:textStyle="italic"
+                                                android:textSize="14sp"
+                                                android:textColor="@color/colorAccent"
+                                                />
+
+                                        </LinearLayout>
+
+                                    </android.support.v7.widget.CardView>
 
                                 </LinearLayout>
 
-                            </android.support.v7.widget.CardView>
+                            </LinearLayout>
 
-                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/colorPrimary"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="77dp"
+                        android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="62dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="75dp"
                             android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/timelineEventMonth"
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:layout_height="match_parent"
-                                android:text="aug"
-                                android:textSize="17sp"
-                                android:gravity="center"
-                                android:textAlignment="center"
-                                android:textAllCaps="true"
-                                android:textColor="@color/dark_blue_theme"/>
 
-                            <TextView
-                                android:id="@+id/timelineEventDate"
-                                android:layout_width="0dp"
-                                android:layout_weight="3"
-                                android:layout_height="match_parent"
-                                android:text="31"
-                                android:textColor="@color/dark_blue_theme"
-                                android:textAlignment="center"
-                                android:textSize="53sp"/>
-
-                            <TextView
-                                android:id="@+id/timelineEventYear"
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:text="2017"
-                                android:textSize="17sp"
-                                android:textColor="@color/dark_blue_theme"
-                                android:textAlignment="center"/>
-
-                        </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/timelineEventTime"
-                            android:layout_width="match_parent"
-                            android:layout_height="25dp"
-                            android:text="Event's time"
-                            android:gravity="center"
-                            android:textAlignment="center"
-                            android:textColor="@color/white"
-                            android:background="@color/colorPrimary"/>
-
-                    </LinearLayout>
-
-                    </ScrollView>
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/colorPrimary"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:orientation="horizontal">
-
-
-
-                        <android.support.v7.widget.CardView
-                            android:layout_width="84dp"
-                            android:layout_height="44dp"
-                            android:layout_margin="2dp"
-                            app:cardCornerRadius="3dp"
-                            app:cardBackgroundColor="@color/colorPrimary">
 
                             <android.support.v7.widget.CardView
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_margin="2dp">
+                                android:layout_width="33dp"
+                                android:layout_height="63dp"
+                                android:layout_margin="5dp"
+                                app:cardCornerRadius="3dp"
+                                app:cardBackgroundColor="@color/colorPrimary">
 
-                                <LinearLayout
+                                <android.support.v7.widget.CardView
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent">
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="2dp">
 
-                                    <android.support.v7.widget.AppCompatImageView
-                                        android:layout_width="40dp"
-                                        android:padding="6dp"
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:layout_gravity="center"
-                                        android:background="@color/colorPrimary"
-                                        app:srcCompat="@drawable/ic_person_white_timeline_24dp"
-                                        />
+                                        android:orientation="vertical">
 
-                                    <TextView
-                                        android:id="@+id/timelineParticipantsCount"
-                                        android:layout_width="40dp"
-                                        android:layout_height="match_parent"
-                                        android:text="3"
-                                        android:textColor="@color/dark_blue_theme"
-                                        android:textSize="20sp"
-                                        android:gravity="center"/>
+                                        <android.support.v7.widget.AppCompatImageView
+                                            android:layout_width="35dp"
+                                            android:layout_height="30dp"
+                                            android:padding="4dp"
+                                            android:layout_gravity="center"
+                                            android:background="@color/colorPrimary"
+                                            app:srcCompat="@drawable/ic_person_white_timeline_24dp"
+                                            />
 
-                                </LinearLayout>
+                                        <TextView
+                                            android:id="@+id/timelineParticipantsCount"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:text="2"
+                                            android:textColor="@color/dark_blue_theme"
+                                            android:textSize="17sp"
+                                            android:gravity="center"/>
+
+                                    </LinearLayout>
+                                </android.support.v7.widget.CardView>
                             </android.support.v7.widget.CardView>
-                        </android.support.v7.widget.CardView>
+                        </LinearLayout>
+
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/timelineParticipantsRecView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                        </android.support.v7.widget.RecyclerView>
+
                     </LinearLayout>
-
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:layout_height="match_parent"
-                        android:text="Participants List"
-                        android:textSize="20sp"/>
-
                 </LinearLayout>
-            </LinearLayout>
+
+            </android.support.v7.widget.CardView>
 
         </android.support.v7.widget.CardView>
+
 
     </android.support.v7.widget.CardView>
 
 
 
-</android.support.v7.widget.CardView>
+</LinearLayout>

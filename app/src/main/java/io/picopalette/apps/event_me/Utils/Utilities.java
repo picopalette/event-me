@@ -21,4 +21,47 @@ public class Utilities {
             return email;
     }
 
+    public static String monthFormatter(int month){
+        String formattedMonth;
+        switch (month)
+        {
+            case 1:
+                formattedMonth="jan";
+                break;
+            case 2:
+                formattedMonth="feb";
+                break;
+            case 3:
+                formattedMonth="mar";
+                break;
+            case 4:
+                formattedMonth="apr";
+                break;
+            case 5:
+                formattedMonth="may";
+                break;
+            case 6:
+                formattedMonth="jun";
+                break;
+            case 7:
+                formattedMonth="jul";
+                break;
+            case 8:
+                formattedMonth="aug";
+                break;
+            case 9:
+                formattedMonth="sep";
+                break;
+            case 10:
+                formattedMonth="oct";
+                break;
+            case 11:
+                formattedMonth="nov";
+                break;
+            default:
+                formattedMonth="dec";
+        }
+        return formattedMonth;
+    }
+
 }

@@ -3,6 +3,7 @@ package io.picopalette.apps.event_me.Adapters;
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,13 +19,14 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import io.picopalette.apps.event_me.Interfaces.RecyclerViewReadyCallback;
 import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.R;
+import io.picopalette.apps.event_me.Utils.Utilities;
 
 /**
  * Created by Aswin Sundar on 08-07-2017.
@@ -113,11 +115,20 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
         holder.timeEventName.setText(homeEvent.getName());
         holder.timeEventPlace.setText(homeEvent.getPlace().getName());
         holder.timeEventHashTag.setText(homeEvent.getType());
-        holder.timeEventTime.setText(homeEvent.getDateAndTime().getFormattedTime());
+        ArrayList<String> splittedTime = homeEvent.getDateAndTime().getSplitTime();
+        holder.timeEventHours.setText(splittedTime.get(0));
+        holder.timeEventMinutes.setText(splittedTime.get(1));
+        holder.timeEventMeridian.setText(splittedTime.get(2));
         holder.timeEventDay.setText(String.valueOf(homeEvent.getDateAndTime().getDayOfMonth()));
-        holder.timeEventMonth.setText(String.valueOf(homeEvent.getDateAndTime().getMonth() + 1));
+        int monthTimeline = homeEvent.getDateAndTime().getMonth() + 1;
+        holder.timeEventMonth.setText(Utilities.monthFormatter(monthTimeline));
         holder.timeEventYear.setText(String.valueOf(homeEvent.getDateAndTime().getYear()));
         holder.timeEventCount.setText(String.valueOf(homeEvent.getParticipants().size()));
+        holder.participantsRecView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        ArrayList<String> partiEmails = new ArrayList<>();
+        for(String email : homeEvent.getParticipants().keySet())
+            partiEmails.add(email);
+        holder.participantsRecView.setAdapter(new TimelinePersonsAdapter(context, partiEmails));
 
         storageRef.child("images/" + homeEvent.getId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -146,9 +157,10 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView timeEventName, timeEventPlace, timeEventHashTag, timeEventMonth, timeEventDay, timeEventYear, timeEventTime,
-                timeEventCount;
+        TextView timeEventName, timeEventPlace, timeEventHashTag, timeEventMonth, timeEventDay, timeEventYear,
+                timeEventCount, timeEventHours, timeEventMinutes, timeEventMeridian;
         ImageView timeEventPic;
+        RecyclerView participantsRecView;
 
         public MyViewHolder(View itemView) {
 
@@ -160,9 +172,12 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
             timeEventDay = (TextView) itemView.findViewById(R.id.timelineEventDate);
             timeEventMonth = (TextView) itemView.findViewById(R.id.timelineEventMonth);
             timeEventYear = (TextView) itemView.findViewById(R.id.timelineEventYear);
-            timeEventTime = (TextView) itemView.findViewById(R.id.timelineEventTime);
+            timeEventHours = (TextView) itemView.findViewById(R.id.timelineHours);
+            timeEventMeridian = (TextView) itemView.findViewById(R.id.timelineMeridian);
+            timeEventMinutes = (TextView) itemView.findViewById(R.id.timelineMinutes);
             timeEventCount = (TextView) itemView.findViewById(R.id.timelineParticipantsCount);
             timeEventPic = (ImageView) itemView.findViewById(R.id.timelineImage);
+            participantsRecView = (RecyclerView) itemView.findViewById(R.id.timelineParticipantsRecView);
 
         }
     }
