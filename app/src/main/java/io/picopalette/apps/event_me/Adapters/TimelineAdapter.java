@@ -13,6 +13,7 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alorma.timeline.TimelineView;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -100,7 +101,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
         };
 
 
-        return new MyViewHolder(itemView);
+        return new MyViewHolder(itemView, viewType);
 
 
     }
@@ -124,6 +125,8 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
         holder.timeEventMonth.setText(Utilities.monthFormatter(monthTimeline));
         holder.timeEventYear.setText(String.valueOf(homeEvent.getDateAndTime().getYear()));
         holder.timeEventCount.setText(String.valueOf(homeEvent.getParticipants().size()));
+        holder.timeline.setTimelineType(TimelineView.TYPE_DEFAULT);
+        holder.timeline.setTimelineAlignment(TimelineView.ALIGNMENT_DEFAULT);
         holder.participantsRecView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         ArrayList<String> partiEmails = new ArrayList<>();
         for(String email : homeEvent.getParticipants().keySet())
@@ -161,11 +164,12 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
                 timeEventCount, timeEventHours, timeEventMinutes, timeEventMeridian;
         ImageView timeEventPic;
         RecyclerView participantsRecView;
+        TimelineView timeline;
 
-        public MyViewHolder(View itemView) {
+
+        public MyViewHolder(View itemView, int viewType) {
 
             super(itemView);
-
             timeEventName = (TextView) itemView.findViewById(R.id.timelineEventsName);
             timeEventPlace = (TextView) itemView.findViewById(R.id.timelineEventPlace);
             timeEventHashTag = (TextView) itemView.findViewById(R.id.timelineHashTag);
@@ -178,6 +182,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
             timeEventCount = (TextView) itemView.findViewById(R.id.timelineParticipantsCount);
             timeEventPic = (ImageView) itemView.findViewById(R.id.timelineImage);
             participantsRecView = (RecyclerView) itemView.findViewById(R.id.timelineParticipantsRecView);
+            timeline = (TimelineView) itemView.findViewById(R.id.timeline1);
 
         }
     }

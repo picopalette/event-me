@@ -65,7 +65,7 @@ dependencies {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
     compile 'com.theartofdev.edmodo:android-image-cropper:2.4.7'
-    compile 'com.github.vipulasri:timelineview:1.0.5'
+    compile 'com.github.alorma:timelineview:2.3.0'
     testCompile 'junit:junit:4.12'
 }
 

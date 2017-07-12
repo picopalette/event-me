@@ -1,9 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
+
+    <com.alorma.timeline.RoundTimelineView
+        android:id="@+id/timeline1"
+        android:layout_width="34dp"
+        android:layout_height="match_parent"
+        app:timeline_indicatorSize="7dp"
+        app:timeline_internalPadding="5dp"
+        app:timeline_lineWidth="2dp"
+        app:timeline_lineStyle="linear"
+        app:timeline_drawInternal="true"
+        app:timeline_lineColor="@color/colorAccent"
+        app:timeline_type="middle"
+        app:timeline_indicatorColor="@color/dark_blue_theme"
+        app:timeline_internalColor="@color/colorAccent"
+        app:timeline_alignment="start"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,6 +32,13 @@
         android:layout_marginTop="4dp"
         android:paddingRight="5dp"
         android:orientation="horizontal">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="5dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorAccent"/>
 
 
         <LinearLayout
@@ -144,14 +172,14 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="3dp"
+        android:layout_marginLeft="6dp"
         android:layout_marginRight="5dp"
         app:cardElevation="7dp">
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="6dp"
+            android:layout_margin="4dp"
             app:cardBackgroundColor="@color/colorPrimary"
             app:cardCornerRadius="3dp">
 
@@ -167,14 +195,14 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="69dp"
+                        android:layout_height="63dp"
                         android:orientation="horizontal">
 
                         <android.support.v7.widget.AppCompatImageView
                             android:id="@+id/timelineImage"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"/>
+                            android:layout_weight="1.2"/>
                         <View
                             android:layout_width="2dp"
                             android:layout_height="match_parent"
@@ -188,7 +216,7 @@
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="match_parent"
                                     android:orientation="vertical"
                                     android:background="@color/colorPrimary">
 
@@ -200,7 +228,7 @@
                                         android:paddingTop="5dp"
                                         android:paddingBottom="5dp"
                                         android:textColor="@color/white"
-                                        android:textSize="22sp"
+                                        android:textSize="21sp"
                                         android:textAlignment="center"/>
 
                                     <android.support.v7.widget.CardView
@@ -214,9 +242,8 @@
 
                                         <LinearLayout
                                             android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:orientation="horizontal"
-                                            android:layout_marginTop="2dp">
+                                            android:layout_height="25dp"
+                                            android:orientation="horizontal">
 
                                             <TextView
                                                 android:id="@+id/timelineEventPlace"
@@ -225,8 +252,8 @@
                                                 android:layout_height="wrap_content"
                                                 android:text="Place"
                                                 android:textColor="@color/dark_blue_theme"
-                                                android:padding="4dp"
-                                                android:textSize="15sp"/>
+                                                android:padding="2dp"
+                                                android:textSize="12sp"/>
 
                                             <TextView
                                                 android:id="@+id/timelineHashTag"
@@ -234,12 +261,11 @@
                                                 android:layout_weight="1"
                                                 android:layout_height="wrap_content"
                                                 android:text="#hashtag"
-                                                android:paddingTop="4dp"
+                                                android:paddingTop="2dp"
                                                 android:paddingRight="3dp"
-                                                android:paddingBottom="4dp"
                                                 android:textAlignment="textEnd"
                                                 android:textStyle="italic"
-                                                android:textSize="14sp"
+                                                android:textSize="11sp"
                                                 android:textColor="@color/colorAccent"
                                                 />
 
@@ -267,9 +293,8 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="75dp"
+                            android:layout_marginTop="3dp"
                             android:orientation="horizontal">
-
-
 
                             <android.support.v7.widget.CardView
                                 android:layout_width="33dp"
@@ -329,6 +354,7 @@
 
     </android.support.v7.widget.CardView>
 
+    </LinearLayout>
 
 
 </LinearLayout>

@@ -94,7 +94,7 @@ public class DateAndTime implements Serializable{
             mHour = 12;
 
         if(mHour < 10 )
-            sHour = "0"+mHour;
+            sHour = ""+mHour;
         else
             sHour = ""+mHour;
 
@@ -120,7 +120,7 @@ public class DateAndTime implements Serializable{
             mHour = 12;
 
         if(mHour < 10 )
-            sHour = "0"+mHour;
+            sHour = ""+mHour;
         else
             sHour = ""+mHour;
 
