@@ -1,7 +1,9 @@
 package io.picopalette.apps.event_me.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -12,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,9 +30,11 @@ import com.mzelzoghbi.zgallery.entities.ZColor;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import io.picopalette.apps.event_me.Activities.EventSearchActivity;
 import io.picopalette.apps.event_me.Activities.MainActivity;
 import io.picopalette.apps.event_me.Adapters.EventsAdapter;
 import io.picopalette.apps.event_me.Activities.EventCreationActivity;
+import io.picopalette.apps.event_me.EventMeApp;
 import io.picopalette.apps.event_me.Interfaces.RecyclerViewReadyCallback;
 import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.R;
@@ -47,6 +52,7 @@ public class EventsFragment extends Fragment  {
     private SharedPreferences eventkeys;
     private SearchView mPES;
     private boolean activityStartUp = true;
+    private Context context = getContext();
 
 
     public static EventsFragment newInstance() {
@@ -73,6 +79,12 @@ public class EventsFragment extends Fragment  {
         mPES = (SearchView) v.findViewById(R.id.publicEventsSearchView);
 
         mPES.setQueryHint("Search Public Events");
+        mPES.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              startActivity( new Intent(getActivity(),EventSearchActivity.class) );
+            }
+        } );
 
 //        mPES.setOnClickListener(new View.OnClickListener() {
 //            @Override
