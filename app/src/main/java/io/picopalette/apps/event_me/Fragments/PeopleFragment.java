@@ -67,6 +67,7 @@ public class PeopleFragment extends Fragment {
                                 .load(user.getDpUrl())
                                 .into(viewHolder.imageView);
                         viewHolder.addButton.setText("Remove");
+                        viewHolder.addButton.setVisibility(View.VISIBLE);
                         viewHolder.addButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
