@@ -94,6 +94,7 @@
             android:theme="@style/Base.Theme.AppCompat" />
         <activity android:name=".Activities.EventGalleryActivity" />
         <activity android:name=".Activities.PeopleSearchActivity"></activity>
+        <activity android:name=".Activities.EventSearchActivity"/>
     </application>
 
 </manifest>
