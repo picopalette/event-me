@@ -133,7 +133,7 @@ public class EventsFragment extends Fragment  {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         Event event = dataSnapshot.getValue(Event.class);
-                                        Log.d("TESTI", eventSnapshot.getValue().toString());
+                                        Log.d("TESTI67", String.valueOf( event ) );
                                         if (event != null && !adapter.events.contains(event)) {
                                             adapter.events.add(event);
                                         } else if(event != null && adapter.events.contains(event)) {

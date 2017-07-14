@@ -94,7 +94,12 @@
             android:theme="@style/Base.Theme.AppCompat" />
         <activity android:name=".Activities.EventGalleryActivity" />
         <activity android:name=".Activities.PeopleSearchActivity"></activity>
-        <activity android:name=".Activities.EventSearchActivity"/>
+        <activity android:name=".Activities.EventSearchActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

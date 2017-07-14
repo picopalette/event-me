@@ -9,7 +9,7 @@
         android:id="@+id/card_view"
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="160dp"
         android:layout_margin="5dp"
         card_view:cardElevation="5dp"
         card_view:cardCornerRadius="4dp">
@@ -18,28 +18,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.2">
-
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/searchImage"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:scaleType="centerCrop"
-                    android:layout_height="match_parent"/>
+                    android:layout_weight="0.9"
+                    android:layout_height="wrap_content"/>
 
-
-            </RelativeLayout>
             <TextView
                 android:id="@+id/searchimageText"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:text="Captain America Civil War"
-                android:layout_weight=".8"/>
+                android:layout_weight="0.1"
+                android:textStyle="bold"/>
         </LinearLayout>
 
 
