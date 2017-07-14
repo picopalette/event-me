@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +34,7 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import io.picopalette.apps.event_me.Adapters.EventsAdapter;
@@ -50,13 +52,16 @@ public class EventSearchActivity extends AppCompatActivity implements SearchView
     private GridLayoutManager mLayoutManager;
     private ArrayList<Event> events;
     private SearchAdapter adapter;
+    private List<Event> homeevents;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.overlay_view );
+        homeevents = (List<Event>) getIntent().getExtras().get( "mylist" );
+        getmydata( homeevents);
         searchRecycler = (RecyclerView) findViewById( R.id.searchRecycler );
-        getmydata();
         events = new ArrayList<>();
         searchRecycler.setHasFixedSize( true );
         adapter = new SearchAdapter(getApplicationContext(), events, searchRecycler );
@@ -114,7 +119,7 @@ public class EventSearchActivity extends AppCompatActivity implements SearchView
 
     }
 
-    private void getmydata() {
+    private void getmydata(final List<Event> events) {
         databaseReference = FirebaseDatabase.getInstance().getReference().child(Constants.events);
         final Query query = databaseReference.orderByChild("private").equalTo(false);
         query.addValueEventListener( new ValueEventListener() {
@@ -124,7 +129,11 @@ public class EventSearchActivity extends AppCompatActivity implements SearchView
                     Log.d("mytestings", String.valueOf( eventSnapshot) );
                     Event event = eventSnapshot.getValue(Event.class);
                     Log.d("mytestings2", String.valueOf(event.getName()) );
-                    adapter.events.add(event);
+                    Log.d("vikkkkky", String.valueOf(events) );
+                    if(!events.contains(event) && !adapter.events.contains(event)) {
+                        adapter.events.add(event);
+                        Log.d("vikky2", String.valueOf(event) );
+                    }
                     adapter.notifyDataSetChanged();
                 }
 

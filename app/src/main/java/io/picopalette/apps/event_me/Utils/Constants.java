@@ -10,6 +10,7 @@ public class Constants {
     public static String gallery = "gallery";
     public static String favContacts = "favcontacts";
     public static String favTeams = "favteams";
+    public static String requests = "requests";
 
     public enum EventStatus {
         UPCOMING,

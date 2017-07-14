@@ -27,7 +27,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.mzelzoghbi.zgallery.ZGallery;
 import com.mzelzoghbi.zgallery.entities.ZColor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import io.picopalette.apps.event_me.Activities.EventSearchActivity;
@@ -82,7 +84,12 @@ public class EventsFragment extends Fragment  {
         mPES.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              startActivity( new Intent(getActivity(),EventSearchActivity.class) );
+
+              Intent intnt = new Intent( getActivity(),EventSearchActivity.class );
+
+                intnt.putExtra( "mylist", (Serializable) adapter.events );
+                startActivity(  intnt);
+
             }
         } );
 

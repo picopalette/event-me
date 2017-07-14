@@ -1,6 +1,7 @@
 package io.picopalette.apps.event_me.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.picopalette.apps.event_me.Activities.EventDisplayActivity;
 import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.R;
 
@@ -31,6 +33,7 @@ import io.picopalette.apps.event_me.R;
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHolder>{
     private View itemView2;
     private Context context;
+
     private RecyclerView searchrecycler;
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     public List<Event> events;
@@ -66,6 +69,19 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
             @Override
             public void onFailure(@NonNull Exception exception) {
 
+            }
+        });
+
+        itemView2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Event homeEvent = events.get(holder.getAdapterPosition());
+                Intent intent = new Intent(context, EventDisplayActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS);
+                intent.putExtra("event", homeEvent);
+                intent.putExtra( "from","search" );
+                context.startActivity(intent);
             }
         });
 
