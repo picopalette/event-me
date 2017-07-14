@@ -9,6 +9,7 @@ public class Constants {
     public static String chatmodel = "chatmodel";
     public static String gallery = "gallery";
     public static String favContacts = "favcontacts";
+    public static String favTeams = "favteams";
 
     public enum EventStatus {
         UPCOMING,

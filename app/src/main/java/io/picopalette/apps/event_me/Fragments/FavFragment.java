@@ -8,10 +8,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import io.picopalette.apps.event_me.Activities.ListCreationActivity;
 import io.picopalette.apps.event_me.Activities.PeopleSearchActivity;
 import io.picopalette.apps.event_me.R;
 
@@ -28,7 +34,7 @@ public class FavFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v= inflater.inflate(R.layout.fragment_fav, container, false);
 
@@ -41,7 +47,42 @@ public class FavFragment extends Fragment {
             public void onClick(View v) {
                 if(currentPage.matches("favourites")) {
                     Intent intent = new Intent(getActivity(), PeopleSearchActivity.class);
+                    intent.putExtra("jobFor", "People Fragment");
+                    intent.putExtra("job", "new");
                     startActivity(intent);
+                } else {
+                    AlertDialog.Builder mB = new AlertDialog.Builder(getContext());
+                    View alertView = getActivity().getLayoutInflater().inflate(R.layout.dialog_list_title,null);
+                    final EditText listTitle = (EditText) alertView.findViewById(R.id.listTitleEditText);
+                    TextView textView = (TextView) alertView.findViewById(R.id.listTitleTextView);
+                    textView.setText("New Team");
+                    listTitle.setHint("Enter a Name for the awesome team");
+                    Button nextButton = (Button) alertView.findViewById(R.id.nextButton);
+                    mB.setView(alertView);
+                    final AlertDialog dialog = mB.create();
+                    dialog.show();
+
+                    nextButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            if(listTitle.getText().toString().equals(""))
+                            {
+                                Toast.makeText(getContext(),"Please enter the Team Name",Toast.LENGTH_SHORT).show();
+                            }
+                            else
+                            {
+                                String title = listTitle.getText().toString();
+                                Intent intent = new Intent(getContext(), PeopleSearchActivity.class);
+                                intent.putExtra("teamName",title);
+                                intent.putExtra("jobFor", "Teams Fragment");
+                                intent.putExtra("job", "edit");
+                                startActivity(intent);
+                                dialog.dismiss();
+                            }
+
+                        }
+                    });
                 }
             }
         });
