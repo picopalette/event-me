@@ -148,6 +148,7 @@ public class EventsFragment extends Fragment  {
                                         }
                                         Log.d("testt", String.valueOf(events));
                                         adapter.notifyDataSetChanged();
+
                                     }
 
                                     @Override

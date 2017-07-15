@@ -1,12 +1,21 @@
 package io.picopalette.apps.event_me.Activities;
 
+import android.Manifest;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringDef;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,8 +31,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -65,6 +76,7 @@ import io.picopalette.apps.event_me.Adapters.ParticipantsAdapter;
 import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.Models.SimpleContact;
 import io.picopalette.apps.event_me.R;
+import io.picopalette.apps.event_me.Services.LocationData;
 import io.picopalette.apps.event_me.Utils.Constants;
 import io.picopalette.apps.event_me.Utils.Utilities;
 
@@ -77,11 +89,16 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
     private Button request,editButton,deletebtn;
     private TextView joinedeve;
     private String myemail;
+    private String islive;
+    private LinearLayout linearLayout;
+    private Switch trackifySwitch;
+    private LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_display);
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         myemail = Utilities.encodeEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
         eve = (Event) getIntent().getSerializableExtra("event");
         from = String.valueOf( getIntent().getExtras().get( "from" ) );
@@ -101,6 +118,7 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
         TextView ePlace = (TextView) findViewById(R.id.eventPlaceName);
         TextView eDate = (TextView) findViewById(R.id.eventDate);
         TextView eTime = (TextView) findViewById(R.id.eventTime);
+         linearLayout = (LinearLayout) findViewById(R.id.linear78);
         joinedeve = (TextView) findViewById( R.id.joinedtheeventext );
         joinedeve.setVisibility( View.GONE );
         RecyclerView participantsRecyclerView = (RecyclerView) findViewById(R.id.event_display_rec_view);
@@ -109,10 +127,25 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
         uberButton = (RideRequestButton) findViewById(R.id.uberRequestButton);
         reqbuttoncard = (CardView) findViewById( R.id.requestCardbutton );
 //        reqbuttoncard.setVisibility( View.GONE );
-        correctify();
+        Log.d("vikkkey", String.valueOf(eve.getLiveparticipants().containsKey(myemail)));
         mTrackify = (CardView) findViewById(R.id.card3);
-        Switch trackifySwitch = (Switch) findViewById(R.id.eve_switch2);
+        trackifySwitch = (Switch) findViewById(R.id.eve_switch2);
         mTrackify.setVisibility(View.GONE);
+        correctify();
+
+        mTrackify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventDisplayActivity.this,LiveShare.class);
+                intent.putExtra("lat",eve.getPlace().getLat());
+                intent.putExtra("lon",eve.getPlace().getLon());
+                intent.putExtra("uid",eve.getId());
+                startActivity(intent);
+
+            }
+        });
+
+
 
 
 
@@ -121,11 +154,65 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked)
                 {
-                    mTrackify.setVisibility(View.VISIBLE);
+
+
+                    if(isNetworkAvailable() && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+                    {
+                        if(isMyServiceRunning(LocationData.class)){
+                            mTrackify.setVisibility(View.VISIBLE);
+                        }
+                        else
+                        {
+                            if(!permission_check())
+                            {
+                                Intent  i = new Intent(getApplicationContext(), LocationData.class);
+                                startService(i);
+                            }
+                            if(isMyServiceRunning(LocationData.class)){
+                                FirebaseDatabase.getInstance().getReference().child(Constants.events)
+                                        .child(eve.getId()).child(Constants.livepart)
+                                        .child(myemail).setValue(true);
+                                mTrackify.setVisibility(View.VISIBLE);
+                                trackifySwitch.setChecked(true);
+
+                            }
+                            else {
+                                mTrackify.setVisibility(View.GONE);
+                                trackifySwitch.setChecked(false);
+                            }
+
+                        }
+                    }
+                    else
+                    {
+
+                        Toast.makeText(getApplicationContext(),"No Network",Toast.LENGTH_SHORT).show();
+                        trackifySwitch.setChecked(false);
+
+                    }
                 }
                 else
                 {
+//                    Boolean needtoOff = false;
+//                    FirebaseDatabase.getInstance().getReference().child(Constants.events).addValueEventListener(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot dataSnapshot) {
+//                            for(DataSnapshot snapshot: dataSnapshot.getChildren())
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError databaseError) {
+//
+//                        }
+//                    });
+
+                    Intent  i = new Intent(getApplicationContext(), LocationData.class);
+                    stopService(i);
                     mTrackify.setVisibility(View.GONE);
+                    FirebaseDatabase.getInstance().getReference().child(Constants.events).child(eve.getId()).child(Constants.livepart).child(myemail).setValue(false);
+                    trackifySwitch.setChecked(false);
+
+
                 }
             }
         });
@@ -267,9 +354,14 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
                 FirebaseDatabase.getInstance().getReference()
                         .child( Constants.events )
                         .child( eve.getId() )
-                        .child(Constants.requests)
+                        .child(Constants.participants)
                         .child( Utilities.encodeEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail()))
-                        .setValue( null );
+                        .setValue(null);
+                FirebaseDatabase.getInstance().getReference()
+                        .child(Constants.users)
+                        .child(myemail)
+                        .child(Constants.events)
+                        .child( eve.getId()).setValue(Constants.UserStatus.LEFT);
                 request.setVisibility( View.VISIBLE );
                 joinedeve.setVisibility( View.GONE );
 
@@ -279,64 +371,104 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
             @Override
             public void onClick(View v) {
                 Log.d( "insideOnclickrequest","hello" );
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-                String currentDateandTime = sdf.format(new Date());
-//                Log.d("timeresr", String.valueOf( seconds ) );
+
 
                 FirebaseDatabase.getInstance().getReference()
                         .child( Constants.events )
                         .child( eve.getId() )
-                        .child(Constants.requests)
+                        .child(Constants.participants)
                         .child( Utilities.encodeEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail()))
-                        .setValue( currentDateandTime );
+                        .setValue(Constants.UserStatus.GOING);
+                FirebaseDatabase.getInstance().getReference()
+                        .child(Constants.users)
+                        .child(myemail)
+                        .child(Constants.events)
+                        .child( eve.getId()).setValue(Constants.UserStatus.GOING);
                 joinedeve.setVisibility( View.VISIBLE );
                 request.setVisibility( View.GONE );
             }
         } );
     }
 
+    private boolean permission_check() {
+        if(Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this, Manifest.permission
+                .ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,Manifest.permission
+                .ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 69);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 69){
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(EventDisplayActivity.this,"Permission Granted", Toast.LENGTH_LONG).show();
+            }
+            else{
+                permission_check();
+            }
+        }
+    }
+
+    private boolean isMyServiceRunning(Class<LocationData> locationDataClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (locationDataClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    private boolean isNetworkAvailable() {
+
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
     private void correctify() {
         final Boolean check = false;
-        DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference().child( Constants.events )
-                .child( eve.getId() )
-                .child( Constants.requests );
+
         if(Objects.equals( from, "search" )){
-            databaseReference.addValueEventListener( new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-                        Log.d("fishy2", String.valueOf( snapshot.getKey() ) +"  "+ myemail );
-                        if(Objects.equals( String.valueOf( snapshot.getKey() ), myemail )){
-                            joinedeve.setVisibility( View.VISIBLE );
-
-                        }
-                    }
-
-                    Log.d("testings55", String.valueOf( joinedeve.getVisibility() ) );
-                    if(joinedeve.getVisibility() != 0){
-                        request.setVisibility( View.VISIBLE );
-                    }
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            } );
-
+            request.setVisibility(View.VISIBLE);
         }
-        else if(Objects.equals( eve.getOwner(), myemail ))
-        {
-            Log.d("insideexpected","hello");
-            editButton.setVisibility( View.VISIBLE );
-            deletebtn.setVisibility( View.VISIBLE );
+        else {
+            if (Objects.equals(eve.getOwner(), myemail)) {
+                Log.d("insideexpected", "hello");
+                editButton.setVisibility(View.VISIBLE);
+                deletebtn.setVisibility(View.VISIBLE);
 
 
-
+            }
+            else
+            {
+                joinedeve.setVisibility(View.VISIBLE);
+            }
         }
-
         Log.d("myemailtesting", eve.getOwner()+ " "+ myemail);
+
+        FirebaseDatabase.getInstance().getReference().child(Constants.events).child(eve.getId()).child(Constants.livepart).child(myemail).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d("fuck android", String.valueOf(dataSnapshot.getValue()));
+                if(Objects.equals(dataSnapshot.getValue().toString(), "true")){
+                    trackifySwitch.setChecked(true);
+                }
+                else
+                    trackifySwitch.setChecked(false);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 

@@ -20,6 +20,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -65,6 +66,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
         recyclerViewReadyCallback  = new RecyclerViewReadyCallback() {
             @Override
             public void onLayoutReady() {
+
                 //Perform Sorting
                 if (keep != events.size())
                 {
@@ -72,6 +74,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
                     Log.d("sizes", "keep: "+keep+"events.size"+ events.size());
                     for(int i = 0; i<keep; i++)
                     {
+
                         for(int j = i+1; j< keep; j++)
                         {
                             Event homeeve = events.get(i);
