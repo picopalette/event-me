@@ -1,5 +1,6 @@
 package io.picopalette.apps.event_me.Activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -7,6 +8,7 @@ import android.support.annotation.StringDef;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.AppCompatImageView;
@@ -61,6 +63,7 @@ import java.util.Objects;
 
 import io.picopalette.apps.event_me.Adapters.ParticipantsAdapter;
 import io.picopalette.apps.event_me.Models.Event;
+import io.picopalette.apps.event_me.Models.SimpleContact;
 import io.picopalette.apps.event_me.R;
 import io.picopalette.apps.event_me.Utils.Constants;
 import io.picopalette.apps.event_me.Utils.Utilities;
@@ -71,7 +74,7 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
     private CardView mTrackify,reqbuttoncard;
     private RideRequestButton uberButton;
     private SessionConfiguration uberConfig;
-    private Button request;
+    private Button request,editButton,deletebtn;
     private TextView joinedeve;
     private String myemail;
 
@@ -87,8 +90,12 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map2);
         mapFragment.getMapAsync(this);
         final ImageView eImage = (ImageView) findViewById(R.id.eventPic);
+        editButton = (Button) findViewById( R.id.editEvent);
+        editButton.setVisibility( View.GONE );
         request = (Button) findViewById( R.id.joinevent );
         request.setVisibility( View.GONE );
+        deletebtn = (Button) findViewById( R.id.deleteevent );
+        deletebtn.setVisibility( View.GONE );
         TextView eStatus = (TextView) findViewById(R.id.eventStatus);
         TextView eName = (TextView) findViewById(R.id.eventName);
         TextView ePlace = (TextView) findViewById(R.id.eventPlaceName);
@@ -209,6 +216,51 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
             }
         });
 
+        editButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventDisplayActivity.this, EventCreationActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS);
+                intent.putExtra("event",eve);
+                startActivity(intent);
+            }
+        } );
+        deletebtn.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(EventDisplayActivity.this);
+                alertDialogBuilder.setMessage( "Do you want to delete this event" );
+                alertDialogBuilder.setPositiveButton( "YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        for(String email : eve.getParticipants().keySet()) {
+                            Log.d("myemailsss",email);
+                           FirebaseDatabase.getInstance().getReference()
+                                   .child( Constants.users )
+                                   .child( email )
+                                   .child( Constants.events ).child( eve.getId() ).setValue( "DELETED" );
+
+                            FirebaseDatabase.getInstance().getReference().child( Constants.events )
+                                    .child( eve.getId() )
+                                    .setValue( null );
+
+                            finish();
+                        }
+
+                    }
+                } );
+                alertDialogBuilder.setNegativeButton( "NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                } );
+                alertDialogBuilder.show();
+
+            }
+        } );
+
         joinedeve.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -274,6 +326,17 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
             } );
 
         }
+        else if(Objects.equals( eve.getOwner(), myemail ))
+        {
+            Log.d("insideexpected","hello");
+            editButton.setVisibility( View.VISIBLE );
+            deletebtn.setVisibility( View.VISIBLE );
+
+
+
+        }
+
+        Log.d("myemailtesting", eve.getOwner()+ " "+ myemail);
 
     }
 
