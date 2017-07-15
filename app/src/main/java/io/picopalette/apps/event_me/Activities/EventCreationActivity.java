@@ -29,6 +29,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
@@ -94,6 +96,9 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
     private ProgressDialog progressDialog;
     private TextView mPrivateEvent;
     private Button mPar;
+    private Event event;
+    private PlaceAutocompleteFragment autocompleteFragment;
+    private String my_key;
 
 
     @Override
@@ -102,6 +107,7 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
         setContentView(R.layout.activity_event_creation);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        final Intent intent = getIntent();
         final StorageReference storageReference = FirebaseStorage.getInstance().getReference();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mPeopleReference = mDatabaseReference.child(Constants.people);
@@ -147,6 +153,8 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
                 startActivity(intent);
             }
         });
+
+
         mitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -205,6 +213,8 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
             @Override
             public void onClick(View v) {
 
+
+
                 if(!TextUtils.isEmpty(Event_name.getText().toString()) && !TextUtils.isEmpty(Event_type.getText().toString()) &&
                         !TextUtils.isEmpty(date.getText().toString()) && !TextUtils.isEmpty(time.getText().toString()) &&
                         (place!=null)  && (Event_image.getDrawable() != null))
@@ -213,7 +223,14 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     DatabaseReference eventRefUser = mDatabaseReference.child(Constants.users).child(Utilities.encodeEmail(user.getEmail()));
                     final DatabaseReference eventReference = mDatabaseReference.child(Constants.events);
-                    final String my_key = eventReference.push().getKey();
+                    if(intent.hasExtra( "event" )){
+                        my_key = event.getId();
+
+                    }
+                    else
+                    {
+                        my_key = eventReference.push().getKey();
+                    }
                     StorageReference everef = storageReference.child("images/"+my_key);
                     Log.d("sf", everef.toString());
                     Event_image.setDrawingCacheEnabled(true);
@@ -277,7 +294,7 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
 
             }
         });
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+         autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_auto);
         autocompleteFragment.setOnPlaceSelectedListener(this);
 
@@ -305,9 +322,53 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
             }
         });
 
+
+        if(intent.hasExtra( "event" ))
+        {
+            event = (Event) getIntent().getSerializableExtra("event");
+            seteverything();
+
+        }
+
+    }
+
+    private void seteverything() {
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+        storageRef.child("images/"+event.getId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(getApplicationContext())
+                        .load(uri.toString())
+                        .into(Event_image);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+            }
+        });
+        Event_name.setText(event.getName() );
+        Event_type.setText( event.getType() );
+        date.setText( event.getDateAndTime().getFormattedDate() );
+        time.setText( event.getDateAndTime().getFormattedTime() );
+        autocompleteFragment.setText( event.getPlace().getName() );
+        if(event.getPrivate())
+        {
+            mitch.setChecked( true );
+        }
+        else
+            mitch.setChecked( false );
+        for(String email : event.getParticipants().keySet()) {
+            SimpleContact contact = new SimpleContact( R.drawable.happiness, email, email );
+            autoCompleteTextView.addObject( contact);
+        }
+
+
+
     }
 
     private void Fetch_And_Parse() {
+
         contacts = new ArrayList<>();
         mPeopleReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -352,6 +413,7 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
                 Event_image.setImageURI(resultUri);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
+                Log.d("someerror",error.toString());
             }
         }
     }
