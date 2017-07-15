@@ -396,7 +396,7 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
                                                       FirebaseDatabase.getInstance().getReference()
                                                               .child(Constants.users)
                                                               .child(email)
-                                                              .child(Constants.events).child(eve.getId()).setValue("DELETED");
+                                                              .child(Constants.events).child(eve.getId()).setValue(null);
                                                       FirebaseDatabase.getInstance().getReference().child(Constants.events)
                                                               .child(eve.getId())
                                                               .setValue(null);
@@ -584,13 +584,13 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.d("fuck android", String.valueOf(dataSnapshot.getValue()));
-                if(Objects.equals(dataSnapshot.getValue().toString(), "true")){
-                    trackifySwitch.setChecked(true);
+                if (dataSnapshot.getValue() != null) {
+                    if (Objects.equals(dataSnapshot.getValue().toString(), "true")) {
+                        trackifySwitch.setChecked(true);
+                    } else
+                        trackifySwitch.setChecked(false);
                 }
-                else
-                    trackifySwitch.setChecked(false);
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 

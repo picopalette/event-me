@@ -88,7 +88,6 @@ public class EventsFragment extends Fragment  {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mPES = (SearchView) v.findViewById(R.id.publicEventsSearchView);
-        mPES.setQueryHint("Search Your Public Events");
         mPES.setOnSearchClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,25 +158,29 @@ public class EventsFragment extends Fragment  {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         Event event = dataSnapshot.getValue(Event.class);
-                                        Log.d("TESTI67", String.valueOf( event ) );
-                                        DateAndTime dateAndTime = event.getDateAndTime();
-                                        Date eventDate = new Date(dateAndTime.getYear(), dateAndTime.getMonth(), dateAndTime.getDayOfMonth() + 1, dateAndTime.getHourOfDay(), dateAndTime.getMinute());
-                                        Date eventEndDate = new Date(dateAndTime.getYear(), dateAndTime.getMonth(), dateAndTime.getDayOfMonth() + 1, dateAndTime.getEndHourOfDay(), dateAndTime.getEndMinute());
+                                        if(event != null) {
+                                            Log.d("TESTI67", String.valueOf(event));
+                                            DateAndTime dateAndTime = event.getDateAndTime();
+                                            Date eventDate = new Date(dateAndTime.getYear(), dateAndTime.getMonth(), dateAndTime.getDayOfMonth() + 1, dateAndTime.getHourOfDay(), dateAndTime.getMinute());
+                                            Date eventEndDate = new Date(dateAndTime.getYear(), dateAndTime.getMonth(), dateAndTime.getDayOfMonth() + 1, dateAndTime.getEndHourOfDay(), dateAndTime.getEndMinute());
 
-                                        if(eventEndDate.after(currentDate)) {
-                                            if(eventDate.before(currentDate)) {
-                                                event.setStatus(Constants.EventStatus.ONGOING);
+                                            if (eventEndDate.after(currentDate)) {
+                                                if (eventDate.before(currentDate)) {
+                                                    event.setStatus(Constants.EventStatus.ONGOING);
+                                                }
+                                                if (event != null && !adapter.events.contains(event)) {
+                                                    adapter.events.add(event);
+                                                } else if (event != null && adapter.events.contains(event)) {
+                                                    adapter.events.set(adapter.events.indexOf(event), event);
+                                                }
+                                                Log.d("testt", String.valueOf(events));
+                                                adapter.notifyDataSetChanged();
+                                            } else {
+                                                eventRef.removeEventListener(this);
                                             }
-                                            if (event != null && !adapter.events.contains(event)) {
-                                                adapter.events.add(event);
-                                            } else if (event != null && adapter.events.contains(event)) {
-                                                adapter.events.set(adapter.events.indexOf(event), event);
-                                            }
-                                            Log.d("testt", String.valueOf(events));
-                                            adapter.notifyDataSetChanged();
-                                        } else {
-                                            eventRef.removeEventListener(this);
                                         }
+                                        else
+                                            adapter.events.clear();
                                     }
 
                                     @Override
