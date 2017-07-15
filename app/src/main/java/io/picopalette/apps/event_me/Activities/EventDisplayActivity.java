@@ -327,6 +327,13 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
                         .setValue(Constants.UserStatus.GOING);
 
                 FirebaseDatabase.getInstance().getReference()
+                        .child(Constants.events)
+                        .child(eve.getId())
+                        .child(Constants.livepart)
+                        .child(Utilities.encodeEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail()))
+                        .setValue(false);
+
+                FirebaseDatabase.getInstance().getReference()
                         .child(Constants.users)
                         .child(myemail)
                         .child(Constants.events)
