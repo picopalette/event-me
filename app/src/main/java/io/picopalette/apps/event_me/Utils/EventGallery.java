@@ -6,8 +6,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mzelzoghbi.zgallery.Constants;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.mzelzoghbi.zgallery.activities.ZGalleryActivity;
 import com.mzelzoghbi.zgallery.entities.ZColor;
@@ -15,7 +17,7 @@ import java.util.ArrayList;
 import io.picopalette.apps.event_me.Activities.EventGalleryActivity;
 
 public class EventGallery  {
-    private Activity mActivity;
+    private Context mActivity;
     private ArrayList<String> imagesURLs;
     private String eventId;
     private String title;
@@ -29,11 +31,11 @@ public class EventGallery  {
     private EventGallery() {
     }
 
-    public static EventGallery with(Activity activity, String eventId) {
+    public static EventGallery with(Context activity, String eventId) {
         return new EventGallery(activity, eventId);
     }
 
-    private EventGallery(Activity activity, String eventId) {
+    private EventGallery(Context activity, String eventId) {
         this.eventId = eventId;
         this.mActivity = activity;
         this.imagesURLs = new ArrayList<>();
@@ -107,6 +109,10 @@ public class EventGallery  {
                 gridActivity.putExtra(Constants.IntentPassingParams.SELECTED_IMG_POS, selectedImgPosition);
                 gridActivity.putExtra(Constants.IntentPassingParams.BG_COLOR, backgroundColor);
                 gridActivity.putExtra("eventId", eventId);
+                gridActivity.putExtra("title", title);
+                if(imagesURLs.isEmpty()) {
+                    Toast.makeText(mActivity, "Gallery is Empty, Add some Memories", Toast.LENGTH_LONG).show();
+                }
                 mActivity.startActivity(gridActivity);
             }
 

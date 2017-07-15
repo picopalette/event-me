@@ -2,13 +2,16 @@ package io.picopalette.apps.event_me.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -19,11 +22,14 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mzelzoghbi.zgallery.activities.ZGalleryActivity;
+import com.mzelzoghbi.zgallery.entities.ZColor;
 import com.nguyenhoanglam.imagepicker.activity.ImagePicker;
 import com.nguyenhoanglam.imagepicker.activity.ImagePickerActivity;
 import com.nguyenhoanglam.imagepicker.model.Image;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import io.picopalette.apps.event_me.R;
@@ -41,6 +47,12 @@ public class EventGalleryActivity extends ZGalleryActivity {
     private ProgressDialog progressDialog;
     private int uploadTaskCount = 0;
     private DatabaseReference dbRef;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle(getIntent().getStringExtra("title"));
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -80,8 +92,21 @@ public class EventGalleryActivity extends ZGalleryActivity {
             for(Image image : images) {
                 Log.d("selected image path", image.getPath());
                 Uri file = Uri.fromFile(new File(image.getPath()));
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 StorageReference eventGalleryRef = FirebaseStorage.getInstance().getReference().child("gallery/"+eventId+"/"+file.getLastPathSegment());
-                UploadTask uploadTask = eventGalleryRef.putFile(file);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                if(bitmap == null) {
+                    progressDialog.dismiss();
+                    return;
+                }
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+                byte[] imageData = baos.toByteArray();
+                UploadTask uploadTask = eventGalleryRef.putBytes(imageData);
                 uploadTaskCount++;
                 // Register observers to listen for when the download is done or if it fails
                 uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -101,6 +126,8 @@ public class EventGalleryActivity extends ZGalleryActivity {
                         pushUrlToDb(downloadUrl);
                         uploadTaskCount--;
                         if(uploadTaskCount == 0 && progressDialog.isShowing()) {
+                            Toast.makeText(EventGalleryActivity.this, "All images uploaded", Toast.LENGTH_SHORT).show();
+                            EventGalleryActivity.this.finish();
                             progressDialog.dismiss();
                         }
                     }
@@ -113,4 +140,5 @@ public class EventGalleryActivity extends ZGalleryActivity {
         String key = dbRef.push().getKey();
         dbRef.child(key).setValue(downloadUrl.toString());
     }
+
 }

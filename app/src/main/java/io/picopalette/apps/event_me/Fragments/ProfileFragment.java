@@ -1,8 +1,12 @@
 package io.picopalette.apps.event_me.Fragments;
 
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -21,8 +25,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -30,15 +39,26 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnPausedListener;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.UploadTask;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import io.picopalette.apps.event_me.Activities.EventCreationActivity;
 import io.picopalette.apps.event_me.Adapters.TimelineAdapter;
 import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.R;
 import io.picopalette.apps.event_me.Utils.Constants;
+import io.picopalette.apps.event_me.Utils.Util;
 import io.picopalette.apps.event_me.Utils.Utilities;
+
+import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetChangedListener{
 
@@ -95,7 +115,26 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
         startAlphaAnimation(textviewTitle, 0, View.INVISIBLE);
         //set avatar and cover
         imageUri = Uri.parse(userBundle.getString("dpurl"));
-        avatar.setImageURI(imageUri);
+        FirebaseDatabase.getInstance().getReference().child(Constants.users).child(Utilities.encodeEmail(userBundle.getString("email"))).child("dpUrl").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String url = dataSnapshot.getValue(String.class);
+                imageUri = Uri.parse(url);
+                avatar.setImageURI(imageUri);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeDp();
+            }
+        });
         coverImage.setImageURI(coverUri);
         profileName.setText(userBundle.getString("name"));
         profileEmail.setText(userBundle.getString("email"));
@@ -213,6 +252,65 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
         alphaAnimation.setDuration(duration);
         alphaAnimation.setFillAfter(true);
         v.startAnimation(alphaAnimation);
+    }
+
+    private void changeDp() {
+        CropImage.activity()
+                .setAspectRatio(1,1)
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .start(getActivity());
+    }
+
+    private void saveDpUrl(String url) {
+        FirebaseDatabase.getInstance().getReference().child(Constants.users).child(Utilities.encodeEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail())).child("dpUrl").setValue(url);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Log.d("ProfileFragment", "OnActivityResult");
+                final Uri resultUri = result.getUri();
+                final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+                progressDialog.setTitle("Uploading");
+                progressDialog.setMessage("Your new Display Picture is cool!");
+                UploadTask uploadTask = FirebaseStorage.getInstance().getReference().child("dp/" + Utilities.encodeEmail(userBundle.getString("email"))).putFile(resultUri);
+                progressDialog.show();
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        Toast.makeText(getActivity(),"Cannot Upload",Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        String downloadUrl = taskSnapshot.getDownloadUrl().toString();
+                        saveDpUrl(downloadUrl);
+                    }
+                });
+                uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        double progress = 100.0 * (taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                        progressDialog.setProgress((int) progress);
+                    }
+                }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
+                        progressDialog.setMessage("Upload Paused");
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                        progressDialog.dismiss();
+                        avatar.setImageURI(resultUri);
+                    }
+                });
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
     }
 
 

@@ -37,6 +37,7 @@ public class PeopleSearchActivity extends AppCompatActivity {
     private String jobFor;
     private String job;
     private String teamName;
+    private String eventId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +45,17 @@ public class PeopleSearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_people_search);
         jobFor = getIntent().getStringExtra("jobFor");
         job = getIntent().getStringExtra("job");
+        getSupportActionBar().setTitle(getIntent().getStringExtra("title"));
         if(jobFor.matches("Teams Fragment")) {
             teamName = getIntent().getStringExtra("teamName");
+        } else if(jobFor.matches("Event Creation Activity")) {
+            eventId= getIntent().getStringExtra("eventId");
         }
         peopleRecView = (RecyclerView) findViewById(R.id.people_search_RecView);
         peopleSearchView = (SearchView) findViewById(R.id.people_searchView);
         peopleRecView.setLayoutManager(new LinearLayoutManager(this));
+
+        peopleSearchView.setIconifiedByDefault(false);
 
         final DatabaseReference usersRef = dbRef.child(Constants.users);
 
@@ -182,7 +188,7 @@ public class PeopleSearchActivity extends AppCompatActivity {
                                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int which) {
                                                 // continue with delete
-                                                getRef(position).removeValue();
+                                                getRef(viewHolder.getAdapterPosition()).removeValue();
                                             }
                                         })
                                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

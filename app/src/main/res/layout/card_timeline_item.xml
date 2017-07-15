@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="300dp">
 
 
     <com.alorma.timeline.RoundTimelineView
@@ -353,6 +353,45 @@
 
 
     </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="11dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="5dp"
+            app:cardElevation="7dp">
+
+
+            <LinearLayout
+                android:id="@+id/timelineViewGallery"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="5dp"
+                android:orientation="horizontal">
+
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/ic_image_blue_24dp"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="View Gallery"
+                    android:textSize="14sp"
+                    android:textColor="@color/dark_blue_theme"
+                    android:gravity="center"
+                    android:layout_height="match_parent" />
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@drawable/ic_arrow_forward_blue_24dp"/>
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
     </LinearLayout>
 

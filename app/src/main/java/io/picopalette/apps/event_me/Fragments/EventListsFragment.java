@@ -91,7 +91,7 @@ public class EventListsFragment extends Fragment {
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), ListDisplayActivity.class);
                         intent.putExtra("type", "event");
-                        intent.putExtra("title", getRef(position).getKey());
+                        intent.putExtra("title", getRef(viewHolder.getAdapterPosition()).getKey());
                         startActivity(intent);
                     }
                 });
@@ -99,7 +99,7 @@ public class EventListsFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getContext(), ListCreationActivity.class);
-                        intent.putExtra(mListTitle, getRef(position).getKey());
+                        intent.putExtra(mListTitle, getRef(viewHolder.getAdapterPosition()).getKey());
                         intent.putExtra("type", "event");
                         startActivity(intent);
                     }
@@ -110,7 +110,7 @@ public class EventListsFragment extends Fragment {
 
                     @Override
                     public void onClick(View v) {
-                        FirebaseDatabase.getInstance().getReference().child(Constants.events).child(getRef(position).getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        FirebaseDatabase.getInstance().getReference().child(Constants.events).child(getRef(viewHolder.getAdapterPosition()).getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 Event event = dataSnapshot.getValue(Event.class);
@@ -165,7 +165,7 @@ public class EventListsFragment extends Fragment {
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), ListDisplayActivity.class);
                         intent.putExtra("type", "event");
-                        intent.putExtra("title", getRef(position).getKey());
+                        intent.putExtra("title", getRef(viewHolder.getAdapterPosition()).getKey());
                         startActivity(intent);
                     }
                 });
@@ -173,7 +173,7 @@ public class EventListsFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getContext(), ListCreationActivity.class);
-                        intent.putExtra(mListTitle,getRef(position).getKey());
+                        intent.putExtra(mListTitle,getRef(viewHolder.getAdapterPosition()).getKey());
                         intent.putExtra("type", "event");
                         startActivity(intent);
                     }
@@ -184,7 +184,7 @@ public class EventListsFragment extends Fragment {
                 viewHolder.personalListDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        FirebaseDatabase.getInstance().getReference().child(Constants.events).child(getRef(position).getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        FirebaseDatabase.getInstance().getReference().child(Constants.events).child(getRef(viewHolder.getAdapterPosition()).getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 Event event = dataSnapshot.getValue(Event.class);

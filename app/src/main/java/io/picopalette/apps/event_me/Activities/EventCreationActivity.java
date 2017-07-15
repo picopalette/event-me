@@ -84,8 +84,6 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
     private DatabaseReference mDatabaseReference;
     private DatabaseReference mPeopleReference;
     private Switch mitch;
-    private int REQUEST_CODE_PICKER = 2000;
-    private ArrayList<Image> images = new ArrayList<>();
     private ImageView Event_image;
     private AlertDialog alertDialog;
     private AlertDialog.Builder dialog;

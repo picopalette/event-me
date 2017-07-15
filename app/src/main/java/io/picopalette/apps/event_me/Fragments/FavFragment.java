@@ -49,6 +49,7 @@ public class FavFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), PeopleSearchActivity.class);
                     intent.putExtra("jobFor", "People Fragment");
                     intent.putExtra("job", "new");
+                    intent.putExtra("title", "Add Favourites");
                     startActivity(intent);
                 } else {
                     AlertDialog.Builder mB = new AlertDialog.Builder(getContext());
@@ -75,6 +76,7 @@ public class FavFragment extends Fragment {
                                 String title = listTitle.getText().toString();
                                 Intent intent = new Intent(getContext(), PeopleSearchActivity.class);
                                 intent.putExtra("teamName",title);
+                                intent.putExtra("title", title);
                                 intent.putExtra("jobFor", "Teams Fragment");
                                 intent.putExtra("job", "edit");
                                 startActivity(intent);

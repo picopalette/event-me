@@ -1,6 +1,7 @@
 package io.picopalette.apps.event_me.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alorma.timeline.TimelineView;
@@ -19,6 +21,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.mzelzoghbi.zgallery.entities.ZColor;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,6 +30,7 @@ import java.util.List;
 import io.picopalette.apps.event_me.Interfaces.RecyclerViewReadyCallback;
 import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.R;
+import io.picopalette.apps.event_me.Utils.EventGallery;
 import io.picopalette.apps.event_me.Utils.Utilities;
 
 /**
@@ -147,6 +151,18 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
             }
         });
 
+        holder.viewGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventGallery.with(context, homeEvent.getId())
+                        .setToolbarTitleColor(ZColor.WHITE) // toolbar title color
+                        .setGalleryBackgroundColor(ZColor.WHITE) // activity background color
+                        .setToolbarColorResId(R.color.colorPrimary) // toolbar color
+                        .setTitle(homeEvent.getName()) // toolbar title
+                        .show();
+            }
+        });
+
     }
 
     @Override
@@ -165,6 +181,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
         ImageView timeEventPic;
         RecyclerView participantsRecView;
         TimelineView timeline;
+        LinearLayout viewGallery;
 
 
         public MyViewHolder(View itemView, int viewType) {
@@ -183,6 +200,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
             timeEventPic = (ImageView) itemView.findViewById(R.id.timelineImage);
             participantsRecView = (RecyclerView) itemView.findViewById(R.id.timelineParticipantsRecView);
             timeline = (TimelineView) itemView.findViewById(R.id.timeline1);
+            viewGallery = (LinearLayout) itemView.findViewById(R.id.timelineViewGallery);
 
         }
     }

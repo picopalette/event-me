@@ -57,7 +57,7 @@ public class TeamsFragment extends Fragment {
         recyclerAdapter = new FirebaseRecyclerAdapter<Object, PersonalListsViewHolder>(Object.class, R.layout.card_list, PersonalListsViewHolder.class, favRef) {
             @Override
             protected void populateViewHolder(final PersonalListsViewHolder viewHolder, Object model, final int position) {
-                viewHolder.personalListTitle.setText(getRef(position).getKey());
+                viewHolder.personalListTitle.setText(getRef(viewHolder.getAdapterPosition()).getKey());
                 viewHolder.personalListCard.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -73,7 +73,8 @@ public class TeamsFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getContext(), PeopleSearchActivity.class);
-                        intent.putExtra("teamName",getRef(position).getKey());
+                        intent.putExtra("teamName",getRef(viewHolder.getAdapterPosition()).getKey());
+                        intent.putExtra("title", getRef(viewHolder.getAdapterPosition()).getKey());
                         intent.putExtra("jobFor", "Teams Fragment");
                         intent.putExtra("job", "view");
                         startActivity(intent);
@@ -83,7 +84,8 @@ public class TeamsFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getContext(), PeopleSearchActivity.class);
-                        intent.putExtra("teamName",getRef(position).getKey());
+                        intent.putExtra("teamName",getRef(viewHolder.getAdapterPosition()).getKey());
+                        intent.putExtra("title", getRef(viewHolder.getAdapterPosition()).getKey());
                         intent.putExtra("jobFor", "Teams Fragment");
                         intent.putExtra("job", "edit");
                         startActivity(intent);
@@ -103,7 +105,7 @@ public class TeamsFragment extends Fragment {
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         // continue with delete
-                                        getRef(position).removeValue();
+                                        getRef(viewHolder.getAdapterPosition()).removeValue();
                                     }
                                 })
                                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
