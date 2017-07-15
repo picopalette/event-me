@@ -16,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -92,13 +94,22 @@ public class EventsFragment extends Fragment  {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        ((TextView)emptyView.findViewById(R.id.empty_textView)).setText("No Events Found, \nTry creating one or joining one");
+        ((ImageView)emptyView.findViewById(R.id.empty_imageView)).setImageDrawable(getResources().getDrawable(R.drawable.ic_insert_emoticon_black_24dp));
+
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
                 super.onChanged();
+                if(adapter.getItemCount() == 0) {
+                    emptyView.setVisibility(View.VISIBLE);
+                } else {
+                    emptyView.setVisibility(View.GONE);
+                }
             }
         });
-        
+        adapter.notifyDataSetChanged();
+
 //
 //        mPES.setQueryHint("Search Public Events");
         mSearchCard.setOnClickListener( new View.OnClickListener() {
@@ -106,7 +117,6 @@ public class EventsFragment extends Fragment  {
             public void onClick(View v) {
 
               Intent intnt = new Intent( getActivity(),EventSearchActivity.class );
-
                 intnt.putExtra( "mylist", (Serializable) adapter.events );
                 startActivity(  intnt);
 
