@@ -6,7 +6,7 @@ This app allows you to plan a event with your friends and also allows you to joi
 
 **Events Management:**
 	Once you have finished creating your event you can edit it at any time and manage the list of participants in it. The owner of the event can edit and delete it. The people who are in that event can leave the event if they are not interested. The user can join any publicly available event by searching the event. All completed events of the user gets added to his timeline which can be viewed anytime.
-
+	
 **Lists Management:**
 	The app contains Two types of list for the users to edit. One is the personal list and the other is the public list for the events. For example, If you have created a event for a birthday party, you need to buy cakes, candles etc which you can add in public events list and check it if that item is bought.
 
