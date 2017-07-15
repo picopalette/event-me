@@ -3,6 +3,7 @@ Android application for planning your events.
 
 This app allows you to plan a event with your friends and also allows you to join into any publicly available event.Once you sign in with your google account, you can search for any public events and join it. 
 
+[Youtube Video Promo](https://youtu.be/JqdBEK0c7gE)
 
 **Events Management:**
 	Once you have finished creating your event you can edit it at any time and manage the list of participants in it. The owner of the event can edit and delete it. The people who are in that event can leave the event if they are not interested. The user can join any publicly available event by searching the event. All completed events of the user gets added to his timeline which can be viewed anytime.
