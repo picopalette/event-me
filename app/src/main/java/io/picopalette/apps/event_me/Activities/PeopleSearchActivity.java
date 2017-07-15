@@ -36,6 +36,7 @@ public class PeopleSearchActivity extends AppCompatActivity {
 
     private SearchView peopleSearchView;
     private RecyclerView peopleRecView;
+    private CardView backCard;
     private FirebaseRecyclerAdapter<User, PeopleSearchCardViewHolder> recyclerAdapter;
     private FirebaseRecyclerAdapter<String, PeopleSearchCardViewHolder> teamMembersAdapter;
     private FirebaseRecyclerAdapter<String, ParticipantsAdapter.ParticipantsViewHolder> teamMembersViewAdapter;
@@ -59,6 +60,7 @@ public class PeopleSearchActivity extends AppCompatActivity {
         }
         peopleRecView = (RecyclerView) findViewById(R.id.people_search_RecView);
         peopleSearchView = (SearchView) findViewById(R.id.people_searchView);
+        backCard = (CardView) findViewById(R.id.search_back_card);
         peopleRecView.setLayoutManager(new LinearLayoutManager(this));
 
         peopleSearchView.setIconifiedByDefault(false);
@@ -135,6 +137,7 @@ public class PeopleSearchActivity extends AppCompatActivity {
 
             if(job.matches("view")) {
                 peopleSearchView.setVisibility(View.GONE);
+                backCard.setVisibility(View.GONE);
             }
             peopleSearchView.setQueryHint("Find your Teammates :)");
 
@@ -320,7 +323,6 @@ public class PeopleSearchActivity extends AppCompatActivity {
                 Log.d("OnCreate", "called");
                 peopleRecView.setLayoutManager(new GridLayoutManager(PeopleSearchActivity.this, 2));
                 peopleRecView.setAdapter(teamMembersViewAdapter);
-                peopleRecView.requestLayout();
             } else {
                 peopleRecView.setAdapter(teamMembersAdapter);
             }
