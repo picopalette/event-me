@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.data.StreamAssetPathFetcher;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -31,10 +32,12 @@ public class ParticipantsAdapter extends RecyclerView.Adapter<ParticipantsAdapte
 
     private Context context;
     private ArrayList<String> participantEmails;
+    private  ArrayList<Constants.UserStatus> participantstatus;
 
-    public ParticipantsAdapter(Context context, ArrayList<String> participantEmails) {
+    public ParticipantsAdapter(Context context, ArrayList<String> participantEmails, ArrayList<Constants.UserStatus> participantstatus) {
         this.context = context;
         this.participantEmails = participantEmails;
+        this.participantstatus = participantstatus;
     }
 
     @Override
@@ -46,13 +49,14 @@ public class ParticipantsAdapter extends RecyclerView.Adapter<ParticipantsAdapte
     @Override
     public void onBindViewHolder(final ParticipantsViewHolder holder, int position) {
         String emailKey = participantEmails.get(position);
+        final String userstat = String.valueOf(participantstatus.get(position));
         Log.d("userEmail", emailKey);
         FirebaseDatabase.getInstance().getReference().child(Constants.users).child(emailKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 holder.nameView.setText(user.getDisplayName());
-                holder.emailView.setText(user.getEmail());
+                holder.emailView.setText(user.getEmail()+"\n"+userstat);
                 Glide.with(context).load(user.getDpUrl()).into(holder.imageView);
             }
 

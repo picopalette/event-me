@@ -64,7 +64,7 @@ public class EventSearchActivity extends AppCompatActivity implements SearchView
         searchRecycler = (RecyclerView) findViewById( R.id.searchRecycler );
         events = new ArrayList<>();
         searchRecycler.setHasFixedSize( true );
-        adapter = new SearchAdapter(getApplicationContext(), events, searchRecycler );
+        adapter = new SearchAdapter(getApplicationContext(), events, searchRecycler, this );
         searchRecycler.setAdapter( adapter );
         mLayoutManager = new GridLayoutManager( this, 2 );
         searchRecycler.setLayoutManager( mLayoutManager );
@@ -135,6 +135,7 @@ public class EventSearchActivity extends AppCompatActivity implements SearchView
                         Log.d("vikky2", String.valueOf(event) );
                     }
                     adapter.notifyDataSetChanged();
+
                 }
 
 

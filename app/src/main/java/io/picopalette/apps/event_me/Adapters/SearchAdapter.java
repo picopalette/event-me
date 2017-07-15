@@ -1,5 +1,6 @@
 package io.picopalette.apps.event_me.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -37,11 +38,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
     private RecyclerView searchrecycler;
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     public List<Event> events;
+    private  Activity activity;
 
-    public SearchAdapter(Context applicationContext, List<Event> events, RecyclerView searchRecycler) {
+    public SearchAdapter(Context applicationContext, List<Event> events, RecyclerView searchRecycler, Activity activity) {
         this.context = applicationContext;
         this.events = events;
         this.searchrecycler = searchRecycler;
+        this.activity = activity;
 
     }
 
@@ -82,6 +85,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
                 intent.putExtra("event", homeEvent);
                 intent.putExtra( "from","search" );
                 context.startActivity(intent);
+                activity.finish();
+
             }
         });
 
