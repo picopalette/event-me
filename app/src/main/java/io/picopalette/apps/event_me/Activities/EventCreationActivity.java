@@ -93,6 +93,7 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
     private Uri downloadUrl;
     private ProgressDialog progressDialog;
     private TextView mPrivateEvent;
+    private Button mPar;
 
 
     @Override
@@ -105,6 +106,7 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mPeopleReference = mDatabaseReference.child(Constants.people);
         dialog = new AlertDialog.Builder(this).setCancelable(false);
+        mPar = (Button) findViewById(R.id.nextParButton);
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.alert_dialog_custom, null);
         dialog.setView(dialogView);
@@ -138,6 +140,13 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
         autoCompleteTextView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Select);
         dateAndTime = new DateAndTime();
 
+        mPar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),AddEventParticipantsActivity.class);
+                startActivity(intent);
+            }
+        });
         mitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
