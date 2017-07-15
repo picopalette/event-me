@@ -161,11 +161,14 @@ public class EventsFragment extends Fragment  {
                                         if(event != null) {
                                             Log.d("TESTI67", String.valueOf(event));
                                             DateAndTime dateAndTime = event.getDateAndTime();
-                                            Date eventDate = new Date(dateAndTime.getYear(), dateAndTime.getMonth(), dateAndTime.getDayOfMonth() + 1, dateAndTime.getHourOfDay(), dateAndTime.getMinute());
-                                            Date eventEndDate = new Date(dateAndTime.getYear(), dateAndTime.getMonth(), dateAndTime.getDayOfMonth() + 1, dateAndTime.getEndHourOfDay(), dateAndTime.getEndMinute());
-
+                                            Date eventDate = new Date(dateAndTime.getYear() - 1900, dateAndTime.getMonth(), dateAndTime.getDayOfMonth(), dateAndTime.getHourOfDay(), dateAndTime.getMinute());
+                                            Date eventEndDate = new Date(dateAndTime.getYear() - 1900, dateAndTime.getMonth(), dateAndTime.getDayOfMonth(), dateAndTime.getEndHourOfDay(), dateAndTime.getEndMinute());
+                                            Log.d("currentdate", currentDate.toString());
+                                            Log.d("eventdate", eventDate.toString());
+                                            Log.d("eventEnd", eventEndDate.toString());
                                             if (eventEndDate.after(currentDate)) {
                                                 if (eventDate.before(currentDate)) {
+                                                    Log.d("ongoing", event.toString());
                                                     event.setStatus(Constants.EventStatus.ONGOING);
                                                 }
                                                 if (event != null && !adapter.events.contains(event)) {

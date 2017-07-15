@@ -121,7 +121,8 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
         mPrivateEvent = (TextView) findViewById(R.id.privateEventTV);
         mPar = (Button) findViewById(R.id.add_par);
         dateAndTime = new DateAndTime();
-
+        participants = new HashMap<>();
+        liveparticipants = new HashMap<>();
         mPar.setVisibility(View.GONE);
 
         mitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -187,7 +188,7 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         dateAndTime.setEndHourOfDay(hourOfDay);
                         dateAndTime.setEndMinute(minute);
-                        endTime.setText(dateAndTime.getFormattedTime());
+                        endTime.setText(dateAndTime.getFormattedEndTime());
                     }
                 }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
                 timePickerDialog.show();
@@ -260,11 +261,11 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
                         }
                     });
                     Boolean mPrivate = mitch.isChecked();
-                    eventRefUser.child(Constants.events).child(my_key).setValue(Constants.UserStatus.OWNER);
-                    participants = new HashMap<>();
-                    liveparticipants = new HashMap<>();
-                    liveparticipants.put(Utilities.encodeEmail(user.getEmail()),false);
-                    participants.put(Utilities.encodeEmail(user.getEmail()), Constants.UserStatus.OWNER);
+                    if(!intent.hasExtra("event")) {
+                        eventRefUser.child(Constants.events).child(my_key).setValue(Constants.UserStatus.OWNER);
+                        liveparticipants.put(Utilities.encodeEmail(user.getEmail()), false);
+                        participants.put(Utilities.encodeEmail(user.getEmail()), Constants.UserStatus.OWNER);
+                    }
                     Event event = new Event(Event_name.getText().toString(),Event_type.getText().toString(), Event_key.getText().toString(),place,dateAndTime,mPrivate,my_key, Constants.EventStatus.UPCOMING, participants,downloadUrl, Utilities.encodeEmail(user.getEmail()));
                     eventReference.child(my_key).setValue(event);
                     eventReference.child(my_key).child(Constants.livepart).setValue(liveparticipants);
@@ -345,10 +346,14 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
         });
         Event_name.setText(event.getName() );
         Event_type.setText( event.getType() );
+        Event_key.setText(event.getKeyword());
         date.setText( event.getDateAndTime().getFormattedDate() );
         time.setText( event.getDateAndTime().getFormattedTime() );
         endTime.setText( event.getDateAndTime().getFormattedEndTime() );
         autocompleteFragment.setText( event.getPlace().getName() );
+        dateAndTime = event.getDateAndTime();
+        place = event.getPlace();
+        participants = event.getParticipants();
         if(event.getPrivate())
         {
             mitch.setChecked( true );

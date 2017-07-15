@@ -49,10 +49,10 @@ public class EventAddParFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
+        final String eventId = getActivity().getIntent().getStringExtra("eventId");
         DatabaseReference favRef = dbRef.child(Constants.users).child(Utilities.encodeEmail(currentUser.getEmail())).child(Constants.favContacts);
-        final DatabaseReference eventParRef = dbRef.child(Constants.events).child(getActivity().getIntent().getStringExtra("eventId")).child("participants");
-        final DatabaseReference eventLiveParRef = dbRef.child(Constants.events).child(getActivity().getIntent().getStringExtra("eventId")).child("liveparticipants");
+        final DatabaseReference eventParRef = dbRef.child(Constants.events).child(eventId).child("participants");
+        final DatabaseReference eventLiveParRef = dbRef.child(Constants.events).child(eventId).child("liveparticipants");
         final DatabaseReference usersRef = dbRef.child(Constants.users);
 
         recyclerAdapter = new FirebaseRecyclerAdapter<String, PeopleSearchCardViewHolder>(String.class, R.layout.card_people_search, PeopleSearchCardViewHolder.class, favRef) {
@@ -99,6 +99,7 @@ public class EventAddParFragment extends Fragment {
                                     public void onClick(View v) {
                                         eventParRef.child(Utilities.encodeEmail(model)).setValue(Constants.UserStatus.INVITED);
                                         eventLiveParRef.child(Utilities.encodeEmail(model)).setValue(false);
+                                        usersRef.child(Utilities.encodeEmail(model)).child(Constants.events).child(eventId).setValue(Constants.UserStatus.INVITED);
                                         viewHolder.statusView.setImageDrawable(getResources().getDrawable(R.drawable.ic_done_blue_24dp));
                                     }
                                 });

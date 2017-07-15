@@ -54,8 +54,9 @@ public class EventAddTeamFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        final DatabaseReference eventParRef = dbRef.child(Constants.events).child(getActivity().getIntent().getStringExtra("eventId")).child("participants");
-        final DatabaseReference eventLiveParRef = dbRef.child(Constants.events).child(getActivity().getIntent().getStringExtra("eventId")).child("liveparticipants");
+        final String eventId = getActivity().getIntent().getStringExtra("eventId");
+        final DatabaseReference eventParRef = dbRef.child(Constants.events).child(eventId).child("participants");
+        final DatabaseReference eventLiveParRef = dbRef.child(Constants.events).child(eventId).child("liveparticipants");
         recyclerAdapter = new FirebaseRecyclerAdapter<Object, PersonalListsViewHolder>(Object.class, R.layout.card_list, PersonalListsViewHolder.class, favRef) {
             @Override
             protected void populateViewHolder(final PersonalListsViewHolder viewHolder, Object model, final int position) {
@@ -106,6 +107,7 @@ public class EventAddTeamFragment extends Fragment {
                                                     String parEmail = participant.getValue(String.class);
                                                     eventParRef.child(Utilities.encodeEmail(parEmail)).setValue(Constants.UserStatus.INVITED);
                                                     eventLiveParRef.child(Utilities.encodeEmail(parEmail)).setValue(false);
+                                                    userRef.child(Utilities.encodeEmail(parEmail)).child(Constants.events).child(eventId).setValue(Constants.UserStatus.INVITED);
                                                     Toast.makeText(getActivity(), "All are added to Event", Toast.LENGTH_SHORT).show();
                                                 }
                                             }

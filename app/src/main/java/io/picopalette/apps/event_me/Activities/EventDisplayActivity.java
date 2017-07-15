@@ -222,6 +222,7 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
         ePlace.setText(eve.getPlace().getName());
         eTime.setText(eve.getDateAndTime().getFormattedTime());
         eDate.setText(eve.getDateAndTime().getFormattedDate());
+        eStatus.setText(eve.getStatus().toString());
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         storageRef.child("images/"+eve.getId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -623,6 +624,7 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         googleMap.addMarker(new MarkerOptions().position(new LatLng(eve.getPlace().getLat(),eve.getPlace().getLon())));
     }
+
 
 
     @Override
