@@ -16,3 +16,4 @@ This app allows you to plan a event with your friends and also allows you to joi
 **Live Location:**
 	anyone can track people who are willing to share their location within the event.people can track their live location and they can also switch off their location sharing for a particular event. 
 	
+MIT LICENCENSED
