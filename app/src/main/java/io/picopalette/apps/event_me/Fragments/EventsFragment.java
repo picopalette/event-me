@@ -29,6 +29,8 @@ import com.mzelzoghbi.zgallery.entities.ZColor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,6 +40,7 @@ import io.picopalette.apps.event_me.Adapters.EventsAdapter;
 import io.picopalette.apps.event_me.Activities.EventCreationActivity;
 import io.picopalette.apps.event_me.EventMeApp;
 import io.picopalette.apps.event_me.Interfaces.RecyclerViewReadyCallback;
+import io.picopalette.apps.event_me.Models.DateAndTime;
 import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.R;
 import io.picopalette.apps.event_me.Utils.Constants;
@@ -54,6 +57,8 @@ public class EventsFragment extends Fragment  {
     private SharedPreferences eventkeys;
     private SearchView mPES;
     private boolean activityStartUp = true;
+    private Date currentDate;
+    private Calendar calendar;
     private Context context = getContext();
 
 
@@ -72,6 +77,10 @@ public class EventsFragment extends Fragment  {
         View v = inflater.inflate(R.layout.fragment_events, container,false);
         FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView_eve);
+        calendar = Calendar.getInstance();
+        currentDate = calendar.getTime();
+        Log.d("current", currentDate.toString());
+
         getDataTask();
         events = new ArrayList<>();
         recyclerView.setHasFixedSize(true);
@@ -130,24 +139,34 @@ public class EventsFragment extends Fragment  {
                         for(final DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                             Log.d("countsss", String.valueOf(dataSnapshot.getChildrenCount()));
                             Log.d("counts", String.valueOf(dataSnapshot.getChildrenCount()));
-                            DatabaseReference eventRef = mDatabaseReference.child(Constants.events).child(eventSnapshot.getKey());
+                            final DatabaseReference eventRef = mDatabaseReference.child(Constants.events).child(eventSnapshot.getKey());
                             Log.d("Testi", eventSnapshot.getValue().toString());
                             if (Objects.equals(eventSnapshot.getValue().toString(), Constants.UserStatus.OWNER.toString()) || Objects.equals(eventSnapshot.getValue().toString(), Constants.UserStatus.GOING.toString())) {
 
                                 Log.d("testify", "indie the if statement");
                                 eventRef.addValueEventListener(new ValueEventListener() {
-
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         Event event = dataSnapshot.getValue(Event.class);
                                         Log.d("TESTI67", String.valueOf( event ) );
-                                        if (event != null && !adapter.events.contains(event)) {
-                                            adapter.events.add(event);
-                                        } else if(event != null && adapter.events.contains(event)) {
-                                            adapter.events.set(adapter.events.indexOf(event), event);
+                                        DateAndTime dateAndTime = event.getDateAndTime();
+                                        Date eventDate = new Date(dateAndTime.getYear(), dateAndTime.getMonth(), dateAndTime.getDayOfMonth() + 1, dateAndTime.getHourOfDay(), dateAndTime.getMinute());
+                                        Date eventEndDate = new Date(dateAndTime.getYear(), dateAndTime.getMonth(), dateAndTime.getDayOfMonth() + 1, dateAndTime.getEndHourOfDay(), dateAndTime.getEndMinute());
+
+                                        if(eventEndDate.after(currentDate)) {
+                                            if(eventDate.before(currentDate)) {
+                                                event.setStatus(Constants.EventStatus.ONGOING);
+                                            }
+                                            if (event != null && !adapter.events.contains(event)) {
+                                                adapter.events.add(event);
+                                            } else if (event != null && adapter.events.contains(event)) {
+                                                adapter.events.set(adapter.events.indexOf(event), event);
+                                            }
+                                            Log.d("testt", String.valueOf(events));
+                                            adapter.notifyDataSetChanged();
+                                        } else {
+                                            eventRef.removeEventListener(this);
                                         }
-                                        Log.d("testt", String.valueOf(events));
-                                        adapter.notifyDataSetChanged();
                                     }
 
                                     @Override

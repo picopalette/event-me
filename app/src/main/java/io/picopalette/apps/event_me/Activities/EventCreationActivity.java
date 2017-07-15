@@ -75,7 +75,7 @@ import io.picopalette.apps.event_me.Utils.Utilities;
 
 public class EventCreationActivity extends AppCompatActivity implements PlaceSelectionListener, TokenCompleteTextView.TokenListener<SimpleContact>{
 
-    private EditText Event_name,date,time,Event_type,Event_key;
+    private EditText Event_name,date,time,endTime,Event_type,Event_key;
     private DateAndTime dateAndTime;
     private Location place;
     private Button complete;
@@ -111,6 +111,7 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
         date = (EditText) findViewById(R.id.date_text);
         mitch = (Switch) findViewById(R.id.eve_switch);
         time = (EditText) findViewById(R.id.time_text);
+        endTime = (EditText) findViewById(R.id.end_time_text);
         Event_type = (EditText) findViewById(R.id.eve_type);
         Event_name = (EditText) findViewById(R.id.eve_name);
         Event_key = (EditText) findViewById(R.id.eve_description);
@@ -175,6 +176,23 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
 
             }
         });
+        endTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Calendar calendar = Calendar.getInstance();
+                TimePickerDialog timePickerDialog = new TimePickerDialog(EventCreationActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        dateAndTime.setEndHourOfDay(hourOfDay);
+                        dateAndTime.setEndMinute(minute);
+                        endTime.setText(dateAndTime.getFormattedTime());
+                    }
+                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
+                timePickerDialog.show();
+
+            }
+        });
         complete.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -182,6 +200,7 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
 
                 if(!TextUtils.isEmpty(Event_name.getText().toString()) && !TextUtils.isEmpty(Event_type.getText().toString()) &&
                         !TextUtils.isEmpty(date.getText().toString()) && !TextUtils.isEmpty(time.getText().toString()) &&
+                        !TextUtils.isEmpty(Event_key.getText().toString()) && !TextUtils.isEmpty(endTime.getText().toString()) &&
                         (place!=null)  && (Event_image.getDrawable() != null))
                 {
 
@@ -243,7 +262,7 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
                     eventRefUser.child(Constants.events).child(my_key).setValue(Constants.UserStatus.OWNER);
                     participants = new HashMap<>();
                     participants.put(Utilities.encodeEmail(user.getEmail()), Constants.UserStatus.OWNER);
-                    Event event = new Event(Event_name.getText().toString(),Event_type.getText().toString(),place,dateAndTime,mPrivate,my_key, Constants.EventStatus.UPCOMING, participants,downloadUrl, Utilities.encodeEmail(user.getEmail()));
+                    Event event = new Event(Event_name.getText().toString(),Event_type.getText().toString(), Event_key.getText().toString(),place,dateAndTime,mPrivate,my_key, Constants.EventStatus.UPCOMING, participants,downloadUrl, Utilities.encodeEmail(user.getEmail()));
                     eventReference.child(my_key).setValue(event);
                     Toast.makeText(getBaseContext(), R.string.success,Toast.LENGTH_LONG).show();
                 }
@@ -324,6 +343,7 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
         Event_type.setText( event.getType() );
         date.setText( event.getDateAndTime().getFormattedDate() );
         time.setText( event.getDateAndTime().getFormattedTime() );
+        endTime.setText( event.getDateAndTime().getFormattedEndTime() );
         autocompleteFragment.setText( event.getPlace().getName() );
         if(event.getPrivate())
         {

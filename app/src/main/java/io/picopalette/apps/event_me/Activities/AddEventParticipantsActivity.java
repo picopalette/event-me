@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import io.picopalette.apps.event_me.Fragments.EventAddParFragment;
 import io.picopalette.apps.event_me.Fragments.EventAddTeamFragment;
@@ -60,5 +62,26 @@ public class AddEventParticipantsActivity extends AppCompatActivity {
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_person_white_24dp);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_person_add_white_24dp);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_group_add_white_24dp);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.parti_done, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.parti_done_menu:
+                finish();
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        //do nothing
     }
 }

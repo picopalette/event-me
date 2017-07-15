@@ -83,7 +83,7 @@ public class EventAddTeamFragment extends Fragment {
                     }
                 });
                 viewHolder.personalListEdit.setVisibility(View.GONE);
-                viewHolder.personalListDeleteIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_group_add_white_24dp));
+                viewHolder.personalListDeleteIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_group_add_blue_24dp));
                 viewHolder.personalListDeleteText.setText("Add All");
                 viewHolder.personalListDelete.setOnClickListener(new View.OnClickListener() {
                     @Override

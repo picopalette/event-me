@@ -9,6 +9,8 @@ public class DateAndTime implements Serializable{
     private int year;
     private int hourOfDay;
     private int minute;
+    private int endHourOfDay;
+    private int endMinute;
     private String formattedTime;
     private String formattedDate;
 
@@ -64,6 +66,22 @@ public class DateAndTime implements Serializable{
         this.minute = minute;
     }
 
+    public int getEndHourOfDay() {
+        return endHourOfDay;
+    }
+
+    public void setEndHourOfDay(int endHourOfDay) {
+        this.endHourOfDay = endHourOfDay;
+    }
+
+    public int getEndMinute() {
+        return endMinute;
+    }
+
+    public void setEndMinute(int endMinute) {
+        this.endMinute = endMinute;
+    }
+
     public String getFormattedDate() {
         int mMonth = month;
         String sMonth;
@@ -85,6 +103,31 @@ public class DateAndTime implements Serializable{
         String mtime = "AM";
         int mHour = hourOfDay;
         int mMinute = minute;
+        String sHour,sMinute;
+        if(mHour >= 12) {
+            mtime = "PM";
+            mHour = mHour - 12;
+        }
+        if(mHour == 0)
+            mHour = 12;
+
+        if(mHour < 10 )
+            sHour = ""+mHour;
+        else
+            sHour = ""+mHour;
+
+        if(mMinute < 10 )
+            sMinute = "0"+mMinute;
+        else
+            sMinute = ""+mMinute;
+
+        return sHour+":"+sMinute+" "+mtime;
+    }
+
+    public String getFormattedEndTime() {
+        String mtime = "AM";
+        int mHour = endHourOfDay;
+        int mMinute = endMinute;
         String sHour,sMinute;
         if(mHour >= 12) {
             mtime = "PM";

@@ -10,7 +10,7 @@ import io.picopalette.apps.event_me.Utils.Constants;
 
 public class Event implements Serializable {
 
-    private String id, name, type;
+    private String id, name, type, keyword;
     private Location place;
     private Constants.EventStatus status;
     private Boolean isPrivate;
@@ -22,8 +22,9 @@ public class Event implements Serializable {
     public Event() {
     }
 
-    public Event(String name, String type, Location place, DateAndTime dateAndTime, Boolean isPrivate, String id, Constants.EventStatus status, HashMap<String, Constants.UserStatus> participants, Uri downloaduri, String owner) {
+    public Event(String name, String type, String keyword, Location place, DateAndTime dateAndTime, Boolean isPrivate, String id, Constants.EventStatus status, HashMap<String, Constants.UserStatus> participants, Uri downloaduri, String owner) {
         this.uri = downloaduri;
+        this.keyword = keyword;
         this.name = name;
         this.type = type;
         this.place = place;
@@ -33,6 +34,14 @@ public class Event implements Serializable {
         this.id = id;
         this.participants = participants;
         this.owner = owner;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
     public Uri getUri() {

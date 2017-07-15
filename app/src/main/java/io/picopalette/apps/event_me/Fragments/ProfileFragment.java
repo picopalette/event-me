@@ -48,10 +48,13 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
 
 import io.picopalette.apps.event_me.Activities.EventCreationActivity;
 import io.picopalette.apps.event_me.Adapters.TimelineAdapter;
+import io.picopalette.apps.event_me.Models.DateAndTime;
 import io.picopalette.apps.event_me.Models.Event;
 import io.picopalette.apps.event_me.R;
 import io.picopalette.apps.event_me.Utils.Constants;
@@ -88,6 +91,8 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
     private TextView textviewTitle;
     private TextView profileName;
     private TextView profileEmail;
+    private Date currentDate;
+    private Calendar calendar;
     private SimpleDraweeView avatar;
 
     public static ProfileFragment newInstance() {
@@ -100,6 +105,8 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
         Fresco.initialize(this.getContext());
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
         userBundle = getArguments();
+        calendar = Calendar.getInstance();
+        currentDate = calendar.getTime();
         appbar = (AppBarLayout) v.findViewById( R.id.appbar );
         collapsing = (CollapsingToolbarLayout) v.findViewById( R.id.collapsing );
         coverImage = (ImageView) v.findViewById( R.id.imageview_placeholder );
@@ -135,7 +142,7 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
                 changeDp();
             }
         });
-        coverImage.setImageURI(coverUri);
+        coverImage.setImageDrawable(getResources().getDrawable(R.drawable.logo));
         profileName.setText(userBundle.getString("name"));
         profileEmail.setText(userBundle.getString("email"));
         recyclerView = (RecyclerView) v.findViewById(R.id.timelineRecycle);
@@ -162,7 +169,7 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
                 for(final DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                     Log.d("countsss", String.valueOf(dataSnapshot.getChildrenCount()));
                     Log.d("counts", String.valueOf(dataSnapshot.getChildrenCount()));
-                    DatabaseReference eventRef = mDatabaseReference.child(Constants.events).child(eventSnapshot.getKey());
+                    final DatabaseReference eventRef = mDatabaseReference.child(Constants.events).child(eventSnapshot.getKey());
                     Log.d("Testi", eventSnapshot.getValue().toString());
                     if (Objects.equals(eventSnapshot.getValue().toString(), Constants.UserStatus.OWNER.toString()) || Objects.equals(eventSnapshot.getValue().toString(), Constants.UserStatus.GOING.toString())) {
 
@@ -173,13 +180,21 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 Event event = dataSnapshot.getValue(Event.class);
                                 Log.d("TESTI", eventSnapshot.getValue().toString());
-                                if (event != null && !adapter.events.contains(event)) {
-                                    adapter.events.add(event);
-                                } else if(event != null && adapter.events.contains(event)) {
-                                    adapter.events.set(adapter.events.indexOf(event), event);
+                                DateAndTime dateAndTime = event.getDateAndTime();
+                                Date eventDate = new Date(dateAndTime.getYear(), dateAndTime.getMonth(), dateAndTime.getDayOfMonth() + 1, dateAndTime.getHourOfDay(), dateAndTime.getMinute());
+                                Date eventEndDate = new Date(dateAndTime.getYear(), dateAndTime.getMonth(), dateAndTime.getDayOfMonth() + 1, dateAndTime.getEndHourOfDay(), dateAndTime.getEndMinute());
+
+                                if(eventEndDate.before(currentDate)) {
+                                    if (event != null && !adapter.events.contains(event)) {
+                                        adapter.events.add(event);
+                                    } else if (event != null && adapter.events.contains(event)) {
+                                        adapter.events.set(adapter.events.indexOf(event), event);
+                                    }
+                                    Log.d("testt", String.valueOf(events));
+                                    adapter.notifyDataSetChanged();
+                                } else {
+                                    eventRef.removeEventListener(this);
                                 }
-                                Log.d("testt", String.valueOf(events));
-                                adapter.notifyDataSetChanged();
                             }
 
                             @Override
