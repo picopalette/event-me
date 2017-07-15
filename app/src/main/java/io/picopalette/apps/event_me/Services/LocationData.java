@@ -21,13 +21,17 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 
 import io.picopalette.apps.event_me.Activities.MainActivity;
 import io.picopalette.apps.event_me.R;
+import io.picopalette.apps.event_me.Utils.Constants;
 import io.picopalette.apps.event_me.Utils.Utilities;
 
 public class LocationData extends Service {
@@ -70,7 +74,18 @@ public class LocationData extends Service {
         final DatabaseReference users = userData.child("users");
         user = FirebaseAuth.getInstance().getCurrentUser();
         useremail = Utilities.encodeEmail(user.getEmail());
-        photourl = String.valueOf(user.getPhotoUrl());
+        FirebaseDatabase.getInstance().getReference().child(Constants.users).child(useremail).child("dpUrl").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                photourl = String.valueOf(dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
