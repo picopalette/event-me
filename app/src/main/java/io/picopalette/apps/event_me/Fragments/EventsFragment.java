@@ -88,8 +88,19 @@ public class EventsFragment extends Fragment  {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mPES = (SearchView) v.findViewById(R.id.publicEventsSearchView);
+        mPES.setQueryHint("Search Your Public Events");
+        mPES.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intnt = new Intent( getActivity(),EventSearchActivity.class );
 
-        mPES.setQueryHint("Search Public Events");
+                intnt.putExtra( "mylist", (Serializable) adapter.events );
+                startActivity(  intnt);
+
+            }
+        });
+//
+//        mPES.setQueryHint("Search Public Events");
         mPES.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
