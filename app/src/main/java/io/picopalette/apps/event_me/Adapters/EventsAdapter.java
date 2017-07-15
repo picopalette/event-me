@@ -190,6 +190,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
                 }
             }
 
+
             notifyDataSetChanged();
 
         }

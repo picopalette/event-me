@@ -6,20 +6,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.StringDef;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -46,35 +44,25 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.api.client.util.Data;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.uber.sdk.android.core.UberButton;
 import com.uber.sdk.android.core.UberSdk;
 import com.uber.sdk.android.rides.RideParameters;
 import com.uber.sdk.android.rides.RideRequestButton;
 import com.uber.sdk.core.auth.Scope;
-import com.uber.sdk.rides.client.ServerTokenSession;
 import com.uber.sdk.rides.client.SessionConfiguration;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 import io.picopalette.apps.event_me.Adapters.ParticipantsAdapter;
 import io.picopalette.apps.event_me.Models.Event;
-import io.picopalette.apps.event_me.Models.SimpleContact;
 import io.picopalette.apps.event_me.R;
 import io.picopalette.apps.event_me.Services.LocationData;
 import io.picopalette.apps.event_me.Utils.Constants;
@@ -92,6 +80,7 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
     private LocationManager locationManager;
     private Button edit,delete,join,leave;
     private LinearLayout linearLayout;
+    private TextView mShareView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +110,7 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
         TextView ePlace = (TextView) findViewById(R.id.eventPlaceName);
         TextView eDate = (TextView) findViewById(R.id.eventDate);
         TextView eTime = (TextView) findViewById(R.id.eventTime);
+        mShareView = (TextView) findViewById(R.id.shareView);
         RecyclerView participantsRecyclerView = (RecyclerView) findViewById(R.id.event_display_rec_view);
         AppCompatImageView eNavi = (AppCompatImageView) findViewById(R.id.navigation_btn);
         View mapCard = (View) findViewById(R.id.map_card);
@@ -152,6 +142,8 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
                 if(isChecked)
                 {
 
+                    mShareView.setTextColor(Color.parseColor("#094782"));
+                    mShareView.setTypeface(null, Typeface.BOLD);
                     FirebaseDatabase.getInstance().getReference().child(Constants.events)
                             .child(eve.getId())
                             .child(Constants.livepart)
@@ -208,6 +200,8 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
 //                    FirebaseDatabase.getInstance().getReference().child(Constants.events).child(eve.getId()).child(Constants.livepart).child(myemail).setValue(false);
 //                    Intent  i = new Intent(getApplicationContext(), LocationData.class);
 //                    stopService(i);
+                    mShareView.setTextColor(Color.parseColor("#666666"));
+                    mShareView.setTypeface(null, Typeface.NORMAL);
                     mTrackify.setVisibility(View.GONE);
                     FirebaseDatabase.getInstance().getReference().child(Constants.events).child(eve.getId()).child(Constants.livepart).child(myemail).setValue(false);
                     trackifySwitch.setChecked(false);
@@ -256,7 +250,12 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
         for(String email : eve.getParticipants().keySet())
             partiEmails.add(email);
         Log.d("userEmails", partiEmails.toString());
-        ParticipantsAdapter participantsAdapter = new ParticipantsAdapter(this, partiEmails);
+
+        ArrayList<Constants.UserStatus> partstatus = new ArrayList<>();
+        for(Constants.UserStatus status: eve.getParticipants().values())
+            partstatus.add(status);
+
+        ParticipantsAdapter participantsAdapter = new ParticipantsAdapter(this, partiEmails,partstatus);
         participantsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         participantsRecyclerView.setAdapter(participantsAdapter);
 
@@ -339,6 +338,7 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
                         .child(myemail)
                         .child(Constants.events)
                         .child( eve.getId()).setValue(Constants.UserStatus.GOING);
+
                 join.setVisibility(View.GONE);
                 leave.setVisibility(View.VISIBLE);
                 linearLayout.setVisibility(View.GONE);

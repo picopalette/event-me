@@ -17,11 +17,28 @@
             app:cardBackgroundColor="#f6f6f6"
             app:cardCornerRadius="8dp">
 
-            <android.support.v7.widget.SearchView
-                android:id="@+id/publicEventsSearchView"
+            <LinearLayout
                 android:layout_width="match_parent"
-                app:searchIcon="@null"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_search_black_24dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="7dp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Search Your Public Events"
+                    android:textColor="@color/colorPrimary"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="13dp"
+                    android:textSize="16sp"/>
+
+            </LinearLayout>
+
 
         </android.support.v7.widget.CardView>
 
