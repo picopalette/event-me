@@ -10,17 +10,21 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled  true
+
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
-            minifyEnabled false
-            multiDexEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     configurations.all {
         resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g" //specify the heap size for the dex process
     }
 }
 
@@ -59,8 +63,10 @@ dependencies {
     compile 'com.github.nguyenhoanglam:ImagePicker:1.1.3'
     compile 'com.github.hani-momanii:SuperNova-Emoji:1.1'
     compile 'me.himanshusoni.chatmessageview:chat-message-view:1.0.3'
+    compile 'com.koushikdutta.ion:ion:2.+'
     compile 'jp.wasabeef:blurry:2.1.1'
     compile 'com.android.support:support-v4:25.4.0'
+
     compile 'com.android.support:recyclerview-v7:25.4.0'
     compile 'com.facebook.fresco:fresco:1.3.0'
     compile 'com.github.mzelzoghbi:zgallery:0.3'

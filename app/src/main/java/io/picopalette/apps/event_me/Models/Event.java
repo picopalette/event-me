@@ -18,6 +18,7 @@ public class Event implements Serializable {
     private HashMap<String, Constants.UserStatus> participants;
     private Uri uri;
     private String owner;
+    private HashMap<String, Boolean> liveparticipants;
 
     public Event() {
     }
@@ -110,6 +111,14 @@ public class Event implements Serializable {
 
     public HashMap<String, Constants.UserStatus> getParticipants() {
         return participants;
+    }
+
+    public HashMap<String, Boolean> getLiveparticipants() {
+        return liveparticipants;
+    }
+
+    public void setLiveparticipants(HashMap<String, Boolean> liveparticipants) {
+        this.liveparticipants = liveparticipants;
     }
 
     public void setParticipants(HashMap<String, Constants.UserStatus> participants) {

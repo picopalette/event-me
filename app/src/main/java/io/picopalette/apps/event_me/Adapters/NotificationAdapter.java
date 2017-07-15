@@ -113,6 +113,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 FirebaseDatabase.getInstance().getReference().child(Constants.users)
                     .child(Utilities.encodeEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail()))
                         .child(Constants.events).child(homeEvent.getId()).setValue(Constants.UserStatus.GOING);
+
+
                 events.remove(holder.getAdapterPosition());
                 Log.d("sizes2", String.valueOf(events.size()));
                 notifyItemRemoved(holder.getAdapterPosition());

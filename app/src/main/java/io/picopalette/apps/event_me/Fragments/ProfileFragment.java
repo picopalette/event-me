@@ -1,16 +1,24 @@
 package io.picopalette.apps.event_me.Fragments;
 
 
+import android.Manifest;
+import android.app.ActivityManager;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -19,9 +27,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,10 +63,13 @@ import java.util.Date;
 import java.util.Objects;
 
 import io.picopalette.apps.event_me.Activities.EventCreationActivity;
+import io.picopalette.apps.event_me.Activities.EventDisplayActivity;
 import io.picopalette.apps.event_me.Adapters.TimelineAdapter;
 import io.picopalette.apps.event_me.Models.DateAndTime;
 import io.picopalette.apps.event_me.Models.Event;
+import io.picopalette.apps.event_me.Models.Location;
 import io.picopalette.apps.event_me.R;
+import io.picopalette.apps.event_me.Services.LocationData;
 import io.picopalette.apps.event_me.Utils.Constants;
 import io.picopalette.apps.event_me.Utils.Util;
 import io.picopalette.apps.event_me.Utils.Utilities;
@@ -94,6 +107,9 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
     private Date currentDate;
     private Calendar calendar;
     private SimpleDraweeView avatar;
+    private Switch myswitch;
+    private NotificationManager mNotificationManager;
+    private LocationManager locationManager;
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
@@ -116,6 +132,7 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
         textviewTitle = (TextView) v.findViewById( R.id.textview_title );
         profileName = (TextView) v.findViewById(R.id.profile_view_name);
         profileEmail = (TextView) v.findViewById(R.id.profile_view_email);
+        myswitch = (Switch) v.findViewById(R.id.mainSwitch);
         avatar = (SimpleDraweeView) v.findViewById(R.id.avatar);
         toolbar.setTitle("");
         appbar.addOnOffsetChangedListener(this);
@@ -136,6 +153,42 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
             }
         });
+        locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+
+        if(isServiceRunning(LocationData.class)){
+            myswitch.setChecked(true);
+        }
+        else
+        {
+            myswitch.setChecked(false);
+        }
+
+        myswitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isServiceRunning(LocationData.class)){
+                    mNotificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                    mNotificationManager.cancel(89);
+                    Intent i = new Intent(getContext(), LocationData.class);
+                    getContext().stopService(i);
+                    myswitch.setChecked(false);
+
+                }else
+                {
+                    if(!permissionEnabled()) {
+                        Intent i = new Intent(getContext(), LocationData.class);
+                        getContext().startService(i);
+                    }
+                    if(isServiceRunning(LocationData.class)){
+                        myswitch.setChecked(true);
+                    }
+                    else
+                    {
+                        myswitch.setChecked(false);
+                    }
+                }
+            }
+        });
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,6 +206,40 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         return v;
+    }
+
+    private boolean permissionEnabled() {
+
+        if(Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(getContext(), Manifest.permission
+                .ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(),Manifest.permission
+                .ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 69);
+            return true;
+        }
+        return false;
+
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 69){
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(getContext(),"Permission Granted", Toast.LENGTH_LONG).show();
+            }
+            else{
+                permissionEnabled();
+            }
+        }
+    }
+
+    private boolean isServiceRunning(Class<LocationData> locationDataClass) {
+        ActivityManager manager = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (locationDataClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

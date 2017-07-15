@@ -11,6 +11,8 @@ public class Constants {
     public static String favContacts = "favcontacts";
     public static String favTeams = "favteams";
     public static String requests = "requests";
+    public static String livepart = "liveparticipants";
+    public static String participants = "participants";
 
     public enum EventStatus {
         UPCOMING,
@@ -23,6 +25,7 @@ public class Constants {
         INVITED,
         GOING,
         NOT_GOING,
+        LEFT,
         OWNER
     }
 }

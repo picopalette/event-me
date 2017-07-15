@@ -91,6 +91,7 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
     private Event event;
     private PlaceAutocompleteFragment autocompleteFragment;
     private String my_key;
+    private HashMap<String,Boolean> liveparticipants;
 
 
     @Override

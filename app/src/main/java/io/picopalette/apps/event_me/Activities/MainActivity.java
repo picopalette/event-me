@@ -7,6 +7,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -21,11 +22,32 @@ import io.picopalette.apps.event_me.R;
 public class MainActivity extends AppCompatActivity {
     private boolean isInEvent = true;
     private BottomNavigationView bottomNavigationView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent intent2 = getIntent();
+//        Intent intent2 = getIntent();
+//        if(intent2.hasExtra("from")){
+//            Log.d("frommm","frommm");
+//            String inten = String.valueOf(intent2.getExtras().get("from"));
+//            if(inten.matches("notif")){
+//                Log.d("frommm22","frommm");
+//                getSupportActionBar().hide();
+//                FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+//                Bundle userBundle = new Bundle();
+//                userBundle.putString("uid", fUser.getUid());
+//                userBundle.putString("name", fUser.getDisplayName());
+//                userBundle.putString("email", fUser.getEmail());
+//                userBundle.putString("dpurl", fUser.getPhotoUrl().toString());
+//                Fragment selectedFragment = ProfileFragment.newInstance();
+//                selectedFragment.setArguments(userBundle);
+//                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//                transaction.replace(R.id.content, selectedFragment);
+//                transaction.commit();
+//
+//            }
+//        }
         if(FirebaseAuth.getInstance().getCurrentUser() == null)
         {
             Intent intent = new Intent(this,SignInActivity.class);
@@ -78,6 +100,26 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.content, EventsFragment.newInstance());
         transaction.commit();
+
+        if(intent2.hasExtra("from")){
+            String val = String.valueOf(intent2.getExtras().get("from"));
+            if(val.matches("notif")){
+                getSupportActionBar().hide();
+                FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+                Bundle userBundle = new Bundle();
+                userBundle.putString("uid", fUser.getUid());
+                userBundle.putString("name", fUser.getDisplayName());
+                userBundle.putString("email", fUser.getEmail());
+                userBundle.putString("dpurl", fUser.getPhotoUrl().toString());
+                Fragment selectedFragment = ProfileFragment.newInstance();
+                selectedFragment.setArguments(userBundle);
+
+                transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.content, selectedFragment);
+                transaction.commit();
+
+            }
+        }
     }
 
     @Override
@@ -94,6 +136,8 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
+
+
 
     @Override
     public void onBackPressed() {
