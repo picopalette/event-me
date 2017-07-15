@@ -169,11 +169,73 @@
 
             </android.support.v7.widget.CardView>
 
+            <android.support.v7.widget.CardView
+                android:id="@+id/descCard"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/card2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="About the event...."
+                        android:textColor="@color/colorPrimary"
+                        android:layout_margin="7dp"
+                        android:textSize="13sp"/>
+                    <TextView
+                        android:id="@+id/descTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="7dp"
+                        android:layout_marginRight="5dp"
+                        android:textSize="15sp"
+                        android:layout_marginBottom="5dp"
+                        android:textColor="@color/dark_blue_theme"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:text="Ends at"
+                            android:textSize="13sp"
+                            android:textColor="@color/colorPrimary"
+                            android:layout_margin="7dp"
+                            />
+                        <TextView
+                            android:id="@+id/endTimeTextView"
+                            android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:textSize="15sp"
+                            android:layout_margin="7dp"
+                            android:layout_height="match_parent"
+                            android:textColor="@color/dark_blue_theme"
+                            />
+
+
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
             <TextView
                 android:id="@+id/p_list_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/card2"
+                android:layout_below="@id/descCard"
                 android:text="Participants"
                 android:textSize="19sp"
                 android:textColor="@color/dark_blue_theme"

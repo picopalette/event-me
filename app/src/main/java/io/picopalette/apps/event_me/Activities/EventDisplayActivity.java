@@ -82,6 +82,8 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
     private Button edit,delete,join,leave;
     private LinearLayout linearLayout;
     private TextView mShareView;
+    private TextView mDescTextView;
+    private TextView mEndTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +116,8 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
         TextView eDate = (TextView) findViewById(R.id.eventDate);
         TextView eTime = (TextView) findViewById(R.id.eventTime);
         mShareView = (TextView) findViewById(R.id.shareView);
+        mEndTime = (TextView) findViewById(R.id.endTimeTextView);
+        mDescTextView = (TextView) findViewById(R.id.descTextView);
         RecyclerView participantsRecyclerView = (RecyclerView) findViewById(R.id.event_display_rec_view);
         AppCompatImageView eNavi = (AppCompatImageView) findViewById(R.id.navigation_btn);
         View mapCard = (View) findViewById(R.id.map_card);
@@ -220,6 +224,8 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
         eTime.setText(eve.getDateAndTime().getFormattedTime());
         eDate.setText(eve.getDateAndTime().getFormattedDate());
         eStatus.setText(eve.getStatus().toString());
+        mDescTextView.setText(eve.getKeyword());
+        mEndTime.setText(eve.getDateAndTime().getFormattedEndTime());
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         storageRef.child("images/"+eve.getId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
