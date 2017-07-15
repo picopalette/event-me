@@ -27,13 +27,20 @@
 
     </android.support.v7.widget.CardView>
 
+    <include layout="@layout/empty_view"
+        android:id="@+id/fragment_events_emptyView"
+        android:visibility="gone">
+
+    </include>
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/publicEventsSearchCard"
+        android:layout_below="@id/publicEventsSearchCard"
         android:id="@+id/recyclerView_eve">
 
     </android.support.v7.widget.RecyclerView>
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

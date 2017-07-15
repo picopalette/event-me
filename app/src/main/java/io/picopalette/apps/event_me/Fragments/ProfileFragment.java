@@ -268,8 +268,8 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
                                 Event event = dataSnapshot.getValue(Event.class);
                                 Log.d("TESTI", eventSnapshot.getValue().toString());
                                 DateAndTime dateAndTime = event.getDateAndTime();
-                                Date eventDate = new Date(dateAndTime.getYear(), dateAndTime.getMonth(), dateAndTime.getDayOfMonth() + 1, dateAndTime.getHourOfDay(), dateAndTime.getMinute());
-                                Date eventEndDate = new Date(dateAndTime.getYear(), dateAndTime.getMonth(), dateAndTime.getDayOfMonth() + 1, dateAndTime.getEndHourOfDay(), dateAndTime.getEndMinute());
+                                Date eventDate = new Date(dateAndTime.getYear() - 1900, dateAndTime.getMonth(), dateAndTime.getDayOfMonth(), dateAndTime.getHourOfDay(), dateAndTime.getMinute());
+                                Date eventEndDate = new Date(dateAndTime.getYear() - 1900, dateAndTime.getMonth(), dateAndTime.getDayOfMonth(), dateAndTime.getEndHourOfDay(), dateAndTime.getEndMinute());
 
                                 if(eventEndDate.before(currentDate)) {
                                     if (event != null && !adapter.events.contains(event)) {

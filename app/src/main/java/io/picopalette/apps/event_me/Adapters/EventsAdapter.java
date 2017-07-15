@@ -51,7 +51,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-
              itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.event_tab_custom_row, parent, false);
         recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

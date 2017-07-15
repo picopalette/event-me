@@ -60,6 +60,7 @@ public class EventsFragment extends Fragment  {
     private Date currentDate;
     private Calendar calendar;
     private Context context = getContext();
+    private View emptyView;
 
 
     public static EventsFragment newInstance() {
@@ -77,6 +78,7 @@ public class EventsFragment extends Fragment  {
         View v = inflater.inflate(R.layout.fragment_events, container,false);
         FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView_eve);
+        emptyView = (View) v.findViewById(R.id.fragment_events_emptyView);
         calendar = Calendar.getInstance();
         currentDate = calendar.getTime();
         Log.d("current", currentDate.toString());
@@ -87,6 +89,14 @@ public class EventsFragment extends Fragment  {
         adapter = new EventsAdapter(getActivity().getApplicationContext(), events,recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+            }
+        });
+
         mPES = (SearchView) v.findViewById(R.id.publicEventsSearchView);
         mPES.setOnSearchClickListener(new View.OnClickListener() {
             @Override
