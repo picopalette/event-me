@@ -251,7 +251,6 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
                     Boolean mPrivate = mitch.isChecked();
                     eventRefUser.child(Constants.events).child(my_key).setValue(Constants.UserStatus.OWNER);
                     participants = new HashMap<>();
-                    liveparticipants.put(Utilities.encodeEmail(user.getEmail()),false);
                     participants.put(Utilities.encodeEmail(user.getEmail()), Constants.UserStatus.OWNER);
                     Event event = new Event(Event_name.getText().toString(),Event_type.getText().toString(),place,dateAndTime,mPrivate,my_key, Constants.EventStatus.UPCOMING, participants,downloadUrl, Utilities.encodeEmail(user.getEmail()));
                     eventReference.child(my_key).setValue(event);

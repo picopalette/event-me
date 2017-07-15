@@ -106,12 +106,12 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map2);
         mapFragment.getMapAsync(this);
         linearLayout = (LinearLayout) findViewById(R.id.tobehiddenn);
-        linearLayout.setVisibility(View.GONE);
+//        linearLayout.setVisibility(View.GONE);
         edit =(Button) findViewById(R.id.editEvent);
         edit.setVisibility(View.GONE);
         delete = (Button) findViewById(R.id.deleteEvent);
         delete.setVisibility(View.GONE);
-        join = (Button) findViewById(R.id.joinevent);
+        join = (Button) findViewById(R.id.joinEvent);
         join.setVisibility(View.GONE);
         leave = (Button) findViewById(R.id.leaveEvent);
         leave.setVisibility(View.VISIBLE);
@@ -125,7 +125,6 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
         AppCompatImageView eNavi = (AppCompatImageView) findViewById(R.id.navigation_btn);
         View mapCard = (View) findViewById(R.id.map_card);
         uberButton = (RideRequestButton) findViewById(R.id.uberRequestButton);
-        Log.d("vikkkey", String.valueOf(eve.getLiveparticipants().containsKey(myemail)));
         mTrackify = (CardView) findViewById(R.id.card3);
         trackifySwitch = (Switch) findViewById(R.id.eve_switch2);
         mTrackify.setVisibility(View.GONE);
@@ -304,6 +303,119 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
             }
         });
 
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventDisplayActivity.this, EventCreationActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS);
+                intent.putExtra("event",eve);
+                startActivity(intent);
+
+            }
+        });
+
+
+        join.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseDatabase.getInstance().getReference()
+                        .child( Constants.events )
+                        .child( eve.getId() )
+                        .child(Constants.participants)
+                        .child( Utilities.encodeEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail()))
+                        .setValue(Constants.UserStatus.GOING);
+
+                FirebaseDatabase.getInstance().getReference()
+                        .child(Constants.users)
+                        .child(myemail)
+                        .child(Constants.events)
+                        .child( eve.getId()).setValue(Constants.UserStatus.GOING);
+                join.setVisibility(View.GONE);
+                leave.setVisibility(View.VISIBLE);
+                linearLayout.setVisibility(View.GONE);
+                edit.setVisibility(View.GONE);
+                delete.setVisibility(View.GONE);
+            }
+        });
+
+        leave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(EventDisplayActivity.this);
+                alertDialogBuilder.setMessage("Are you sure");
+                alertDialogBuilder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        FirebaseDatabase.getInstance().getReference()
+                                .child( Constants.events )
+                                .child( eve.getId() )
+                                .child(Constants.participants)
+                                .child( Utilities.encodeEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail()))
+                                .setValue(null);
+                        FirebaseDatabase.getInstance().getReference()
+                                .child( Constants.events )
+                                .child( eve.getId() )
+                                .child(Constants.livepart)
+                                .child( Utilities.encodeEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail()))
+                                .setValue(null);
+                        FirebaseDatabase.getInstance().getReference()
+                                .child(Constants.users)
+                                .child(myemail)
+                                .child(Constants.events)
+                                .child( eve.getId()).setValue(null);
+                        finish();
+
+
+                    }
+                });
+                alertDialogBuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                alertDialogBuilder.show();
+
+
+            }
+        });
+
+        delete.setOnClickListener(new View.OnClickListener() {
+                                      @Override
+                                      public void onClick(View v) {
+                                          AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(EventDisplayActivity.this);
+                                          alertDialogBuilder.setMessage("Do you want to delete this event");
+                                          alertDialogBuilder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                              @Override
+                                              public void onClick(DialogInterface dialog, int which) {
+                                                  for (String email : eve.getParticipants().keySet()) {
+                                                      Log.d("myemailsss", email);
+                                                      FirebaseDatabase.getInstance().getReference()
+                                                              .child(Constants.users)
+                                                              .child(email)
+                                                              .child(Constants.events).child(eve.getId()).setValue("DELETED");
+                                                      FirebaseDatabase.getInstance().getReference().child(Constants.events)
+                                                              .child(eve.getId())
+                                                              .setValue(null);
+                                                      finish();
+                                                  }
+
+                                              }
+                                          });
+                                          alertDialogBuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                              @Override
+                                              public void onClick(DialogInterface dialog, int which) {
+
+                                              }
+                                          });
+                                          alertDialogBuilder.show();
+
+                                      }
+                                  });
+
 //        editButton.setOnClickListener( new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -434,22 +546,35 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
     }
 
     private void correctify() {
-//        final Boolean check = false;
 
         if(Objects.equals( from, "search" )){
 //            request.setVisibility(View.VISIBLE);
             join.setVisibility(View.VISIBLE);
+            leave.setVisibility(View.GONE);
+            linearLayout.setVisibility(View.GONE);
+            edit.setVisibility(View.GONE);
+            delete.setVisibility(View.GONE);
         }
         else {
             if (Objects.equals(eve.getOwner(), myemail)) {
                 Log.d("insideexpected", "hello");
 //                editButton.setVisibility(View.VISIBLE);
 //                deletebtn.setVisibility(View.VISIBLE);
+                linearLayout.setVisibility(View.VISIBLE);
+                edit.setVisibility(View.VISIBLE);
+                delete.setVisibility(View.VISIBLE);
+                join.setVisibility(View.GONE);
+                leave.setVisibility(View.GONE);
 
 
             }
             else
+
             {
+                leave.setVisibility(View.VISIBLE);
+                linearLayout.setVisibility(View.GONE);
+                join.setVisibility(View.GONE);
+
 //                joinedeve.setVisibility(View.VISIBLE);
             }
         }
