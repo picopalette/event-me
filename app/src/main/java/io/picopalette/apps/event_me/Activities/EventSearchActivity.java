@@ -66,7 +66,7 @@ public class EventSearchActivity extends AppCompatActivity implements SearchView
         searchRecycler.setHasFixedSize( true );
         adapter = new SearchAdapter(getApplicationContext(), events, searchRecycler );
         searchRecycler.setAdapter( adapter );
-        mLayoutManager = new GridLayoutManager( this, 3 );
+        mLayoutManager = new GridLayoutManager( this, 2 );
         searchRecycler.setLayoutManager( mLayoutManager );
 
 

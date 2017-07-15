@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -92,6 +94,7 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
     private LocationManager locationManager;
     private Button edit,delete,join,leave;
     private LinearLayout linearLayout;
+    private TextView mShareView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +124,7 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
         TextView ePlace = (TextView) findViewById(R.id.eventPlaceName);
         TextView eDate = (TextView) findViewById(R.id.eventDate);
         TextView eTime = (TextView) findViewById(R.id.eventTime);
+        mShareView = (TextView) findViewById(R.id.shareView);
         RecyclerView participantsRecyclerView = (RecyclerView) findViewById(R.id.event_display_rec_view);
         AppCompatImageView eNavi = (AppCompatImageView) findViewById(R.id.navigation_btn);
         View mapCard = (View) findViewById(R.id.map_card);
@@ -152,6 +156,8 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
                 if(isChecked)
                 {
 
+                    mShareView.setTextColor(Color.parseColor("#094782"));
+                    mShareView.setTypeface(null, Typeface.BOLD);
                     FirebaseDatabase.getInstance().getReference().child(Constants.events)
                             .child(eve.getId())
                             .child(Constants.livepart)
@@ -208,6 +214,8 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
 //                    FirebaseDatabase.getInstance().getReference().child(Constants.events).child(eve.getId()).child(Constants.livepart).child(myemail).setValue(false);
 //                    Intent  i = new Intent(getApplicationContext(), LocationData.class);
 //                    stopService(i);
+                    mShareView.setTextColor(Color.parseColor("#666666"));
+                    mShareView.setTypeface(null, Typeface.NORMAL);
                     mTrackify.setVisibility(View.GONE);
                     FirebaseDatabase.getInstance().getReference().child(Constants.events).child(eve.getId()).child(Constants.livepart).child(myemail).setValue(false);
                     trackifySwitch.setChecked(false);

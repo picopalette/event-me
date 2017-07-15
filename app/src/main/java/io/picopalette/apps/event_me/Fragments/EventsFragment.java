@@ -7,6 +7,7 @@ import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -55,7 +56,7 @@ public class EventsFragment extends Fragment  {
     private EventsAdapter adapter;
     private DatabaseReference mDatabaseReference;
     private SharedPreferences eventkeys;
-    private SearchView mPES;
+    private CardView mSearchCard;
     private boolean activityStartUp = true;
     private Date currentDate;
     private Calendar calendar;
@@ -83,24 +84,16 @@ public class EventsFragment extends Fragment  {
 
         getDataTask();
         events = new ArrayList<>();
+        mSearchCard = (CardView) v.findViewById(R.id.publicEventsSearchCard);
         recyclerView.setHasFixedSize(true);
         adapter = new EventsAdapter(getActivity().getApplicationContext(), events,recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mPES = (SearchView) v.findViewById(R.id.publicEventsSearchView);
-        mPES.setOnSearchClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intnt = new Intent( getActivity(),EventSearchActivity.class );
 
-                intnt.putExtra( "mylist", (Serializable) adapter.events );
-                startActivity(  intnt);
 
-            }
-        });
 //
 //        mPES.setQueryHint("Search Public Events");
-        mPES.setOnClickListener( new View.OnClickListener() {
+        mSearchCard.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

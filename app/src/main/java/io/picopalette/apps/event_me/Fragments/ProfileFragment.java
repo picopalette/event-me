@@ -9,6 +9,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
@@ -110,6 +112,7 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
     private Switch myswitch;
     private NotificationManager mNotificationManager;
     private LocationManager locationManager;
+    private TextView mMainLive;
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
@@ -132,6 +135,7 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
         textviewTitle = (TextView) v.findViewById( R.id.textview_title );
         profileName = (TextView) v.findViewById(R.id.profile_view_name);
         profileEmail = (TextView) v.findViewById(R.id.profile_view_email);
+        mMainLive = (TextView) v.findViewById(R.id.mainLiveShare);
         myswitch = (Switch) v.findViewById(R.id.mainSwitch);
         avatar = (SimpleDraweeView) v.findViewById(R.id.avatar);
         toolbar.setTitle("");
@@ -189,13 +193,28 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
                 }
             }
         });
+        myswitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked)
+                {
+                    mMainLive.setTextColor(Color.parseColor("#094782"));
+                    mMainLive.setTypeface(null, Typeface.BOLD);
+                }
+                else
+                {
+                    mMainLive.setTextColor(Color.parseColor("#666666"));
+                    mMainLive.setTypeface(null, Typeface.NORMAL);
+                }
+            }
+        });
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 changeDp();
             }
         });
-        coverImage.setImageDrawable(getResources().getDrawable(R.drawable.logo));
+        coverImage.setImageDrawable(getResources().getDrawable(R.drawable.full));
         profileName.setText(userBundle.getString("name"));
         profileEmail.setText(userBundle.getString("email"));
         recyclerView = (RecyclerView) v.findViewById(R.id.timelineRecycle);
