@@ -1,203 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="io.picopalette.apps.event_me.Activities.EventCreationActivity"
     tools:showIn="@layout/activity_event_creation">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical"
-        android:padding="10dp">
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="3dp">
-
-            <EditText
-                android:id="@+id/eve_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/event_name"
-                android:textColor="@color/dark_blue_theme"
-                android:textColorHint="#666"
-                android:textSize="17sp"
-                android:inputType="textCapWords|textPersonName"/>
-
-        </android.support.design.widget.TextInputLayout>
-
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-            <EditText
-                android:id="@+id/eve_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/event_type"
-                android:textColor="@color/dark_blue_theme"
-                android:textColorHint="#666"
-                android:textSize="17sp"
-                android:inputType="textCapWords"/>
-
-
-        </android.support.design.widget.TextInputLayout>
-
-
-       <LinearLayout
-           android:layout_width="match_parent"
-           android:layout_height="30dp"
-           android:orientation="horizontal"
-           android:layout_marginTop="15dp"
-           android:layout_marginLeft="2dp">
-
-           <TextView
-               android:id="@+id/privateEventTV"
-               android:layout_width="0dp"
-               android:layout_weight="1"
-               android:layout_height="wrap_content"
-               android:text="@string/private_event"
-               android:textSize="18sp"/>
-
-           <Switch
-               android:paddingRight="6dp"
-               android:id="@+id/eve_switch"
-               android:layout_width="0dp"
-               android:layout_weight="1"
-               android:layout_height="match_parent" />
-
-       </LinearLayout>
-
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-            <EditText
-                android:id="@+id/eve_keyword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/keyword"
-                android:textColor="@color/dark_blue_theme"
-                android:textColorHint="#666"
-                android:textSize="17sp"
-                android:inputType="textCapWords"/>
-
-
-        </android.support.design.widget.TextInputLayout>
-
-
 
         <LinearLayout
-            android:baselineAligned="false"
             android:layout_width="match_parent"
-            android:layout_marginTop="8dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <android.support.design.widget.TextInputLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.5">
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="7dp">
 
-                <EditText android:id="@+id/date_text"
+                <EditText
+                    android:id="@+id/eve_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="@string/event_name"
                     android:textColor="@color/dark_blue_theme"
-                    android:fontFamily="sans-serif"
+                    android:textColorHint="#666"
                     android:textSize="17sp"
-                    android:enabled="true"
-                    android:textAlignment="center"
-                    android:inputType="date"
-                    android:focusable="false"
-                    android:hint="@string/set_date" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <EditText android:id="@+id/time_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif"
-                    android:textSize="17sp"
-                    android:textColor="@color/dark_blue_theme"
-                    android:enabled="true"
-                    android:textAlignment="center"
-                    android:inputType="time"
-                    android:focusable="false"
-                    android:hint="@string/set_time" />
+                    android:inputType="textCapWords|textPersonName"/>
 
             </android.support.design.widget.TextInputLayout>
 
 
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/nextParButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add participants"/>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="4dp">
 
 
-        <android.support.v7.widget.CardView
-            android:layout_marginTop="20dp"
-            android:layout_width="match_parent"
-            android:id="@+id/to_card"
-            android:layout_height="50dp">
-                <fragment
-                        android:id="@+id/place_auto"
-                        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+                <EditText
+                    android:id="@+id/eve_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/event_type"
+                    android:textColor="@color/dark_blue_theme"
+                    android:textColorHint="#666"
+                    android:textSize="17sp"
+                    android:inputType="textCapWords"/>
+
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="18dp"
+                android:layout_marginLeft="2dp">
+
+                <TextView
+                    android:id="@+id/privateEventTV"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="@string/private_event"
+                    android:textSize="18sp"/>
+
+                <Switch
+                    android:paddingRight="6dp"
+                    android:id="@+id/eve_switch"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+
+                <EditText
+                    android:id="@+id/eve_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Description"
+                    android:textColor="@color/dark_blue_theme"
+                    android:textColorHint="#666"
+                    android:textSize="17sp"
+                    android:inputType="textMultiLine"/>
+
+
+            </android.support.design.widget.TextInputLayout>
+
+
+
+            <LinearLayout
+                android:baselineAligned="false"
+                android:layout_width="match_parent"
+                android:layout_marginTop="4dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:layout_marginTop="7dp">
+
+                    <EditText android:id="@+id/date_text"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp" />
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/dark_blue_theme"
+                        android:fontFamily="sans-serif"
+                        android:textSize="17sp"
+                        android:enabled="true"
+                        android:textAlignment="center"
+                        android:inputType="date"
+                        android:focusable="false"
+                        android:hint="@string/set_date" />
 
-        </android.support.v7.widget.CardView>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginTop="7dp">
+
+                    <EditText android:id="@+id/time_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif"
+                        android:textSize="17sp"
+                        android:textColor="@color/dark_blue_theme"
+                        android:enabled="true"
+                        android:textAlignment="center"
+                        android:inputType="time"
+                        android:focusable="false"
+                        android:hint="@string/set_time" />
+
+                </android.support.design.widget.TextInputLayout>
 
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <io.picopalette.apps.event_me.Utils.ContactsCompletionView
-                android:id="@+id/autocomplete_textview"
+            </LinearLayout>
+
+            <android.support.v7.widget.CardView
+                android:layout_marginTop="25dp"
+                android:layout_width="match_parent"
+                android:id="@+id/to_card"
+                android:layout_height="50dp">
+                <fragment
+                    android:id="@+id/place_auto"
+                    android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp" />
+
+            </android.support.v7.widget.CardView>
+
+            <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:focusableInTouchMode="true"
-                android:imeOptions="actionDone"
-                android:inputType="text|textNoSuggestions|textMultiLine"
-                android:nextFocusDown="@+id/editText"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="19sp" />
+                android:layout_gravity="end"
+                android:id="@+id/add_event"
+                android:layout_marginTop="20dp"
+                android:background="@color/colorAccent"
+                android:text="Create Event"
+                android:textColor="@color/white"
+                android:layout_below="@+id/scrollEventCreation"
+                android:layout_centerHorizontal="true" />
 
         </LinearLayout>
 
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="end"
-            android:id="@+id/add_event"
-            android:background="@drawable/button_shape"
-            android:text="@string/complete"/>
-
-
-
-
-
-    </LinearLayout>
 
 
 </android.support.v4.widget.NestedScrollView>

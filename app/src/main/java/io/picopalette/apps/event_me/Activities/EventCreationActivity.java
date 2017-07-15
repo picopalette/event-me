@@ -51,8 +51,6 @@ import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.nguyenhoanglam.imagepicker.activity.ImagePicker;
-import com.nguyenhoanglam.imagepicker.activity.ImagePickerActivity;
 import com.nguyenhoanglam.imagepicker.model.Image;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -77,9 +75,6 @@ import io.picopalette.apps.event_me.Utils.Utilities;
 public class EventCreationActivity extends AppCompatActivity implements PlaceSelectionListener, TokenCompleteTextView.TokenListener<SimpleContact>{
 
     private EditText Event_name,date,time,Event_type,Event_key;
-    private ArrayList<SimpleContact> contacts;
-    private FilterAdapter filterAdapter;
-    private ContactsCompletionView autoCompleteTextView;
     private DateAndTime dateAndTime;
     private Location place;
     private Button complete;
@@ -87,8 +82,6 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
     private DatabaseReference mPeopleReference;
     private Switch mitch;
     private ImageView Event_image;
-    private AlertDialog alertDialog;
-    private AlertDialog.Builder dialog;
     private HashMap<String, Constants.UserStatus> participants;
     private Uri downloadUrl;
     private ProgressDialog progressDialog;
@@ -109,48 +102,33 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
         final StorageReference storageReference = FirebaseStorage.getInstance().getReference();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mPeopleReference = mDatabaseReference.child(Constants.people);
-        dialog = new AlertDialog.Builder(this).setCancelable(false);
-        mPar = (Button) findViewById(R.id.nextParButton);
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.alert_dialog_custom, null);
-        dialog.setView(dialogView);
-        alertDialog = dialog.create();
         progressDialog = new ProgressDialog(EventCreationActivity.this);
         progressDialog.setTitle("Creating Event");
-        alertDialog.show();
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        if(layoutParams != null)
-            layoutParams.copyFrom(alertDialog.getWindow().getAttributes());
-        int dialogWindowWidth = 600;
-        int dialogWindowHeight = 400;
-        layoutParams.width = dialogWindowWidth;
-        layoutParams.height = dialogWindowHeight;
-        alertDialog.getWindow().setAttributes(layoutParams);
         date = (EditText) findViewById(R.id.date_text);
         mitch = (Switch) findViewById(R.id.eve_switch);
         time = (EditText) findViewById(R.id.time_text);
         Event_type = (EditText) findViewById(R.id.eve_type);
         Event_name = (EditText) findViewById(R.id.eve_name);
-        Event_key = (EditText) findViewById(R.id.eve_keyword);
+        Event_key = (EditText) findViewById(R.id.eve_description);
         Event_image = (ImageView) findViewById(R.id.event_image);
         complete = (Button) findViewById(R.id.add_event);
         mPrivateEvent = (TextView) findViewById(R.id.privateEventTV);
-        autoCompleteTextView = (ContactsCompletionView) findViewById(R.id.autocomplete_textview);
-        Fetch_And_Parse();
-        filterAdapter = new FilterAdapter(this, R.layout.item_contact, contacts);
-        autoCompleteTextView.setTokenListener(EventCreationActivity.this);
-        autoCompleteTextView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Select);
+        //autoCompleteTextView = (ContactsCompletionView) findViewById(R.id.autocomplete_textview);
+
+        //autoCompleteTextView.setTokenListener(EventCreationActivity.this);
+        //autoCompleteTextView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Select);
         dateAndTime = new DateAndTime();
 
-        mPar.setOnClickListener(new View.OnClickListener() {
+        /*mPar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),AddEventParticipantsActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
 
         mitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -273,12 +251,6 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
                     eventRefUser.child(Constants.events).child(my_key).setValue(Constants.UserStatus.OWNER);
                     participants = new HashMap<>();
                     participants.put(Utilities.encodeEmail(user.getEmail()), Constants.UserStatus.OWNER);
-                    List<SimpleContact> selectedParticipants = autoCompleteTextView.getObjects();
-                    for(SimpleContact selectedParticipant : selectedParticipants) {
-                        participants.put(Utilities.encodeEmail(selectedParticipant.getEmail()), Constants.UserStatus.INVITED);
-                        eventRefUser = mDatabaseReference.child(Constants.users).child(Utilities.encodeEmail(selectedParticipant.getEmail()));
-                        eventRefUser.child(Constants.events).child(my_key).setValue(Constants.UserStatus.INVITED);
-                    }
                     Event event = new Event(Event_name.getText().toString(),Event_type.getText().toString(),place,dateAndTime,mPrivate,my_key, Constants.EventStatus.UPCOMING, participants,downloadUrl, Utilities.encodeEmail(user.getEmail()));
                     eventReference.child(my_key).setValue(event);
                     Toast.makeText(getBaseContext(), R.string.success,Toast.LENGTH_LONG).show();
@@ -295,6 +267,7 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
          autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_auto);
         autocompleteFragment.setOnPlaceSelectedListener(this);
+        autocompleteFragment.setHint("Event's Destination");
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -356,37 +329,12 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
         }
         else
             mitch.setChecked( false );
-        for(String email : event.getParticipants().keySet()) {
-            SimpleContact contact = new SimpleContact( R.drawable.happiness, email, email );
-            autoCompleteTextView.addObject( contact);
-        }
 
 
 
     }
 
-    private void Fetch_And_Parse() {
 
-        contacts = new ArrayList<>();
-        mPeopleReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                @SuppressWarnings("unchecked")
-                Map<String, Object> td = (HashMap<String,Object>) dataSnapshot.getValue();
-                for (Map.Entry<String, Object> e : td.entrySet()) {
-                    contacts.add(new SimpleContact(R.mipmap.male, e.getValue().toString(), e.getKey().replace(Constants.dot,".")));
-                }
-                autoCompleteTextView.setAdapter(filterAdapter);
-                alertDialog.dismiss();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                alertDialog.dismiss();
-                Toast.makeText(EventCreationActivity.this,getString(R.string.error_network),Toast.LENGTH_LONG).show();
-            }
-        });
-    }
 
 
 //    @Override

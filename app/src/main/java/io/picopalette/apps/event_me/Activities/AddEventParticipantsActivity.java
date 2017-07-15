@@ -38,19 +38,7 @@ public class AddEventParticipantsActivity extends AppCompatActivity {
                 }
             }
 
-            @Override
-            public CharSequence getPageTitle(int position) {
 
-                switch (position)
-                {
-                    case 0:
-                        return "PAR";
-                    case 1:
-                        return "ADD PAR";
-                    default:
-                        return "Add Teams";
-                }
-            }
 
             @Override
             public int getCount() {
@@ -60,5 +48,9 @@ public class AddEventParticipantsActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLays);
         tabLayout.setupWithViewPager(vp);
+
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_person_white_24dp);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_person_add_white_24dp);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_group_add_white_24dp);
     }
 }
