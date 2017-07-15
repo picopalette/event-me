@@ -94,13 +94,29 @@ public class LocationData extends Service {
             @Override
             public void onProviderEnabled(String provider) {
 
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext());
+                mBuilder.setSmallIcon(R.drawable.logo);
+                mBuilder.setContentTitle("Event-Me");
+                mBuilder.setContentText("you are in live");
+                Intent i = new Intent(getBaseContext(),MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.putExtra("from","notif");
+                PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, i,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+                mBuilder.setContentIntent(contentIntent);
+                mBuilder.setOngoing(true);
+
+                NotificationManager mNotificationManager =
+                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.notify(89, mBuilder.build());
+
+
 
 
             }
 
             @Override
             public void onProviderDisabled(String provider) {
-
 
 
                 NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

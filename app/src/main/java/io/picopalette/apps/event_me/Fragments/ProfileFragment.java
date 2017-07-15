@@ -148,7 +148,7 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
         });
         locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 
-        if(isServiceRunning(LocationData.class) ){
+        if(isServiceRunning(LocationData.class)){
             myswitch.setChecked(true);
         }
         else
@@ -168,7 +168,6 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
                 }else
                 {
-
                     if(!permissionEnabled()) {
                         Intent i = new Intent(getContext(), LocationData.class);
                         getContext().startService(i);
@@ -180,7 +179,6 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
                     {
                         myswitch.setChecked(false);
                     }
-
                 }
             }
         });

@@ -155,41 +155,43 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
                 if(isChecked)
                 {
 
-
-                    if(isNetworkAvailable() && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-                    {
-                        if(isMyServiceRunning(LocationData.class)){
+                    FirebaseDatabase.getInstance().getReference().child(Constants.events)
+                            .child(eve.getId())
+                            .child(Constants.livepart)
+                            .child(myemail)
+                            .setValue(true);
+                    if(isNetworkAvailable() && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        if (isMyServiceRunning(LocationData.class)) {
                             mTrackify.setVisibility(View.VISIBLE);
                         }
-                        else
-                        {
-                            if(!permission_check())
-                            {
-                                Intent  i = new Intent(getApplicationContext(), LocationData.class);
-                                startService(i);
-                            }
-                            if(isMyServiceRunning(LocationData.class)){
-                                FirebaseDatabase.getInstance().getReference().child(Constants.events)
-                                        .child(eve.getId()).child(Constants.livepart)
-                                        .child(myemail).setValue(true);
-                                mTrackify.setVisibility(View.VISIBLE);
-                                trackifySwitch.setChecked(true);
-
-                            }
-                            else {
-                                mTrackify.setVisibility(View.GONE);
-                                trackifySwitch.setChecked(false);
-                            }
-
-                        }
                     }
-                    else
-                    {
-
-                        Toast.makeText(getApplicationContext(),"No Network",Toast.LENGTH_SHORT).show();
-                        trackifySwitch.setChecked(false);
-
-                    }
+//                        else
+//                        {
+//                            if(!permission_check())
+//                            {
+//                                Intent  i = new Intent(getApplicationContext(), LocationData.class);
+//                                startService(i);
+//                            }
+//                            if(isMyServiceRunning(LocationData.class)){
+//                                FirebaseDatabase.getInstance().getReference().child(Constants.events)
+//                                        .child(eve.getId()).child(Constants.livepart)
+//                                        .child(myemail).setValue(true);
+//                                mTrackify.setVisibility(View.VISIBLE);
+//                                trackifySwitch.setChecked(true);
+//
+//                            }
+//                            else {
+//                                mTrackify.setVisibility(View.GONE);
+//                                trackifySwitch.setChecked(false);
+//                            }
+//
+//                        }
+//                    }
+//                    else
+//                    {
+//                        Toast.makeText(getApplicationContext(),"No Network",Toast.LENGTH_SHORT).show();
+//                        trackifySwitch.setChecked(false);
+//                    }
                 }
                 else
                 {
@@ -206,8 +208,9 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
 //                        }
 //                    });
 
-                    Intent  i = new Intent(getApplicationContext(), LocationData.class);
-                    stopService(i);
+//                    FirebaseDatabase.getInstance().getReference().child(Constants.events).child(eve.getId()).child(Constants.livepart).child(myemail).setValue(false);
+//                    Intent  i = new Intent(getApplicationContext(), LocationData.class);
+//                    stopService(i);
                     mTrackify.setVisibility(View.GONE);
                     FirebaseDatabase.getInstance().getReference().child(Constants.events).child(eve.getId()).child(Constants.livepart).child(myemail).setValue(false);
                     trackifySwitch.setChecked(false);
