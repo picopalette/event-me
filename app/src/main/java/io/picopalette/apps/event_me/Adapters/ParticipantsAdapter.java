@@ -1,6 +1,7 @@
 package io.picopalette.apps.event_me.Adapters;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -67,16 +68,18 @@ public class ParticipantsAdapter extends RecyclerView.Adapter<ParticipantsAdapte
         return participantEmails.size();
     }
 
-    public class ParticipantsViewHolder extends RecyclerView.ViewHolder {
+    static public class ParticipantsViewHolder extends RecyclerView.ViewHolder {
 
         public CircleImageView imageView;
         public TextView nameView, emailView;
+        public CardView card;
 
         public ParticipantsViewHolder(View itemView) {
             super(itemView);
             imageView = (CircleImageView) itemView.findViewById(R.id.p_list_image);
             nameView = (TextView) itemView.findViewById(R.id.p_list_name);
             emailView = (TextView) itemView.findViewById(R.id.p_list_email);
+            card = (CardView) itemView.findViewById(R.id.p_list_card);
         }
     }
 }

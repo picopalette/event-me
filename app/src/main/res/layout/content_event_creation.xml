@@ -145,6 +145,12 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/nextParButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add participants"/>
+
 
         <android.support.v7.widget.CardView
             android:layout_marginTop="20dp"
@@ -186,6 +192,8 @@
             android:id="@+id/add_event"
             android:background="@drawable/button_shape"
             android:text="@string/complete"/>
+
+
 
 
 

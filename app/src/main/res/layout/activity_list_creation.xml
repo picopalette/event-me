@@ -29,7 +29,7 @@
         android:layout_marginEnd="8dp" />
 
     <RelativeLayout
-        android:layout_width="368dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
@@ -58,31 +58,31 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/addFAB"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:fabSize="mini"
             app:srcCompat="@drawable/ic_add_white_24dp"
-            android:layout_marginEnd="24dp"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/list_creation_RecyclerView"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_height="0dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="24dp"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-            app:layout_constraintVertical_bias="0.128">
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp">
 
         </android.support.v7.widget.RecyclerView>
 

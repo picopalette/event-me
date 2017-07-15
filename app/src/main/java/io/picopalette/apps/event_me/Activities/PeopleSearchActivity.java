@@ -4,11 +4,15 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -21,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import io.picopalette.apps.event_me.Adapters.ParticipantsAdapter;
 import io.picopalette.apps.event_me.Adapters.PeopleSearchCardViewHolder;
 import io.picopalette.apps.event_me.Models.User;
 import io.picopalette.apps.event_me.R;
@@ -33,6 +38,7 @@ public class PeopleSearchActivity extends AppCompatActivity {
     private RecyclerView peopleRecView;
     private FirebaseRecyclerAdapter<User, PeopleSearchCardViewHolder> recyclerAdapter;
     private FirebaseRecyclerAdapter<String, PeopleSearchCardViewHolder> teamMembersAdapter;
+    private FirebaseRecyclerAdapter<String, ParticipantsAdapter.ParticipantsViewHolder> teamMembersViewAdapter;
     private final DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
     private String jobFor;
     private String job;
@@ -64,6 +70,7 @@ public class PeopleSearchActivity extends AppCompatActivity {
 
             final DatabaseReference favRef = usersRef.child(Utilities.encodeEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail())).child(Constants.favContacts);
 
+            peopleSearchView.setQueryHint("Find your People :)");
             peopleSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
@@ -94,7 +101,8 @@ public class PeopleSearchActivity extends AppCompatActivity {
                                     String newFavKey = favRef.push().getKey();
                                     favRef.child(newFavKey).setValue(model.getEmail());
                                     Toast.makeText(PeopleSearchActivity.this, "Added " + model.getDisplayName() + " to Favorites", Toast.LENGTH_SHORT).show();
-                                    viewHolder.addButton.setText("Added");
+                                    viewHolder.statusView.setImageDrawable(getResources().getDrawable(R.drawable.ic_done_blue_24dp));
+                                    peopleSearchView.setQuery("", false);
                                     viewHolder.addButton.setOnClickListener(null);
                                     viewHolder.addButton.setEnabled(false);
                                 }
@@ -104,7 +112,7 @@ public class PeopleSearchActivity extends AppCompatActivity {
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     viewHolder.addButton.setVisibility(View.VISIBLE);
                                     if (dataSnapshot.hasChildren()) {
-                                        viewHolder.addButton.setText("Cool!");
+                                        viewHolder.statusView.setImageDrawable(getResources().getDrawable(R.drawable.ic_done_blue_24dp));
                                         viewHolder.addButton.setEnabled(false);
                                     }
                                 }
@@ -128,6 +136,52 @@ public class PeopleSearchActivity extends AppCompatActivity {
             if(job.matches("view")) {
                 peopleSearchView.setVisibility(View.GONE);
             }
+            peopleSearchView.setQueryHint("Find your Teammates :)");
+
+            teamMembersViewAdapter = new FirebaseRecyclerAdapter<String, ParticipantsAdapter.ParticipantsViewHolder>(String.class, R.layout.participant_list_card, ParticipantsAdapter.ParticipantsViewHolder.class, teamRef ) {
+                @Override
+                protected void populateViewHolder(final ParticipantsAdapter.ParticipantsViewHolder viewHolder, String model, int position) {
+                    viewHolder.card.getLayoutParams().width = CardView.LayoutParams.MATCH_PARENT;
+                    dbRef.child(Constants.users).child(Utilities.encodeEmail(model)).child("displayName").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String name = dataSnapshot.getValue(String.class);
+                            viewHolder.nameView.setText(name);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                    dbRef.child(Constants.users).child(Utilities.encodeEmail(model)).child("email").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String email = dataSnapshot.getValue(String.class);
+                            viewHolder.emailView.setText(email);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                    dbRef.child(Constants.users).child(Utilities.encodeEmail(model)).child("dpUrl").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String dpUrl = dataSnapshot.getValue(String.class);
+                            Glide.with(PeopleSearchActivity.this)
+                                    .load(dpUrl)
+                                    .into(viewHolder.imageView);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            };
 
             teamMembersAdapter = new FirebaseRecyclerAdapter<String, PeopleSearchCardViewHolder>(String.class, R.layout.card_people_search, PeopleSearchCardViewHolder.class, teamRef) {
                 @Override
@@ -173,7 +227,7 @@ public class PeopleSearchActivity extends AppCompatActivity {
                     if(job.matches("edit")) {
                         viewHolder.addButton.setVisibility(View.VISIBLE);
                         viewHolder.addButton.setEnabled(true);
-                        viewHolder.addButton.setText("Remove");
+                        viewHolder.statusView.setImageDrawable(getResources().getDrawable(R.drawable.ic_remove_blue_24dp));
                         viewHolder.addButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -233,7 +287,8 @@ public class PeopleSearchActivity extends AppCompatActivity {
                                     String newFavKey = teamRef.push().getKey();
                                     teamRef.child(newFavKey).setValue(model.getEmail());
                                     Toast.makeText(PeopleSearchActivity.this, "Added " + model.getDisplayName() + " to Favorites", Toast.LENGTH_SHORT).show();
-                                    viewHolder.addButton.setText("Added");
+                                    viewHolder.statusView.setImageDrawable(getResources().getDrawable(R.drawable.ic_done_blue_24dp));
+                                    peopleSearchView.setQuery("", false);
                                     viewHolder.addButton.setOnClickListener(null);
                                     viewHolder.addButton.setEnabled(false);
                                 }
@@ -243,7 +298,7 @@ public class PeopleSearchActivity extends AppCompatActivity {
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     viewHolder.addButton.setVisibility(View.VISIBLE);
                                     if (dataSnapshot.hasChildren()) {
-                                        viewHolder.addButton.setText("Cool!");
+                                        viewHolder.statusView.setImageDrawable(getResources().getDrawable(R.drawable.ic_done_blue_24dp));
                                         viewHolder.addButton.setEnabled(false);
                                     }
                                 }
@@ -261,8 +316,14 @@ public class PeopleSearchActivity extends AppCompatActivity {
                 }
             });
 
-            peopleRecView.setAdapter(teamMembersAdapter);
-
+            if(job.matches("view")) {
+                Log.d("OnCreate", "called");
+                peopleRecView.setLayoutManager(new GridLayoutManager(PeopleSearchActivity.this, 2));
+                peopleRecView.setAdapter(teamMembersViewAdapter);
+                peopleRecView.requestLayout();
+            } else {
+                peopleRecView.setAdapter(teamMembersAdapter);
+            }
         }
     }
 

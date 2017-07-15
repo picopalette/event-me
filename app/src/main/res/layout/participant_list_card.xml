@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/p_list_card"
     android:layout_width="190dp"
     android:layout_height="190dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">

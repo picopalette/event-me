@@ -243,6 +243,53 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/card3"
                 uber:ub__style="black" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_below="@id/uberRequestButton"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/requestCardbutton"
+                android:layout_height="wrap_content">
+                <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Request"
+
+                android:id="@+id/joinevent"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:background="@drawable/shape"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/joinedtheeventext"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="Remove Request"/>
+                <Button
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:text="Edit"
+                    android:id="@+id/editEvent"
+                    android:layout_gravity="left"
+                    android:gravity="center"
+                    android:background="@drawable/shape"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"/>
+                <Button
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:text="Delete"
+                    android:background="@drawable/shape"
+                    android:id="@+id/deleteevent"/>
+            </android.support.v7.widget.CardView>
+
         </RelativeLayout>
+
+
     </ScrollView>
 </RelativeLayout>

@@ -66,7 +66,7 @@ public class PeopleFragment extends Fragment {
                         Glide.with(getActivity().getApplicationContext())
                                 .load(user.getDpUrl())
                                 .into(viewHolder.imageView);
-                        viewHolder.addButton.setText("Remove");
+                        viewHolder.statusView.setImageDrawable(getResources().getDrawable(R.drawable.ic_remove_blue_24dp));
                         viewHolder.addButton.setVisibility(View.VISIBLE);
                         viewHolder.addButton.setOnClickListener(new View.OnClickListener() {
                             @Override

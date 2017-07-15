@@ -136,6 +136,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS);
                     intent.putExtra("event", homeEvent);
+                    intent.putExtra( "from","fragment" );
                     context.startActivity(intent);
                 }
             });
