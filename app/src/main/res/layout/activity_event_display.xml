@@ -25,7 +25,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="190dp"
                     android:scaleType="fitXY"
-                    app:srcCompat="@drawable/logo"
                     />
 
                 <TextView
@@ -175,8 +174,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/card2"
                 android:text="Participants"
-                android:layout_margin="10dp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
+                android:textSize="19sp"
+                android:textColor="@color/dark_blue_theme"
+                android:layout_margin="10dp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/event_display_rec_view"
@@ -191,17 +191,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/event_display_rec_view"
-                android:id="@+id/linear78"
+                android:id="@+id/linear"
                 android:padding="8dp"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:layout_centerVertical="true"
                 android:orientation="horizontal">
                 <TextView
+                    android:id="@+id/shareView"
                     android:layout_width="0dp"
                     android:layout_weight="3"
                     android:text="Share my Location"
                     android:gravity="start"
+                    android:textColor="#666666"
                     android:layout_height="wrap_content" />
                 <Switch
                     android:id="@+id/eve_switch2"
@@ -216,7 +218,7 @@
                 android:layout_height="55dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_below="@id/linear78"
+                android:layout_below="@id/linear"
                 app:cardElevation="25dp"
                 app:contentPadding="16dp">
                 <LinearLayout
@@ -234,7 +236,6 @@
                         android:layout_height="match_parent"
                         android:text="View locations of Participants"
                         android:textSize="15sp"
-                        android:id="@+id/liveshareText"
                         android:layout_weight="2"/>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -245,48 +246,65 @@
                 android:layout_below="@id/card3"
                 uber:ub__style="black" />
 
-            <android.support.v7.widget.CardView
+            <LinearLayout
+                android:layout_below="@+id/uberRequestButton"
                 android:layout_width="match_parent"
-                android:layout_below="@id/uberRequestButton"
-                android:layout_centerHorizontal="true"
-                android:id="@+id/requestCardbutton"
-                android:layout_height="wrap_content">
-                <Button
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Request"
-                android:id="@+id/joinevent"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center"
-                android:background="@drawable/shape"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"/>
+                android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="match_parent"
+                <Button
+                    android:id="@+id/joinEvent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Join Event"
+                    android:textColor="#008000"
+                    android:background="@color/white"
+                    android:textSize="18sp"
+                    />
+                <Button
+                    android:id="@+id/leaveEvent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Leave Event"
+                    android:background="@color/white"
+                    android:textColor="@color/ended_red"
+                    android:textSize="18sp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tobehiddenn"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/editEvent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:id="@+id/joinedtheeventext"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="Remove Request"/>
-                <Button
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:text="Edit"
-                    android:id="@+id/editEvent"
-                    android:layout_gravity="left"
-                    android:gravity="center"
-                    android:background="@drawable/shape"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"/>
-                <Button
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:text="Delete"
-                    android:background="@drawable/shape"
-                    android:id="@+id/deleteevent"/>
-            </android.support.v7.widget.CardView>
+                        android:text="Edit Event"
+                        android:background="@color/white"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="18sp"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.5"
+                        android:layout_height="match_parent"
+                        android:background="@color/white">
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/deleteEvent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Delete Event"
+                        android:background="@color/white"
+                        android:textColor="@color/ended_red"
+                        android:textSize="18sp"/>
+                </LinearLayout>
+
+            </LinearLayout>
 
         </RelativeLayout>
 
