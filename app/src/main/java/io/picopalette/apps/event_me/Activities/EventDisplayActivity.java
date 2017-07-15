@@ -1,6 +1,7 @@
 package io.picopalette.apps.event_me.Activities;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -85,6 +86,8 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_event_display);
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         myemail = Utilities.encodeEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
@@ -624,6 +627,7 @@ public class EventDisplayActivity extends AppCompatActivity implements OnMapRead
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         googleMap.addMarker(new MarkerOptions().position(new LatLng(eve.getPlace().getLat(),eve.getPlace().getLon())));
     }
+
 
 
 

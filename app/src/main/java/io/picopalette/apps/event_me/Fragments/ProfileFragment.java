@@ -244,6 +244,10 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
         if (requestCode == 69){
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
                 Toast.makeText(getContext(),"Permission Granted", Toast.LENGTH_LONG).show();
+//                Intent i = new Intent(getContext(), LocationData.class);
+//                getContext().startService(i);
+//                myswitch.setChecked(true);
+
             }
             else{
                 permissionEnabled();

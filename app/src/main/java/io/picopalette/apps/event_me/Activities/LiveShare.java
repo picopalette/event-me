@@ -226,7 +226,7 @@ public class LiveShare extends FragmentActivity  implements OnMapReadyCallback{
                                          e1.printStackTrace();
                                      }
 
-                                     googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
+                                     googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 20));
 
                                  }
 
