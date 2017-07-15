@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.games.multiplayer.Participant;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
@@ -116,20 +117,10 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
         Event_image = (ImageView) findViewById(R.id.event_image);
         complete = (Button) findViewById(R.id.add_event);
         mPrivateEvent = (TextView) findViewById(R.id.privateEventTV);
-        //autoCompleteTextView = (ContactsCompletionView) findViewById(R.id.autocomplete_textview);
-
-        //autoCompleteTextView.setTokenListener(EventCreationActivity.this);
-        //autoCompleteTextView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Select);
+        mPar = (Button) findViewById(R.id.add_par);
         dateAndTime = new DateAndTime();
 
-        /*mPar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),AddEventParticipantsActivity.class);
-                startActivity(intent);
-            }
-        });*/
-
+        mPar.setVisibility(View.GONE);
 
         mitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -189,8 +180,6 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
             @Override
             public void onClick(View v) {
 
-
-
                 if(!TextUtils.isEmpty(Event_name.getText().toString()) && !TextUtils.isEmpty(Event_type.getText().toString()) &&
                         !TextUtils.isEmpty(date.getText().toString()) && !TextUtils.isEmpty(time.getText().toString()) &&
                         (place!=null)  && (Event_image.getDrawable() != null))
@@ -226,6 +215,9 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             downloadUrl = taskSnapshot.getDownloadUrl();
+                            Intent intent1 = new Intent(EventCreationActivity.this, AddEventParticipantsActivity.class);
+                            intent1.putExtra("eventId", my_key);
+                            startActivity(intent1);
                             finish();
                         }
                     });
@@ -293,13 +285,23 @@ public class EventCreationActivity extends AppCompatActivity implements PlaceSel
             }
         });
 
-
-        if(intent.hasExtra( "event" ))
-        {
+        if(intent.hasExtra( "event" )) {
             event = (Event) getIntent().getSerializableExtra("event");
+            mPar.setVisibility(View.VISIBLE);
+            complete.setText("Save Changes");
+            mPar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(),AddEventParticipantsActivity.class);
+                    intent.putExtra("eventId", event.getId());
+                    intent.putExtra("eventName", event.getName());
+                    startActivity(intent);
+                }
+            });
             seteverything();
 
         }
+
 
     }
 

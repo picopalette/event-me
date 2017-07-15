@@ -21,6 +21,13 @@ public class Utilities {
             return email;
     }
 
+    public static String decodeEmail(String email) {
+        if(email != null)
+            return email.replace(Constants.dot,".");
+        else
+            return email;
+    }
+
     public static String monthFormatter(int month){
         String formattedMonth;
         switch (month)

@@ -14,10 +14,18 @@ import io.picopalette.apps.event_me.R;
 
 public class AddEventParticipantsActivity extends AppCompatActivity {
 
+    private String eventId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event_participants);
+
+        eventId = getIntent().getStringExtra("eventId");
+        if(getIntent().hasExtra("eventName"))
+            getSupportActionBar().setTitle(getIntent().getStringExtra("eventName"));
+        else
+            getSupportActionBar().setTitle("Add Participants");
 
         final EventAddParFragment eventAddParFragment = new EventAddParFragment();
         final EventParFragment eventParFragment = new EventParFragment();

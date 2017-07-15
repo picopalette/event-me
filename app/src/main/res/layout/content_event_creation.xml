@@ -170,16 +170,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                android:id="@+id/add_par"
+                android:layout_marginTop="20dp"
+                android:background="@color/colorAccent"
+                android:text="Manage Participants"
+                android:textColor="@color/white" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
                 android:id="@+id/add_event"
                 android:layout_marginTop="20dp"
                 android:background="@color/colorAccent"
                 android:text="Create Event"
-                android:textColor="@color/white"
-                android:layout_below="@+id/scrollEventCreation"
-                android:layout_centerHorizontal="true" />
+                android:textColor="@color/white" />
 
         </LinearLayout>
-
-
 
 </android.support.v4.widget.NestedScrollView>

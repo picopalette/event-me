@@ -40,7 +40,7 @@ public class NotificationsActivity extends AppCompatActivity {
         getDataTasks();
         events = new ArrayList<>();
         recyclerView.setHasFixedSize(true);
-        adapter = new NotificationAdapter(this.getApplicationContext(), events,recyclerView);
+        adapter = new NotificationAdapter(this, events,recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
 

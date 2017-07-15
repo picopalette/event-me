@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,6 +42,7 @@ public class PeopleSearchActivity extends AppCompatActivity {
     private FirebaseRecyclerAdapter<String, PeopleSearchCardViewHolder> teamMembersAdapter;
     private FirebaseRecyclerAdapter<String, ParticipantsAdapter.ParticipantsViewHolder> teamMembersViewAdapter;
     private final DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+    private FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     private String jobFor;
     private String job;
     private String teamName;
@@ -124,6 +126,10 @@ public class PeopleSearchActivity extends AppCompatActivity {
 
                                 }
                             });
+                            if(model.getEmail().matches(currentUser.getEmail())) {
+                                viewHolder.addButton.setVisibility(View.INVISIBLE);
+                                viewHolder.addButton.setOnClickListener(null);
+                            }
                         }
                     };
 
